@@ -1,0 +1,37 @@
+
+- List Awards (HPTT nutzen, siehe meisten Adminseiten)
+
+- Edit/Add awards (form class nutzen, siehe z.B. usersettings)
+
+    - Name
+    - Image (himageuploader)
+    - Description
+    - isUserOrCharacterAward (boolean -> hradio)
+    - Adjustment (boolean -> hradio)
+    - AdjustmentValue (die DKP)
+
+
+- List Awardings (HPTT)
+
+- Edit/Add Awarding
+
+    - UserIDs
+    - UserGroup
+    - CharacterIDs
+    - AwardID
+    - Time
+
+
+- Show Awards (aggregate awards from UserID and Usergroup and CharacterIDs)
+
+    - Show Image, Description and Time of Awarding
+    - Auf der Benutzerprofilseite, entsprechender Hook wird dann noch eingebaut
+
+
+- Vlt. ne Seite, wo alle Awards aufgelistet werden, und wenn man einen anklickt, man sieht, wer wann den Award bekommen hat. Als Pageobject. 
+
+
+- Automatisieren
+
+    - Module, z.B. "Hat an x Raids teilgenommen". Bei einem Award wählt man das Modul dann aus (muss aber nicht), und trägt die Zahl für x ein (als setting im Modul hinterlegt, wie z.B. bei den Cronjobs).
+    - Ein Cronjob arbeitet dann alle Awards ab, die ein Modul haben. Im Modul wir dann geschaut, ob die User x Raids erreicht haben, und erteilt ihnen dann das Awarding. 
