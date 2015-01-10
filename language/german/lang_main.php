@@ -32,12 +32,20 @@ $lang = array(
   
   'aw_achievements'				=> 'Erfolge',
   'aw_add_award'				=> 'Erfolg hinzufügen',
-  'aw_update_award'				=> 'Erfolg bearbeiten',
+  'aw_update_award'				=> 'Erfolg editieren',
   'aw_manage_awards'			=> 'Erfolge verwalten',
   'aw_assign_awards'			=> 'Erfolge zuweisen',
   'aw_icon_header'				=> 'Icon auswählen',
   'aw_upload_icon'				=> 'Icon hinzufügen',
+  'aw_special'					=> 'Spezial',
+  'aw_adj_module'				=> 'DKP Modul',
+  'aw_adj_value'				=> 'DKP Wert',
   
+  // verfügbare Adjustment Module
+  'aw_cron_module_1'				=> 'aw_cron_module_1',
+  'aw_cron_module_2'				=> 'aw_cron_module_2',
+  
+  // System Nachrichten
   'aw_plugin_not_installed'		=> 'Das Awards-Plugin ist nicht installiert.',
   'aw_add_success'				=> ' wurde hinzugefügt',
   'aw_add_nosuccess'			=> ' konnte nicht hinzugefügt werden',

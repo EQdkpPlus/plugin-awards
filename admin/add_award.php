@@ -59,159 +59,39 @@ class awards_add_award extends page_generic
 
 
 
-
-/*
-	public function edit($message=false) {
-		//fetch raids for select
-		$raids = array(0 => '');
-		$raidids = $this->pdh->sort($this->pdh->get('raid', 'id_list'), 'raid', 'date', 'desc');
-		foreach($raidids as $id) {
-			$raids[$id] = '#ID:'.$id.' - '.$this->pdh->get('event', 'name', array($this->pdh->get('raid', 'event', array($id)))).' '.date('d.m.y', $this->pdh->get('raid', 'date', array($id)));
-		}
-
-		//fetch events for select
-		$events = array();
-		$event_ids = $this->pdh->get('event', 'id_list');
-		foreach($event_ids as $id) {
-			$events[$id] = $this->pdh->get('event', 'name', array($id));
-		}
-		if($message) {
-			$this->core->messages($message);
-			$adj = $this->get_post(true);
-		} elseif($this->in->get('a',0)) {
-			$grp_key = $this->pdh->get('adjustment', 'group_key', array($this->in->get('a',0)));
-			$ids = $this->pdh->get('adjustment', 'ids_of_group_key', array($grp_key));
-			foreach($ids as $id)
-			{
-				$adj['members'][] = $this->pdh->get('adjustment', 'member', array($id));
-			}
-			$adj['reason'] = $this->pdh->get('adjustment', 'reason', array($id));
-			$adj['value'] = $this->pdh->get('adjustment', 'value', array($id));
-			$adj['date'] = $this->pdh->get('adjustment', 'date', array($id));
-			$adj['raid_id'] = $this->pdh->get('adjustment', 'raid_id', array($id));
-			$adj['event'] = $this->pdh->get('adjustment', 'event', array($id));
-			
-			//Add additional members
-			if (count($adj['members']) > 0){
-				$arrIDList = array_keys($members);
-				$blnResort = false;
-				foreach($adj['members'] as $member_id){
-					if (!isset($members[$member_id])) {
-						$arrIDList[] = $member_id;
-						$blnResort = true;
-					}
-				}
-				if ($blnResort) $members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($arrIDList, 'member', 'name', 'asc')));
-			}
-		}
-
-		//fetch adjustment-reasons
-		$adjustment_reasons = $this->pdh->aget('adjustment', 'reason', 0, array($this->pdh->get('adjustment', 'id_list')));
-		$this->jquery->Autocomplete('reason', array_unique($adjustment_reasons));
-		$this->confirm_delete($this->user->lang('confirm_delete_adjustment')."<br />".((isset($adj['reason'])) ? $adj['reason'] : ''), '', true);
-		
-		$this->tpl->assign_vars(array(
-			'GRP_KEY'		=> (isset($grp_key)) ? $grp_key : '',
-			'REASON'		=> (isset($adj['reason'])) ? $adj['reason'] : '',
-			'RAID'			=> new hdropdown('raid_id', array('options' => $raids, 'value' => ((isset($adj['raid_id'])) ? $adj['raid_id'] : ''))),
-			'MEMBERS'		=> $this->jquery->MultiSelect('members', $members, ((isset($adj['members'])) ? $adj['members'] : ''), array('width' => 350, 'filter' => true)),
-			'DATE'			=> $this->jquery->Calendar('date', $this->time->user_date(((isset($adj['date'])) ? $adj['date'] : $this->time->time), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
-			'VALUE'			=> (isset($adj['value'])) ? $adj['value'] : '',
-			'EVENT'			=> new hdropdown('event', array('options' => $events, 'value' => ((isset($adj['event'])) ? $adj['event'] : ''))),
-		));
-
-		// -- EQDKP ---------------------------------------------------------------
-		$this->core->set_vars(array(
-			'page_title'		=> (($id) ? $this->user->lang('aw_add_award').': '.$this->pdh->get('awards_achievements', 'name', array($id)) : $this->user->lang('aw_add_award')),
-			'template_path'		=> $this->pm->get_data('awards', 'template_path'),
-			'template_file'		=> 'admin/add_award_edit.html',
-			'display'			=> true)
-		);
-	}
-
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	public function edit(){
 		$id = $this->in->get('aid', 0);
 		
-		$arrCronDropdown = array(
+		// verfügbare Adjustment Module für den Cron
+		$arrAdjDropdown = array(
 			0 => '',
 			1 => $this->user->lang('aw_cron_module_1'),
 			2 => $this->user->lang('aw_cron_module_2')
 		);
 		
-		
-		
-			
-			
-		
-		
-/*		
-		$this->jquery->Tab_header('article_category-tabs');
-		$this->jquery->Tab_header('category-permission-tabs');
-		$editor = register('tinyMCE');
-		$editor->editor_normal(array(
-			'relative_urls'	=> false,
-			'link_list'		=> true,
-			'readmore'		=> false,
-		));
-		
-		$arrAwardIDs = $this->pdh->sort($this->pdh->get('awards_achievements', 'id_list', array()), 'awards_achievements', 'sort_id', 'asc');
-		$arrCategories['0'] = '--';
-		foreach($arrAwardIDs as $aid){
-			$arrAward[$aid] = $this->pdh->get('awards_achievements', 'name_prefix', array($aid)).$this->pdh->get('awards_achievements', 'name', array($aid));
-		}
-		$arrAggregation = $arrCategories;
-		unset($arrAggregation[0]);
-*/
-
 		if ($id){
 			$this->tpl->assign_vars(array(
-				'NAME' 				=> $this->pdh->get('mediacenter_categories', 'name', array($id)),
-				'DESCRIPTION'		=> $this->pdh->get('mediacenter_categories', 'description', array($id)),
-				
-				
-				'ALIAS'				=> $this->pdh->get('mediacenter_categories', 'alias', array($id)),					
-				'PER_PAGE'			=> $this->pdh->get('mediacenter_categories', 'per_page', array($id)),
-				'DD_PARENT' 		=> new hdropdown('parent', array('js'=>'onchange="renew_all_permissions();"', 'options' => $arrCategories, 'value' => $this->pdh->get('mediacenter_categories', 'parent', array($id)))),
-				'DD_PUBLISHED_STATE'=> new hradio('default_published_state]', array('options' => array(0 => $this->user->lang('not_published'), 1 => $this->user->lang('published')), 'value' => $this->pdh->get('mediacenter_categories', 'default_published_state', array($id)))),
-				'R_NOTIFY_UNPUBLISHED' => new hradio('notify_unpublished', array('value' => ($this->pdh->get('mediacenter_categories', 'notify_on_onpublished', array($id))))),
-				'R_COMMENTS'		=> new hradio('allow_comments', array('value' => ($this->pdh->get('mediacenter_categories', 'allow_comments', array($id))))),
-				'R_VOTING'			=> new hradio('allow_voting', array('value' => ($this->pdh->get('mediacenter_categories', 'allow_voting', array($id))))),
-				'DD_LAYOUT_TYPE' 	=> new hdropdown('layout', array('options' => $this->user->lang('mc_layout_types'), 'value' => $this->pdh->get('mediacenter_categories', 'layout', array($id)))),
-				'DD_MEDIA_TYPE' 	=> new hmultiselect('types', array('options' => $this->user->lang('mc_types'), 'value' => $this->pdh->get('mediacenter_categories', 'types', array($id)))),
-				'R_PUBLISHED'		=> new hradio('published', array('value' =>  ($this->pdh->get('mediacenter_categories', 'published', array($id))))),
-				'SPINNER_PER_PAGE'	=> new hspinner('per_page', array('value' =>  ($this->pdh->get('mediacenter_categories', 'per_page', array($id))), 'max'  => 50, 'min'  => 5,'step' => 5,'onlyinteger' => true)),
+				'NAME' 				=> $this->pdh->get('awards_achievements', 'name', array($id)),
+				'R_ACTIVE_STATE'	=> new hradio('active_state]', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => $this->pdh->get('awards_achievements', 'active', array($id)))),
+				'R_SPECIAL_STATE'	=> new hradio('special_state]', array('options' => array(1 => $this->user->lang('published'), 0 => $this->user->lang('not_published')), 'value' => $this->pdh->get('awards_achievements', 'special', array($id)))),
+				'DESCRIPTION'		=> $this->pdh->get('awards_achievements', 'description', array($id)),
+				'SPINNER_VALUE' 	=> new hspinner('value', array('value' =>  ($this->pdh->get('awards_achievements', 'value', array($id))), 'max'  => 99999, 'min'  => 0,'step' => 5,'onlyinteger' => true)),
+				'R_ACTIVE_STATE'	=> new hradio('active_state]', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => $this->pdh->get('awards_achievements', 'active', array($id)))),				
+				'DD_ADJ_MODULE' 	=> new hdropdown('adjustment', array('options' => $arrAdjDropdown, 'value' => $this->pdh->get('awards_achievements', 'adjustment', array($id)))),
+				'SPINNER_ADJ_VALUE'	=> new hspinner('adjustment_value', array('value' =>  ($this->pdh->get('awards_achievements', 'adjustment_value', array($id))), 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),
 			));
 		} else {
 			$this->tpl->assign_vars(array(
-				'PER_PAGE' => 25,	
-				'DD_PARENT' => new hdropdown('parent', array('js'=>'onchange="renew_all_permissions();"', 'options' => $arrCategories, 'value' => 0)),
-				'DD_PUBLISHED_STATE'=> new hradio('default_published_state]', array('options' => array(0 => $this->user->lang('not_published'), 1 => $this->user->lang('published')), 'value' => 1)),
-				'R_NOTIFY_UNPUBLISHED' => new hradio('notify_unpublished', array('value' => 0)),
-				'R_COMMENTS'		=> new hradio('allow_comments', array('value' => 1)),
-				'DD_LAYOUT_TYPE' 	=> new hdropdown('layout', array('options' => $this->user->lang('mc_layout_types'), 'value' => 0)),
-				'DD_MEDIA_TYPE' 	=> new hmultiselect('types', array('options' => $this->user->lang('mc_types'), 'value' => array(0,1,2))),
-				'R_PUBLISHED'		=> new hradio('published', array('value' =>  1)),
-				'R_VOTING'			=> new hradio('allow_voting', array('value' => 1)),
-				'SPINNER_PER_PAGE'	=> new hspinner('per_page', array('value' => $this->config->get('per_page', 'mediacenter'), 'max'  => 50, 'min'  => 5,'step' => 5,'onlyinteger' => true)),	
+				'NAME' 				=> '',
+				'R_ACTIVE_STATE'	=> new hradio('active_state]', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => 1)),
+				'R_SPECIAL_STATE'	=> new hradio('special_state]', array('options' => array(1 => $this->user->lang('published'), 0 => $this->user->lang('not_published')), 'value' => 1)),
+				'DESCRIPTION'		=> '',
+				'SPINNER_VALUE' 	=> new hspinner('value', array('value' =>  10, 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),	
+				'R_ACTIVE_STATE'	=> new hradio('active_state]', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => $this->pdh->get('awards_achievements', 'active', array($id)))),
+				'DD_ADJ_MODULE' 	=> new hdropdown('adjustment', array('options' => $arrAdjDropdown, 'value' => NULL)),
+				'SPINNER_ADJ_VALUE'	=> new hspinner('adjustment_value', array('value' =>  0, 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),	
 			));
 		}
-
 
 		//Get Icons
 		$icon_folder = $this->root_path.'plugins/awards/images';

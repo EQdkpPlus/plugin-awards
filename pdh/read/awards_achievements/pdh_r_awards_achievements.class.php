@@ -133,7 +133,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		}
 		
 		public function get_html_name($intAwardID, $strLink, $strSuffix){
-			return '<a href="'.$this->root_path.'plugins/mediacenter/admin/manage_categories.php'.$this->SID.'&aid='.$intAwardID.'">'.$this->get_name($intAwardID).'</a>';
+			return '<a href="'.$this->root_path.'plugins/awards/admin/add_award.php'.$this->SID.'&aid='.$intAwardID.'">'.$this->get_name($intAwardID).'</a>';
 		}
 
 		/**
