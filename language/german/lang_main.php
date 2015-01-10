@@ -35,6 +35,8 @@ $lang = array(
   'aw_update_award'				=> 'Erfolg bearbeiten',
   'aw_manage_awards'			=> 'Erfolge verwalten',
   'aw_assign_awards'			=> 'Erfolge zuweisen',
+  'aw_icon_header'				=> 'Icon auswählen',
+  'aw_upload_icon'				=> 'Icon hinzufügen',
   
   'aw_plugin_not_installed'		=> 'Das Awards-Plugin ist nicht installiert.',
   'aw_add_success'				=> ' wurde hinzugefügt',

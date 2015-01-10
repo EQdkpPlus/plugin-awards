@@ -154,22 +154,13 @@ class awards_add_award extends page_generic
 			2 => $this->user->lang('aw_cron_module_2')
 		);
 		
-		$this->tpl->assign_vars(array(
-			'NAME'		=> (isset($adj['reason'])) ? $adj['reason'] : '',
-			'DESCRIPTION'		=> (isset($adj['reason'])) ? $adj['reason'] : '',
-			
-			
-			'RAID'			=> new hdropdown('raid_id', array('options' => $raids, 'value' => ((isset($adj['raid_id'])) ? $adj['raid_id'] : ''))),
-			'MEMBERS'		=> $this->jquery->MultiSelect('members', $members, ((isset($adj['members'])) ? $adj['members'] : ''), array('width' => 350, 'filter' => true)),
-			'DATE'			=> $this->jquery->Calendar('date', $this->time->user_date(((isset($adj['date'])) ? $adj['date'] : $this->time->time), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
-			'VALUE'			=> (isset($adj['value'])) ? $adj['value'] : '',
-			'EVENT'			=> new hdropdown('event', array('options' => $events, 'value' => ((isset($adj['event'])) ? $adj['event'] : ''))),
-		));
-			
+		
+		
 			
 			
 		
 		
+/*		
 		$this->jquery->Tab_header('article_category-tabs');
 		$this->jquery->Tab_header('category-permission-tabs');
 		$editor = register('tinyMCE');
@@ -186,11 +177,14 @@ class awards_add_award extends page_generic
 		}
 		$arrAggregation = $arrCategories;
 		unset($arrAggregation[0]);
+*/
+
 		if ($id){
-			unset($arrCategories[$id]);
 			$this->tpl->assign_vars(array(
-				'DESCRIPTION'		=> $this->pdh->get('mediacenter_categories', 'description', array($id)),
 				'NAME' 				=> $this->pdh->get('mediacenter_categories', 'name', array($id)),
+				'DESCRIPTION'		=> $this->pdh->get('mediacenter_categories', 'description', array($id)),
+				
+				
 				'ALIAS'				=> $this->pdh->get('mediacenter_categories', 'alias', array($id)),					
 				'PER_PAGE'			=> $this->pdh->get('mediacenter_categories', 'per_page', array($id)),
 				'DD_PARENT' 		=> new hdropdown('parent', array('js'=>'onchange="renew_all_permissions();"', 'options' => $arrCategories, 'value' => $this->pdh->get('mediacenter_categories', 'parent', array($id)))),
@@ -203,9 +197,7 @@ class awards_add_award extends page_generic
 				'R_PUBLISHED'		=> new hradio('published', array('value' =>  ($this->pdh->get('mediacenter_categories', 'published', array($id))))),
 				'SPINNER_PER_PAGE'	=> new hspinner('per_page', array('value' =>  ($this->pdh->get('mediacenter_categories', 'per_page', array($id))), 'max'  => 50, 'min'  => 5,'step' => 5,'onlyinteger' => true)),
 			));
-			
 		} else {
-			
 			$this->tpl->assign_vars(array(
 				'PER_PAGE' => 25,	
 				'DD_PARENT' => new hdropdown('parent', array('js'=>'onchange="renew_all_permissions();"', 'options' => $arrCategories, 'value' => 0)),
@@ -220,9 +212,54 @@ class awards_add_award extends page_generic
 			));
 		}
 
+
+		//Get Icons
+		$icon_folder = $this->root_path.'plugins/awards/images';
+		$files = scandir($icon_folder);
+		$ignorefiles = array('.', '..', 'index.html', '.tmb');
+		
+		$icons = array();
+		foreach($files as $file) {
+			if(!in_array($file, $ignorefiles)) $icons[] = $icon_folder.'/'.$file;
+		}
+		
+		$icon_folder = $this->pfh->FolderPath('images', 'awards');
+		$files = scandir($icon_folder);
+		$ignorefiles = array('.', '..', 'index.html', '.tmb');
+		
+		foreach($files as $file) {
+			if(!in_array($file, $ignorefiles)) $icons[] = $icon_folder.'/'.$file;
+		}
+
+		$num = count($icons);
+		$fields = (ceil($num/6))*6;
+		$i = 0;
+
+		while($i<$fields)
+		{
+			$this->tpl->assign_block_vars('files_row', array());
+			$this->tpl->assign_var('ICONS', true);
+			$b = $i+6;
+			
+			for($i; $i<$b; $i++){
+			$icon = (isset($icons[$i])) ? $icons[$i] : '';
+			$this->tpl->assign_block_vars('files_row.fields', array(
+					'NAME'		=> pathinfo($icon, PATHINFO_FILENAME).'.'.pathinfo($icon, PATHINFO_EXTENSION),
+					'CHECKED'	=> (isset($award['icon']) AND pathinfo($icon, PATHINFO_FILENAME).'.'.pathinfo($icon, PATHINFO_EXTENSION) == $award['icon']) ? ' checked="checked"' : '',
+					'IMAGE'		=> "<img src='".$icon."' alt='".$icon."' width='48px' style='eventicon' />",
+					'CHECKBOX'	=> ($i < $num) ? true : false)
+				);
+			}
+		}
+		
+		//Image Uploader
+		$this->jquery->fileBrowser('all', 'image', $this->pfh->FolderPath('images','awards', 'absolute'), array('title' => $this->user->lang('aw_upload_icon'), 'onclosejs' => '$(\'#eventSubmBtn\').click();'));
+
 		$this->tpl->assign_vars(array(
 			'AID' => $id,
 		));
+		
+		// -- EQDKP ---------------------------------------------------------------
 		$this->core->set_vars(array(
 			'page_title'		=> (($id) ? $this->user->lang('aw_add_award').': '.$this->pdh->get('awards_achievements', 'name', array($id)) : $this->user->lang('aw_add_award')),
 			'template_path'		=> $this->pm->get_data('awards', 'template_path'),
