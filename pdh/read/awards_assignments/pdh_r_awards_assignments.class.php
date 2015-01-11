@@ -41,10 +41,10 @@ if ( !class_exists( "pdh_r_awards_assignments" ) ) {
 	);
 
 	public $presets = array(
-		'awards_assignments_id' => array('id', array('%intAssignmentID%'), array()),
-		'awards_assignments_date' => array('date', array('%intAssignmentID%'), array()),
-		'awards_assignments_user_id' => array('user_id', array('%intAssignmentID%'), array()),
-		'awards_assignments_award_id' => array('award_id', array('%intAssignmentID%'), array()),
+		'awards_assignments_id' 			=> array('id', array('%intAssignmentID%'), array()),
+		'awards_assignments_date' 			=> array('date', array('%intAssignmentID%'), array()),
+		'awards_assignments_user_id' 		=> array('user_id', array('%intAssignmentID%'), array()),
+		'awards_assignments_achievement_id' => array('achievement_id', array('%intAssignmentID%'), array()),
 	);
 
 	public function reset(){
@@ -65,10 +65,10 @@ if ( !class_exists( "pdh_r_awards_assignments" ) ) {
 				while($drow = $objQuery->fetchAssoc()){
 					//TODO: Check if id Column is available
 					$this->awards_assignments[(int)$drow['id']] = array(
-						'id'			=> (int)$drow['id'],
-						'date'			=> (int)$drow['date'],
+						'id'				=> (int)$drow['id'],
+						'date'				=> (int)$drow['date'],
 						'user_id'			=> (int)$drow['user_id'],
-						'award_id'			=> (int)$drow['award_id'],
+						'achievement_id'	=> (int)$drow['achievement_id'],
 
 					);
 				}
@@ -134,13 +134,13 @@ if ( !class_exists( "pdh_r_awards_assignments" ) ) {
 		}
 
 		/**
-		 * Returns award_id for $intAssignmentID
+		 * Returns  for achievement_id $intAssignmentID
 		 * @param integer $intAssignmentID
-		 * @return multitype award_id
+		 * @return multitype achievement_id
 		 */
-		 public function get_award_id($intAssignmentID){
+		 public function get_achievement_id($intAssignmentID){
 			if (isset($this->awards_assignments[$intAssignmentID])){
-				return $this->awards_assignments[$intAssignmentID]['award_id'];
+				return $this->awards_assignments[$intAssignmentID]['achievement_id'];
 			}
 			return false;
 		}

@@ -1,0 +1,73 @@
+<!-- IF S_NORMAL_HEADER -->
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
+		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
+		<li><a href="{EQDKP_ROOT_PATH}plugins/awards/admin/manage_achievements.php{SID}">{L_awards}: {L_aw_manage_achievements}</a></li>
+		<li class="current"><a href=""><!-- IF NAME == '' -->{L_aw_add_achievement}<!-- ELSE -->{L_aw_edit_achievement}<!-- ENDIF --></a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<!-- ENDIF -->
+
+<form method="post" action="{ACTION}" name="post">
+<fieldset class="settings smallsettings">
+	<legend><!-- IF NAME == '' -->{L_aw_add_achievement}<!-- ELSE -->{L_aw_edit_achievement}<!-- ENDIF --></legend>
+	<dl>
+		<dt><label>{L_name}:</label></dt>
+		<dd><input type="text" name="name" value="{NAME}" class="input" size='60' id="name" /></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_active}:</label></dt>
+		<dd>{R_ACTIVE_STATE}</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_aw_special}:</label></dt>
+		<dd>{R_SPECIAL_STATE}</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_description}:</label></dt>
+		<dd><textarea name="description" cols="50" rows="1">{DESCRIPTION}</textarea></dd>
+	</dl>
+	<dl>
+		<dt><label>{L_value}:</label></dt>
+		<dd>{SPINNER_POINTS}</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_aw_auto_assign}:</label></dt>
+		<dd>{DD_MODULE}</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_aw_dkp_value}:</label></dt>
+		<dd>{SPINNER_DKP}</dd>
+	</dl>
+	
+	<dl>
+		<dt><label>{L_aw_icon_header}:</label></dt>
+		<dd><button class="mainoption" type="button" id="iubuttonedit" onclick="elfinder_all();"><i class="fa fa-upload"></i> {L_aw_upload_icon}</button></dd>
+	</dl>
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="scrollable-x">
+		<!-- IF ICONS -->
+		<!-- BEGIN files_row -->
+		<tr class="colorswitch">
+			<!-- BEGIN fields -->
+			<td class="nowrap" width="16%">
+				<!-- IF files_row.fields.CHECKBOX -->
+				<label><input type="radio" name="icon" {files_row.fields.CHECKED} value="{files_row.fields.NAME}" />
+				{files_row.fields.IMAGE}</label>
+				<!-- ENDIF -->
+			</td>
+			<!-- END fields -->
+		</tr>
+		<!-- END files_row -->
+		<!-- ENDIF -->
+	</table>
+</fieldset>
+
+<div class="contentFooter">
+	<button class="mainoption" type="submit" name="save"><i class="fa fa-check"></i>{L_save}</button>
+	<input type="hidden" name="aid" value="{AID}" />
+	<button class="mainoption" type="button" name="" onclick="window.location.href='{EQDKP_ROOT_PATH}plugins/awards/admin/manage_achievements.php{SID}'"><i class="fa fa-chevron-left"></i>{L_cancel}</button>
+</div>
+{CSRF_TOKEN}
+</form>

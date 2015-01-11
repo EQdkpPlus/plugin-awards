@@ -45,15 +45,51 @@ class awards_manage_assignments extends page_generic
 		
 		$handler = array(
 			#'save' => array('process' => 'save', 'check' => 'a_awards_manage', 'csrf' => true),
+			'aid'		=> array('process' => 'edit', 'check' => 'a_awards_manage'),
 		);
 		parent::__construct(false, $handler, array('manage_assignments', 'name'), null, 'selected_ids[]');
 		$this->process();
 	}
 	
+	
+	
+	
+	/**
+	  * Edit
+	  * edit assignment
+	  */	
+	public function edit(){
+		$id = $this->in->get('aid', 0);
+		
+		if ($id){
+			$this->tpl->assign_vars(array(
+				'NAME' 				=> $this->pdh->get('awards_achievements', 'name', array($id)),
+			));
+		} else {
+			$this->tpl->assign_vars(array(
+				'NAME' 				=> '',
+			));
+		}
+		
+		$this->tpl->assign_vars(array(
+			'AID' => $id,
+		));
+		
+		// -- EQDKP ---------------------------------------------------------------
+		$this->core->set_vars(array(
+			'page_title'		=> (($id) ? $this->user->lang('aw_add_assignment').': '.$this->pdh->get('awards_assignments', 'name', array($id)) : $this->user->lang('aw_add_assignment')),
+			'template_path'		=> $this->pm->get_data('awards', 'template_path'),
+			'template_file'		=> 'admin/manage_assignments_edit.html',
+			'display'			=> true)
+		);
+	}
+	
+	
+	
 
 	/**
 	  * Display
-	  * display the page
+	  * display all assignments
 	  */
 	public function display(){
 		$view_list = $this->pdh->get('awards_assignments', 'id_list', array());

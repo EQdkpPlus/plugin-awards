@@ -51,7 +51,7 @@ $awardsSQL = array(
 			`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 			`date` INT(10) NULL DEFAULT '0',
 			`user_id` INT(10) UNSIGNED NULL DEFAULT '0',
-			`award_id` INT(10) UNSIGNED NULL DEFAULT '0',
+			`achievement_id` INT(10) UNSIGNED NULL DEFAULT '0',
 			PRIMARY KEY (`id`)
 		)
 		DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
