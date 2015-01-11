@@ -25,9 +25,12 @@ $module_lang = array(
 	'editicon'				=> '',
 	'active'				=> '',
 	'special'				=> '',
+	'icon'					=> '',
 	'name'					=> 'Name',
 	'description'			=> 'Beschreibung',
-	'value'					=> 'Punkte',
+	'points'				=> 'Punkte',
+	'module'				=> 'Modul',
+	'dkp'					=> 'DKP',
 );
 
 

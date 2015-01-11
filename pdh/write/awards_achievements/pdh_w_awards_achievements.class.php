@@ -33,25 +33,25 @@ if(!class_exists('pdh_w_awards_achievements')) {
 		'id'				=> "{L_ID}",
 		'name'				=> "{L_NAME}",
 		'description'		=> "{L_DESCRIPTION}",
-		'sort_id'			=> "{L_SORTATION}",
+		'sort_id'			=> "{L_AW_SORTATION}",
 		'active'			=> "{L_ACTIVE}",
 		'special'			=> "{L_AW_SPECIAL}",
-		'value'				=> "{L_VALUE}",
-		'image'				=> "{L_ICON}",
-		'image_colors'		=> "{L_IMAGE_COLORS}",
-		'adjustment'		=> "{L_AW_ADJ_MODULE}",
-		'adjustment_value'  => "{L_AW_ADJ_VALUE}",
+		'points'			=> "{L_AW_POINTS}",
+		'icon'				=> "{L_ICON}",
+		'icon_colors'		=> "{L_AW_ICON_COLORS}",
+		'module'			=> "{L_AW_MODULE}",
+		'dkp' 				=> "{L_AW_DKP}",
 	);
 	
 
 	/**
-	  * Delete all selected Awards
+	  * Delete all selected Achievements
 	  */
 	public function delete($id) {
-		$arrAwards = $this->pdh->get('awards_achievements', 'id_list_for_category', array($id));
-		if (isset($arrMedia[0]) && count($arrAwards)){
-			foreach($arrAwards[0] as $intAwardID){
-				$this->pdh->put('awards_achievements', 'delete', array($intAwardID));
+		$arrAchievements = $this->pdh->get('awards_achievements', 'id_list_for_category', array($id));
+		if (isset($arrMedia[0]) && count($arrAchievements)){
+			foreach($arrAchievements[0] as $intAchievementID){
+				$this->pdh->put('awards_achievements', 'delete', array($intAchievementID));
 			}
 		}
 		
@@ -62,12 +62,12 @@ if(!class_exists('pdh_w_awards_achievements')) {
 		return true;
 	}
 		
-	private function delete_recursiv($intAwardID){
-		$arrOldData = $this->pdh->get('awards_achievements', 'data', array($intAwardID));
-		$this->db->prepare("DELETE FROM __awards_achievements WHERE id =?")->execute($intAwardID);
+	private function delete_recursiv($intAchievementID){
+		$arrOldData = $this->pdh->get('awards_achievements', 'data', array($intAchievementID));
+		$this->db->prepare("DELETE FROM __awards_achievements WHERE id =?")->execute($intAchievementID);
 		
 		$log_action = $this->logs->diff(false, $arrOldData, $this->arrLogLang);
-		$this->log_insert("action_award_deleted", $log_action, $intAwardID, $arrOldData["name"],  1, 'awards');
+		$this->log_insert("action_achievement_deleted", $log_action, $intAchievementID, $arrOldData["name"],  1, 'awards');
 		
 		return true;
 	}
@@ -76,8 +76,8 @@ if(!class_exists('pdh_w_awards_achievements')) {
 	/**
 	  * Add a Award
 	  */
-	public function add($strName, $strDescription, $intActive, $intSpecial, $intValue,
-						$strImage, $arrImageColors, $strAdjustment, $intAdjustmentValue){
+	public function add($strName, $strDescription, $intActive, $intSpecial,
+						$intPoints, $strIcon, $arrIconColors, $strModule, $intDKP){
 		// Parse TinyMC Code of 'Description'
 		#$strDescription = $this->bbcode->replace_shorttags($strDescription);
 		#$strDescription = $this->embedly->parseString($strDescription);
@@ -88,11 +88,11 @@ if(!class_exists('pdh_w_awards_achievements')) {
 			'sort_id'			=> 99999999,
 			'active'			=> $intActive,
 			'special'			=> $intSpecial,
-			'value'				=> $intValue,
-			'image' 			=> $strImage,
-			'image_colors'		=> serialize($arrImageColors),
-			'adjustment' 		=> $strAdjustment,
-			'adjustment_value'	=> $intAdjustmentValue,
+			'points'			=> $intPoints,
+			'icon' 				=> $strIcon,
+			'icon_colors'		=> serialize($arrIconColors),
+			'module' 			=> $strModule,
+			'dkp'				=> $intDKP,
 		);
 		
 		$objQuery = $this->db->prepare("INSERT INTO __awards_achievements :p")->set($arrQuery)->execute();
@@ -100,7 +100,7 @@ if(!class_exists('pdh_w_awards_achievements')) {
 		if ($objQuery){
 			$id = $objQuery->insertId;
 			$log_action = $this->logs->diff(false, $arrQuery, $this->arrLogLang);
-			$this->log_insert("action_award_added", $log_action, $id, $arrQuery["name"], 1, 'awards');
+			$this->log_insert("action_achievement_added", $log_action, $id, $arrQuery["name"], 1, 'awards');
 			
 			$this->pdh->enqueue_hook('awards_achievements_update');
 			return $id;
@@ -113,8 +113,8 @@ if(!class_exists('pdh_w_awards_achievements')) {
 	/**
 	  * Update a Award
 	  */
-	public function update($id, $strName, $strDescription, $intSortID, $intActive, $intSpecial, $intValue,
-							$strImage, $arrImageColors, $strAdjustment, $intAdjustmentValue){
+	public function update($id, $strName, $strDescription, $intSortID, $intActive, $intSpecial,
+							$intPoints, $strIcon, $arrIconColors, $strModule, $intDKP){
 		// Parse TinyMC Code of 'Description'
 		#$strDescription = $this->bbcode->replace_shorttags($strDescription);
 		#$strDescription = $this->embedly->parseString($strDescription);
@@ -125,11 +125,11 @@ if(!class_exists('pdh_w_awards_achievements')) {
 			'sort_id'			=> $intSortID,
 			'active'			=> $intActive,
 			'special'			=> $intSpecial,
-			'value'				=> $intValue,
-			'image' 			=> $strImage,
-			'image_colors'		=> serialize($arrImageColors),
-			'adjustment' 		=> $strAdjustment,
-			'adjustment_value'	=> $intAdjustmentValue,
+			'points'			=> $intPoints,
+			'icon' 				=> $strIcon,
+			'icon_colors'		=> serialize($arrIconColors),
+			'module' 			=> $strModule,
+			'dkp'				=> $intDKP,
 		);
 		
 		$arrOldData = $this->pdh->get('awards_achievements', 'data', array($id));
@@ -140,7 +140,7 @@ if(!class_exists('pdh_w_awards_achievements')) {
 			$this->pdh->enqueue_hook('awards_achievements_update');
 			
 			$log_action = $this->logs->diff($arrOldData, $arrQuery, $this->arrLogLang, array('description' => 1), true);
-			$this->log_insert("action_award_updated", $log_action, $id, $arrOldData["name"], 1, 'awards');
+			$this->log_insert("action_achievement_updated", $log_action, $id, $arrOldData["name"], 1, 'awards');
 			
 			return $id;
 		}

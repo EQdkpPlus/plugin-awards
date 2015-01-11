@@ -3,7 +3,7 @@
 	<ul class="breamcrumb">
 		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
-		<li class="current"><a href="">{L_awards}: {L_aw_manage_awards}</a></li>
+		<li class="current"><a href="">{L_awards}: {L_aw_manage_achievements}</a></li>
 	</ul>
 	<div class="clear"></div>
 </div>
@@ -13,11 +13,12 @@
 	$(document).ready(function() {
 		$('.eyeToggleTrigger').on('click', function(event){
 			if ($(this).hasClass('eye')){
-				//Hide
+				// set 'special' to inactive
 				$(this).siblings('.special_cb').val(0);
 				$(this).removeClass('eye');
 				$(this).addClass('eye-gray');
 			} else {
+				// set 'special' to active
 				$(this).siblings('.special_cb').val(1);
 				$(this).removeClass('eye-gray');
 				$(this).addClass('eye');
@@ -25,11 +26,12 @@
 		});
 		$('.activeToggleTrigger').on('click', function(event){
 			if ($(this).hasClass('fa-check-square-o')){
-				//Hide
+				// set 'active' to inactive
 				$(this).siblings('.active_cb').val(0);
 				$(this).removeClass('fa-check-square-o icon-color-green');
 				$(this).addClass('fa-square-o icon-color-red');
 			} else {
+				// set 'active' to active
 				$(this).siblings('.active_cb').val(1);
 				$(this).removeClass('fa-square-o icon-color-red');
 				$(this).addClass('fa-check-square-o icon-color-green');
@@ -40,14 +42,14 @@
 
 <form method="post" action="{ACTION}" name="post">
 	<div class="contentHeader">
-		<h1 class="contentTitle">{L_aw_manage_awards}</h1>
+		<h1 class="contentTitle">{L_aw_manage_achievements}</h1>
 	</div>
 	<div class="tableHeader floatRight">
-		<button class="mainoption" type="button" name="add" onclick="window.location='add_award.php{SID}&amp;aid=0'"><i class="fa fa-plus"></i>{L_aw_add_award}</button>
+		<button class="mainoption" type="button" name="add" onclick="window.location='manage_achievements.php{SID}&amp;aid=0'"><i class="fa fa-plus"></i>{L_aw_add_achievement}</button>
 	</div>
 	<div class="clear"></div>
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="colorswitch" id="article_categories-table">
-		{AWARD_LIST}
+		{ACHIEVEMENTS_LIST}
 	</table>
 	<div class="center pagination_wrapper">
 		{PAGINATION}

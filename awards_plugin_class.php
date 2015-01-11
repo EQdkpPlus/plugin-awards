@@ -75,10 +75,10 @@ class awards extends plugin_generic
 
 		// -- PDH Modules -------------------------------------
 		$this->add_pdh_read_module('awards_achievements');
-		$this->add_pdh_read_module('awards_achievements_assigned');
+		$this->add_pdh_read_module('awards_assignments');
 		
 		$this->add_pdh_write_module('awards_achievements');
-		#$this->add_pdh_write_module('awards_achievements_assigned');
+		#$this->add_pdh_write_module('awards_assignments');
 
 		// -- Menu --------------------------------------------
 		$this->add_menu('admin', $this->gen_admin_menu());
@@ -124,14 +124,14 @@ class awards extends plugin_generic
 			'name' => $this->user->lang('awards'),
 			'icon' => 'fa fa-mortar-board ',
 			1 => array (
-				'link'  => 'plugins/awards/admin/add_award.php'.$this->SID,
-				'text'  => $this->user->lang('aw_add_award'),
-				'check' => 'a_awards_add',
+				'link'  => 'plugins/awards/admin/manage_achievements.php'.$this->SID,
+				'text'  => $this->user->lang('aw_manage_achievements'),
+				'check' => 'a_awards_manage',
 				'icon'  => 'fa-gift'
 			),
 			2 => array (
-				'link'  => 'plugins/awards/admin/manage_awards.php'.$this->SID,
-				'text'  => $this->user->lang('aw_manage_awards'),
+				'link'  => 'plugins/awards/admin/manage_assignments.php'.$this->SID,
+				'text'  => $this->user->lang('aw_manage_assignments'),
 				'check' => 'a_awards_manage',
 				'icon'  => 'fa-list'
 			),

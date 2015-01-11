@@ -3,8 +3,8 @@
 	<ul class="breamcrumb">
 		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
-		<li><a href="{EQDKP_ROOT_PATH}plugins/awards/admin/add_award.php{SID}">{L_awards}: {L_aw_manage_awards}</a></li>
-		<li class="current"><a href=""><!-- IF NAME == '' -->{L_aw_add_award}<!-- ELSE -->{L_aw_update_award}<!-- ENDIF --></a></li>
+		<li><a href="{EQDKP_ROOT_PATH}plugins/awards/admin/manage_achievements.php{SID}">{L_awards}: {L_aw_manage_achievements}</a></li>
+		<li class="current"><a href=""><!-- IF NAME == '' -->{L_aw_add_achievement}<!-- ELSE -->{L_aw_edit_achievement}<!-- ENDIF --></a></li>
 	</ul>
 	<div class="clear"></div>
 </div>
@@ -12,7 +12,7 @@
 
 <form method="post" action="{ACTION}" name="post">
 <fieldset class="settings smallsettings">
-	<legend><!-- IF NAME == '' -->{L_aw_add_award}<!-- ELSE -->{L_aw_update_award}<!-- ENDIF --></legend>
+	<legend><!-- IF NAME == '' -->{L_aw_add_achievement}<!-- ELSE -->{L_aw_edit_achievement}<!-- ENDIF --></legend>
 	<dl>
 		<dt><label>{L_name}:</label></dt>
 		<dd><input type="text" name="name" value="{NAME}" class="input" size='60' id="name" /></dd>
@@ -31,15 +31,15 @@
 	</dl>
 	<dl>
 		<dt><label>{L_value}:</label></dt>
-		<dd>{SPINNER_VALUE}</dd>
+		<dd>{SPINNER_POINTS}</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_aw_adj_module}:</label></dt>
-		<dd>{DD_ADJ_MODULE}</dd>
+		<dt><label>{L_aw_auto_assign}:</label></dt>
+		<dd>{DD_MODULE}</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_aw_adj_value}:</label></dt>
-		<dd>{SPINNER_ADJ_VALUE}</dd>
+		<dt><label>{L_aw_dkp_value}:</label></dt>
+		<dd>{SPINNER_DKP}</dd>
 	</dl>
 	
 	<dl>
@@ -67,10 +67,7 @@
 <div class="contentFooter">
 	<button class="mainoption" type="submit" name="save"><i class="fa fa-check"></i>{L_save}</button>
 	<input type="hidden" name="aid" value="{AID}" />
-	<!-- IF S_UPD -->
-	<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete}</button>
-	<!-- ENDIF -->
-	<button class="mainoption" type="button" name="" onclick="window.location.href='{EQDKP_ROOT_PATH}plugins/awards/admin/add_award.php{SID}'"><i class="fa fa-chevron-left"></i>{L_cancel}</button>
+	<button class="mainoption" type="button" name="" onclick="window.location.href='{EQDKP_ROOT_PATH}plugins/awards/admin/manage_achievements.php{SID}'"><i class="fa fa-chevron-left"></i>{L_cancel}</button>
 </div>
 {CSRF_TOKEN}
 </form>

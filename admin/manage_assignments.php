@@ -31,7 +31,7 @@ include_once($eqdkp_root_path.'common.php');
 /*+----------------------------------------------------------------------------
   | awards_manage_awards
   +--------------------------------------------------------------------------*/
-class awards_manage_awards extends page_generic
+class awards_manage_assignments extends page_generic
 {
 	/**
 	  * Constructor
@@ -46,7 +46,7 @@ class awards_manage_awards extends page_generic
 		$handler = array(
 			#'save' => array('process' => 'save', 'check' => 'a_awards_manage', 'csrf' => true),
 		);
-		parent::__construct(false, $handler, array('add_award', 'name'), null, 'selected_ids[]');
+		parent::__construct(false, $handler, array('manage_assignments', 'name'), null, 'selected_ids[]');
 		$this->process();
 	}
 	
@@ -56,12 +56,12 @@ class awards_manage_awards extends page_generic
 	  * display the page
 	  */
 	public function display(){
-		$view_list = $this->pdh->get('awards_achievements_assigned', 'id_list', array());
+		$view_list = $this->pdh->get('awards_assignments', 'id_list', array());
 		$hptt_page_settings = array(
 			'name'					=> 'hptt_aw_admin_manage_awards',
-			'table_main_sub'		=> '%intAwardID%',
-			'table_subs'			=> array('%intAwardID%', '%intAwardID%'),
-			'page_ref'				=> 'manage_awards.php',
+			'table_main_sub'		=> '%intAssignmentID%',
+			'table_subs'			=> array('%intAssignmentID%', '%intAssignmentID%'),
+			'page_ref'				=> 'manage_assignments.php',
 			'show_numbers'			=> true,
 			'show_select_boxes'		=> true,
 			'selectboxes_checkall'	=> true,
@@ -69,12 +69,12 @@ class awards_manage_awards extends page_generic
 			'table_sort_dir'		=> 'asc',
 			'table_sort_col'		=> 0,
 			'table_presets'			=> array(
-				array('name' => 'awards_achievements_assigned_date', 'sort' => true, 'th_add' => '', 'td_add' => ''),
-				array('name' => 'awards_achievements_assigned_user', 'sort' => true, 'th_add' => '', 'td_add' => ''),
-				array('name' => 'awards_achievements_name', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+				array('name' => 'awards_assignments_date', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+				array('name' => 'awards_assignments_user', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+				array('name' => 'awards_assignments_name', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 			),
 		);
-		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->root_path.'plugins/awards/admin/manage_awards.php', '%link_url_suffix%' => ''));
+		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->root_path.'plugins/awards/admin/manage_assignments.php', '%link_url_suffix%' => ''));
 		$page_suffix = '&amp;start='.$this->in->get('start', 0);
 		$sort_suffix = '?sort='.$this->in->get('sort');
 		
@@ -83,20 +83,20 @@ class awards_manage_awards extends page_generic
 		$this->confirm_delete($this->user->lang('aw_confirm_delete_assignment'));
 
 		$this->tpl->assign_vars(array(
-			'AWARDS_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix,null,1,null,false, array('awards_achievements_assigned', 'checkbox_check')),
+			'AWARDS_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix,null,1,null,false, array('awards_assignments', 'checkbox_check')),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count())
 		);
 	
 	// -- EQDKP ---------------------------------------------------------------
 	$this->core->set_vars(array(
-			'page_title'		=> $this->user->lang('aw_manage_awards'),
+			'page_title'		=> $this->user->lang('aw_manage_assignments'),
 			'template_path'		=> $this->pm->get_data('awards', 'template_path'),
-			'template_file'		=> 'admin/manage_awards.html',
+			'template_file'		=> 'admin/manage_assignments.html',
 			'display'			=> true)
 		);
 	}
 
 }
-registry::register('awards_manage_awards');
+registry::register('awards_manage_assignments');
 
 ?>

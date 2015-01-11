@@ -27,7 +27,7 @@ $awardsSQL = array(
 
 	'uninstall' => array(
 		1     => 'DROP TABLE IF EXISTS `__awards_achievements`',
-		2     => 'DROP TABLE IF EXISTS `__awards_achievements_assigned`',
+		2     => 'DROP TABLE IF EXISTS `__awards_assignments`',
 	),
 
 	'install'   => array(
@@ -38,16 +38,16 @@ $awardsSQL = array(
 			`sort_id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
 			`active` TINYINT(3) UNSIGNED NULL DEFAULT '0',
 			`special` TINYINT(3) UNSIGNED NULL DEFAULT '0',
-			`value` INT(10) NULL DEFAULT '0',
-			`image` TEXT NULL COLLATE 'utf8_bin',
-			`image_colors` TEXT NULL COLLATE 'utf8_bin',
-			`adjustment` TEXT NULL COLLATE 'utf8_bin',
-			`adjustment_value` INT(10) NULL DEFAULT '0',
+			`points` INT(10) NULL DEFAULT '0',
+			`icon` TEXT NULL COLLATE 'utf8_bin',
+			`icon_colors` TEXT NULL COLLATE 'utf8_bin',
+			`module` TEXT NULL COLLATE 'utf8_bin',
+			`dkp` INT(10) NULL DEFAULT '0',
 			PRIMARY KEY (`id`)
 		)
 		DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 		",
-		2 => "CREATE TABLE `__awards_achievements_assigned` (
+		2 => "CREATE TABLE `__awards_assignments` (
 			`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 			`date` INT(10) NULL DEFAULT '0',
 			`user_id` INT(10) UNSIGNED NULL DEFAULT '0',
