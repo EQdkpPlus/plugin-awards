@@ -35,6 +35,7 @@ $lang = array(
   'aw_update_award'				=> 'Erfolg editieren',
   'aw_manage_awards'			=> 'Erfolge verwalten',
   'aw_assign_awards'			=> 'Erfolge zuweisen',
+  'aw_assign_award'				=> 'Zuweisung hinzufügen',
   'aw_icon_header'				=> 'Icon auswählen',
   'aw_upload_icon'				=> 'Icon hinzufügen',
   'aw_special'					=> 'Spezial',
@@ -54,7 +55,7 @@ $lang = array(
   'aw_add_success'				=> ' wurde hinzugefügt',
   'aw_add_nosuccess'			=> ' konnte nicht hinzugefügt werden',
   'aw_confirm_delete_award'		=> 'Bist du sicher, dass Du die Erfolge %s wirklich löschen willst? Alle erhaltenen DKP werden dabei auch gelöscht!',
-  
+  'aw_confirm_delete_assignment'=> 'Bist du sicher, dass Du die Erfolgszuweisung %s wirklich löschen willst?',
   
   
 /* 

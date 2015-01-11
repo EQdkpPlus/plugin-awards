@@ -24,12 +24,12 @@ if (!defined('EQDKP_INC')){
 }
 
 $awardsSQL = array(
-	
+
 	'uninstall' => array(
 		1     => 'DROP TABLE IF EXISTS `__awards_achievements`',
 		2     => 'DROP TABLE IF EXISTS `__awards_achievements_assigned`',
 	),
-	
+
 	'install'   => array(
 		1 => "CREATE TABLE `__awards_achievements` (
 			`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -49,9 +49,9 @@ $awardsSQL = array(
 		",
 		2 => "CREATE TABLE `__awards_achievements_assigned` (
 			`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-			`award_id` INT(10) UNSIGNED NULL DEFAULT '0',
-			`user_id` INT(10) UNSIGNED NULL DEFAULT '0',
 			`date` INT(10) NULL DEFAULT '0',
+			`user_id` INT(10) UNSIGNED NULL DEFAULT '0',
+			`award_id` INT(10) UNSIGNED NULL DEFAULT '0',
 			PRIMARY KEY (`id`)
 		)
 		DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
