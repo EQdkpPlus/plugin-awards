@@ -238,12 +238,14 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 			return false;
 		}
 		
+		// hierfür bite in game.class.php nachschauen, abändern auf this->awards->decorate()
+		/*public function get_html_icon($intAchievementID, $width=30){
+			return $this->game->decorate('primary', $intAchievementID, array(), $width);
+		}*/
+		
 		/*public function get_icon($event_id, $withpath=false){
 			if($withpath) return $this->game->decorate('events', $event_id, array(), 0, true);
 			return $this->events[$event_id]['icon'];
-		}
-		public function get_html_icon($intAchievementID, $width=30){
-			return $this->game->decorate('events', $intAchievementID, array(), $width);
 		}*/
 
 		/**

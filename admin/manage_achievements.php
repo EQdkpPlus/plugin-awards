@@ -220,7 +220,10 @@ class awards_manage_achievements extends page_generic
 		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
 			foreach($this->in->getArray('selected_ids','int') as $id) {
 				$pos[] = stripslashes($this->pdh->get('awards_achievements', 'name', array($id)));
-				$retu[$id] = $this->pdh->put('awards_achievements', 'delete', array($id));
+				$intEventID = $this->pdh->get('awards_achievements', 'event_id', array($id));
+				
+				if($this->pdh->put('event', 'delete_event', array($intEventID)))
+					$retu[$id] = $this->pdh->put('awards_achievements', 'delete', array($id));
 			}
 		}
 
@@ -261,7 +264,7 @@ class awards_manage_achievements extends page_generic
 				array('name' => 'awards_achievements_sort_id', 'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
 				array('name' => 'awards_achievements_active',  'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
 				array('name' => 'awards_achievements_special', 'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
-				array('name' => 'awards_achievements_icon',	   'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
+				array('name' => 'awards_achievements_icon',	   'sort' => false, 'th_add' => 'width="20"', 'td_add' => ''),
 				array('name' => 'awards_achievements_name',	   'sort' => true, 'th_add' => '', 'td_add' => ''),
 				array('name' => 'awards_achievements_description', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 				array('name' => 'awards_achievements_points',  'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
