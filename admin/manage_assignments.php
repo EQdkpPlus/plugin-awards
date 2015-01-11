@@ -44,7 +44,7 @@ class awards_manage_assignments extends page_generic
 		$this->user->check_auth('a_awards_manage');
 		
 		$handler = array(
-			#'save' => array('process' => 'save', 'check' => 'a_awards_manage', 'csrf' => true),
+			'save' => array('process' => 'save', 'check' => 'a_awards_manage', 'csrf' => true),
 			'aid'		=> array('process' => 'edit', 'check' => 'a_awards_manage'),
 		);
 		parent::__construct(false, $handler, array('manage_assignments', 'name'), null, 'selected_ids[]');
@@ -71,24 +71,18 @@ class awards_manage_assignments extends page_generic
 		
 		$intAdjID = $this->pdh->get('awards_assignments', 'adj_id', array($id));
 		
-		if ($intUserID == "0"){
-			$this->core->message($this->user->lang('members'), $this->user->lang('missing_values'), 'red');
-			$this->edit();
-			return;
-		}
-		
 		if ($id){
 			// upd ADJUSTMENT
 			if($this->pdh->put('adjustment', 'update_adjustment', array($intAdjID, $fltDKP, $strName, $intUserID, $intEventID, 0, $intDate, true))){
 				// add ASSIGNMENT
-				$blnResult = $this->pdh->put();
+				$blnResult = $this->pdh->put('awards_assignments', 'update', array($id, $intDate, $intUserID, $intAchievmentID, $intAdjID));
 			} else { $blnResult = false; }
 		} else {
 			// add ADJUSTMENT
 			$intAdjID = $this->pdh->put('adjustment', 'add_adjustment', array($fltDKP, $strName, $intUserID, $intEventID, 0, $intDate));
 			if($intAdjID > 0){
 				// add ASSIGNMENT
-				$blnResult = $this->pdh->put();
+				$blnResult = $this->pdh->put('awards_assignments', 'add', array($intDate, $intUserID, $intAchievmentID, $intAdjID));
 			} else { $blnResult = false; }
 		}
 		
