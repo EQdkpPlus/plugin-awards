@@ -45,6 +45,7 @@ if ( !class_exists( "pdh_r_awards_assignments" ) ) {
 		'awards_assignments_date' 			=> array('date', array('%intAssignmentID%'), array()),
 		'awards_assignments_user_id' 		=> array('user_id', array('%intAssignmentID%'), array()),
 		'awards_assignments_achievement_id' => array('achievement_id', array('%intAssignmentID%'), array()),
+		'awards_assignments_adj_id' 		=> array('adj_id', array('%intAssignmentID%'), array()),
 	);
 
 	public function reset(){
@@ -69,7 +70,7 @@ if ( !class_exists( "pdh_r_awards_assignments" ) ) {
 						'date'				=> (int)$drow['date'],
 						'user_id'			=> (int)$drow['user_id'],
 						'achievement_id'	=> (int)$drow['achievement_id'],
-
+						'adj_id'			=> (int)$drow['adj_id'],
 					);
 				}
 
@@ -120,6 +121,10 @@ if ( !class_exists( "pdh_r_awards_assignments" ) ) {
 			}
 			return false;
 		}
+		
+		public function get_html_date($intAssignmentID) {
+			return $this->time->user_date($this->get_date($intAssignmentID));
+		}
 
 		/**
 		 * Returns user_id for $intAssignmentID
@@ -132,6 +137,14 @@ if ( !class_exists( "pdh_r_awards_assignments" ) ) {
 			}
 			return false;
 		}
+		
+		public function get_member_name($intAssignmentID) {
+			return $this->pdh->get('member', 'name', array($this->get_user_id($intAssignmentID)));
+		}
+
+		public function get_html_member_name($intAssignmentID) {
+			return $this->pdh->geth('member', 'name', array($this->get_user_id($intAssignmentID)));
+		}
 
 		/**
 		 * Returns  for achievement_id $intAssignmentID
@@ -141,6 +154,18 @@ if ( !class_exists( "pdh_r_awards_assignments" ) ) {
 		 public function get_achievement_id($intAssignmentID){
 			if (isset($this->awards_assignments[$intAssignmentID])){
 				return $this->awards_assignments[$intAssignmentID]['achievement_id'];
+			}
+			return false;
+		}
+		
+		/**
+		 * Returns adj_id for $intAssignmentID
+		 * @param integer $intAssignmentID
+		 * @return multitype adj_id
+		 */
+		 public function get_adj_id($intAssignmentID){
+			if (isset($this->awards_assignments[$intAssignmentID])){
+				return $this->awards_assignments[$intAssignmentID]['adj_id'];
 			}
 			return false;
 		}

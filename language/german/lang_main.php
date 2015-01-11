@@ -66,6 +66,8 @@ $lang = array(
   'aw_plugin_not_installed'		=> 'Das Awards-Plugin ist nicht installiert.',
   'aw_add_success'				=> '%s wurde hinzugefügt',
   'aw_add_nosuccess'			=> '%s konnte nicht hinzugefügt werden',
+  'aw_assign_success'			=> '%s wurde %s zugewiesen',
+  'aw_assign_nosuccess'			=> '%s konnte nicht zugewiesen werden',
   
   'aw_confirm_delete_achievement'	=> 'Bist du sicher, dass Du die Erfolge %s wirklich löschen willst? Alle erhaltenen DKP werden dabei auch gelöscht!',
   
