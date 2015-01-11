@@ -79,10 +79,18 @@ class awards_manage_achievements extends page_generic
 		}
 		
 		if ($id){
-			$blnResult = $this->pdh->put('awards_achievements', 'update', array(
-				$id, $strName, $strDescription, $intSortID, $intActive, $intSpecial,
-				$intPoints, $strIcon, $arrIconColors, $strModule, $fltDKP
-			));
+			// get and upd EVENT
+			$intEventID = $this->pdh->get('awards_achievements', 'event_id', array($id));
+			if($this->pdh->put('event', 'update_event', array($intEventID, $strName, 0, ''))){
+				// upd MDKP
+				if($this->pdh->put('multidkp', 'add_multidkp2event', array($intEventID, $intMDKP))){
+					// upd ACHIEVEMENT
+					$blnResult = $this->pdh->put('awards_achievements', 'update', array(
+						$id, $strName, $strDescription, $intSortID, $intActive, $intSpecial,
+						$intPoints, $strIcon, $arrIconColors, $strModule, $fltDKP, $intEventID
+					));
+				} else { $blnResult = false; } // <-- if MDKP fail
+			} else { $blnResult = false; } // <-- if EVENT fail
 		} else {
 			// add EVENT
 			$intEventID = $this->pdh->put('event', 'add_event', array($strName, 0, ''));
