@@ -43,12 +43,14 @@ $lang = array(
   'aw_special'					=> 'Spezial',
   'aw_auto_assign'				=> 'Automatisch zuweisen',
   'aw_dkp_value'				=> 'DKP Wert',
+  'aw_multidkp'					=> 'Multidkp-Konten',
   'aw_sortation'				=> 'Sortierung',
   'aw_points'					=> 'Punkte',
   'aw_icon_colors'				=> 'Icon Farben',
   'aw_module'					=> 'Modul',
   'aw_dkp'						=> 'DKP',
-  'aw_multidkp'					=> 'Multidkp-Konten',
+  'aw_event_id'					=> 'Ereignis ID',
+  
   
   // Adjustment Modules
   'aw_cron_module_0'			=> 'Kein Modul ausgewählt',

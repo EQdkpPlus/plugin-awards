@@ -42,7 +42,8 @@ $awardsSQL = array(
 			`icon` TEXT NULL COLLATE 'utf8_bin',
 			`icon_colors` TEXT NULL COLLATE 'utf8_bin',
 			`module` TEXT NULL COLLATE 'utf8_bin',
-			`dkp` INT(10) NULL DEFAULT '0',
+			`dkp` FLOAT(11,2) NULL DEFAULT NULL,
+			`event_id` INT(10) UNSIGNED NULL DEFAULT '0',
 			PRIMARY KEY (`id`)
 		)
 		DEFAULT CHARSET=utf8 COLLATE=utf8_bin;

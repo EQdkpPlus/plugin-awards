@@ -41,6 +41,7 @@ if(!class_exists('pdh_w_awards_achievements')) {
 		'icon_colors'		=> "{L_AW_ICON_COLORS}",
 		'module'			=> "{L_AW_MODULE}",
 		'dkp' 				=> "{L_AW_DKP}",
+		'event_id' 			=> "{L_AW_EVENT_ID}",
 	);
 	
 
@@ -74,10 +75,10 @@ if(!class_exists('pdh_w_awards_achievements')) {
 	
 	
 	/**
-	  * Add a Award
+	  * Add a Achievement
 	  */
 	public function add($strName, $strDescription, $intActive, $intSpecial,
-						$intPoints, $strIcon, $arrIconColors, $strModule, $intDKP){
+						$intPoints, $strIcon, $arrIconColors, $strModule, $fltDKP, $intEventID){
 		// Parse TinyMC Code of 'Description'
 		#$strDescription = $this->bbcode->replace_shorttags($strDescription);
 		#$strDescription = $this->embedly->parseString($strDescription);
@@ -92,7 +93,8 @@ if(!class_exists('pdh_w_awards_achievements')) {
 			'icon' 				=> $strIcon,
 			'icon_colors'		=> serialize($arrIconColors),
 			'module' 			=> $strModule,
-			'dkp'				=> $intDKP,
+			'dkp'				=> $fltDKP,
+			'event_id'			=> $intEventID,
 		);
 		
 		$objQuery = $this->db->prepare("INSERT INTO __awards_achievements :p")->set($arrQuery)->execute();
@@ -111,10 +113,10 @@ if(!class_exists('pdh_w_awards_achievements')) {
 	
 	
 	/**
-	  * Update a Award
+	  * Update a Achievement
 	  */
 	public function update($id, $strName, $strDescription, $intSortID, $intActive, $intSpecial,
-							$intPoints, $strIcon, $arrIconColors, $strModule, $intDKP){
+							$intPoints, $strIcon, $arrIconColors, $strModule, $fltDKP, $intEventID){
 		// Parse TinyMC Code of 'Description'
 		#$strDescription = $this->bbcode->replace_shorttags($strDescription);
 		#$strDescription = $this->embedly->parseString($strDescription);
@@ -129,7 +131,8 @@ if(!class_exists('pdh_w_awards_achievements')) {
 			'icon' 				=> $strIcon,
 			'icon_colors'		=> serialize($arrIconColors),
 			'module' 			=> $strModule,
-			'dkp'				=> $intDKP,
+			'dkp'				=> $fltDKP,
+			'event_id'			=> $intEventID,
 		);
 		
 		$arrOldData = $this->pdh->get('awards_achievements', 'data', array($id));
