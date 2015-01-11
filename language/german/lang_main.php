@@ -47,7 +47,8 @@ $lang = array(
   
   // System Nachrichten
   'action_award_deleted'		=> 'Erfolg gelöscht',
-  'action_award_added'		=> 'Erfolg erstellt',
+  'action_award_added'			=> 'Erfolg erstellt',
+  'action_award_updated'		=> 'Erfolg aktualisiert',
   
   'aw_plugin_not_installed'		=> 'Das Awards-Plugin ist nicht installiert.',
   'aw_add_success'				=> ' wurde hinzugefügt',

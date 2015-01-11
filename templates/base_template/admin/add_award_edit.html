@@ -66,8 +66,8 @@
 
 <div class="contentFooter">
 	<button class="mainoption" type="submit" name="save"><i class="fa fa-check"></i>{L_save}</button>
+	<input type="hidden" name="aid" value="{AID}" />
 	<!-- IF S_UPD -->
-	<input type="hidden" name="event_id" value="{EVENT_ID}" />
 	<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete}</button>
 	<!-- ENDIF -->
 	<button class="mainoption" type="button" name="" onclick="window.location.href='{EQDKP_ROOT_PATH}plugins/awards/admin/add_award.php{SID}'"><i class="fa fa-chevron-left"></i>{L_cancel}</button>

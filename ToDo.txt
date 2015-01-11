@@ -3,12 +3,8 @@
 
 - Edit/Add awards (form class nutzen, siehe z.B. usersettings)
 
-    - Name
     - Image (himageuploader)
-    - Description
     - isUserOrCharacterAward (boolean -> hradio)
-    - Adjustment (boolean -> hradio)
-    - AdjustmentValue (die DKP)
 
 
 - List Awardings (HPTT)

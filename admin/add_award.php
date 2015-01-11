@@ -73,9 +73,12 @@ class awards_add_award extends page_generic
 		$intValue = $this->in->get('value', 10);
 		$strImage = $this->in->get('icon', 'default.svg');
 		#$arrImageColors = $this->in->getArray('image_colors', '');
+		$arrImageColors = array();
 		$strAdjustment = $this->in->get('adjustment');
 		$intAdjustmentValue = $this->in->get('adjustment_value', 0);
 		#$strDescription = $this->in->get('description', '', 'raw'); // TinyMCE	
+		
+		d($id);
 		
 		if ($strName == "" ) {
 			$this->core->message($this->user->lang('name'), $this->user->lang('missing_values'), 'red');
