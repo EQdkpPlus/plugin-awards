@@ -50,6 +50,7 @@ $lang = array(
   'aw_module'					=> 'Modul',
   'aw_dkp'						=> 'DKP',
   'aw_event_id'					=> 'Ereignis ID',
+  'aw_achievement'				=> 'Erfolg',
   
   
   // Adjustment Modules

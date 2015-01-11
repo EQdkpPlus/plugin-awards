@@ -29,7 +29,7 @@ include_once($eqdkp_root_path.'common.php');
 
 
 /*+----------------------------------------------------------------------------
-  | awards_manage_awards
+  | awards_manage_assignments
   +--------------------------------------------------------------------------*/
 class awards_manage_assignments extends page_generic
 {
@@ -54,25 +54,48 @@ class awards_manage_assignments extends page_generic
 	
 	
 	
+	
+	/**
+	  * Save
+	  * save the assignment
+	  */
+	public function save(){
+		$id 			 = $this->in->get('aid', 0);
+		$intDate 		 = $this->in->get('date', 0);
+		$intUserID 		 = $this->in->get('user', 0);
+		$intAchievmentID = $this->in->get('achievment', 0);
+		
+		$intDate		 = $this->pdh->get('awards_assignments', 'date', array($id));
+		$intUserID		 = $this->pdh->get('awards_assignments', 'user_id', array($id));
+		$intAchievmentID = $this->pdh->get('awards_achievments', 'event_id', array($id));
+	}
+	
+	
 	/**
 	  * Edit
 	  * edit assignment
 	  */	
 	public function edit(){
-		$id = $this->in->get('aid', 0);
+		$id 			 = $this->in->get('aid', 0);
+		$intDate		 = $this->pdh->get('awards_assignments', 'date', array($id));
+		$intUserID		 = $this->pdh->get('awards_assignments', 'user_id', array($id));
 		
-		if ($id){
-			$this->tpl->assign_vars(array(
-				'NAME' 				=> $this->pdh->get('awards_achievements', 'name', array($id)),
-			));
-		} else {
-			$this->tpl->assign_vars(array(
-				'NAME' 				=> '',
-			));
+		
+		//fetch achievements for select
+		$achievements = array();
+		$achievement_ids = $this->pdh->get('awards_achievements', 'id_list');
+		foreach($achievement_ids as $id) {
+			$achievements[$id] = $this->pdh->get('awards_achievements', 'name', array($id));
 		}
+		
+		//fetch members for select
+		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(false,true,false)), 'member', 'name', 'asc')));
 		
 		$this->tpl->assign_vars(array(
 			'AID' => $id,
+			'DD_ACHIEVEMENT' => new hdropdown('achievment', array('options' => $achievements, 'value' => ((isset($achievements)) ? $achievements : ''), 'name', array($id))),
+			'DATE'			 => $this->jquery->Calendar('date', $this->time->user_date(((isset($intDate)) ? $intDate : $this->time->time), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
+			'MEMBERS'		 => $this->jquery->MultiSelect('members', $members, ((isset($intUserID)) ? $intUserID : ''), array('width' => 350, 'filter' => true)),
 		));
 		
 		// -- EQDKP ---------------------------------------------------------------
