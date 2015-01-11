@@ -70,8 +70,9 @@ class awards_manage_achievements extends page_generic
 		$arrIconColors  = array();
 		$strModule		= $this->in->get('module');
 		$intDKP 		= $this->in->get('dkp', 0);
+		$intMDKP 		= $this->in->getArray('mdkp2event', 'int');
 		
-		if ($strName == "" ) {
+		if ($strName == "" ){
 			$this->core->message($this->user->lang('name'), $this->user->lang('missing_values'), 'red');
 			$this->edit();
 			return;
@@ -83,10 +84,24 @@ class awards_manage_achievements extends page_generic
 				$intPoints, $strIcon, $arrIconColors, $strModule, $intDKP
 			));
 		} else {
-			$blnResult = $this->pdh->put('awards_achievements', 'add', array(
-				$strName, $strDescription, $intActive, $intSpecial,
-				$intPoints, $strIcon, $arrIconColors, $strModule, $intDKP
-			));
+			
+			// add EVENT
+			$event_id = $this->pdh->put('event', 'add_event', array($strName, 0, 'mop.png'));
+			if($event_id > 0){
+				// add EVENT to MDKP
+				$retu = $this->pdh->put('multidkp', 'add_multidkp2event', array($event_id, $intMDKP));
+				if($retu > 0){
+					// add ACHIEVEMENT
+					$blnResult = $this->pdh->put('awards_achievements', 'add', array(
+						$strName, $strDescription, $intActive, $intSpecial,
+						$intPoints, $strIcon, $arrIconColors, $strModule, $intDKP
+					));
+					
+					d($event_id);
+				}
+			} else {
+				$blnResult = false;
+			}
 		}
 		
 		if ($blnResult){
@@ -123,6 +138,7 @@ class awards_manage_achievements extends page_generic
 				'SPINNER_POINTS' 	=> new hspinner('points', array('value' =>  ($this->pdh->get('awards_achievements', 'points', array($id))), 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),
 				'DD_MODULE' 		=> new hdropdown('module', array('options' => $arrAdjDropdown, 'value' => $this->pdh->get('awards_achievements', 'module', array($id)))),
 				'SPINNER_DKP'		=> new hspinner('dkp', array('value' =>  ($this->pdh->get('awards_achievements', 'dkp', array($id))), 'max'  => 99999, 'min'  => -99999, 'step' => 5, 'onlyinteger' => true)),
+				'MDKP2EVENT' 	=> $this->jquery->Multiselect('mdkp2event', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), $event['mdkp2event']),
 			));
 		} else {
 			$this->tpl->assign_vars(array(
@@ -132,7 +148,8 @@ class awards_manage_achievements extends page_generic
 				'DESCRIPTION'		=> '',
 				'SPINNER_POINTS' 	=> new hspinner('points', array('value' =>  10, 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),	
 				'DD_MODULE' 		=> new hdropdown('module', array('options' => $arrAdjDropdown, 'value' => NULL)),
-				'SPINNER_DKP'		=> new hspinner('dkp', array('value' =>  0, 'max'  => 99999, 'min'  => -99999, 'step' => 5, 'onlyinteger' => true)),	
+				'SPINNER_DKP'		=> new hspinner('dkp', array('value' =>  0, 'max'  => 99999, 'min'  => -99999, 'step' => 5, 'onlyinteger' => true)),
+				'MDKP2EVENT' 	=> $this->jquery->Multiselect('mdkp2event', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), $event['mdkp2event']),
 			));
 		}
 

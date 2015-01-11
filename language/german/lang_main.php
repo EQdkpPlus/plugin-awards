@@ -48,6 +48,7 @@ $lang = array(
   'aw_icon_colors'				=> 'Icon Farben',
   'aw_module'					=> 'Modul',
   'aw_dkp'						=> 'DKP',
+  'aw_multidkp'					=> 'Multidkp-Konten',
   
   // Adjustment Modules
   'aw_cron_module_0'			=> 'Kein Modul ausgewählt',
