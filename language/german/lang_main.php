@@ -24,7 +24,7 @@ if (!defined('EQDKP_INC')){
 }
 
 $lang = array(
-  'awards'						=> 'Errungenschaften',
+  'awards'						=> 'Awards',
 
   // Description
   'awards_short_desc'			=> 'Dieses Plugin ermöglicht es Erfolge zu erhalten',
@@ -46,6 +46,9 @@ $lang = array(
   'aw_cron_module_2'				=> 'aw_cron_module_2',
   
   // System Nachrichten
+  'action_award_deleted'		=> 'Erfolg gelöscht',
+  'action_award_added'		=> 'Erfolg erstellt',
+  
   'aw_plugin_not_installed'		=> 'Das Awards-Plugin ist nicht installiert.',
   'aw_add_success'				=> ' wurde hinzugefügt',
   'aw_add_nosuccess'			=> ' konnte nicht hinzugefügt werden',

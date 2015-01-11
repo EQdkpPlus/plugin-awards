@@ -23,6 +23,9 @@ if ( !defined('EQDKP_INC') ){
 	die('Do not access this file directly.');
 }
 
+/*+----------------------------------------------------------------------------
+  | pdh_r_awards_achievements
+  +--------------------------------------------------------------------------*/
 if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 	class pdh_r_awards_achievements extends pdh_r_generic{
 		public static function __shortcuts() {
@@ -69,17 +72,17 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 				while($drow = $objQuery->fetchAssoc()){
 					//TODO: Check if id Column is available
 					$this->awards_achievements[(int)$drow['id']] = array(
-						'id'			=> (int)$drow['id'],
-						'name'			=> $drow['name'],
-						'description'			=> $drow['description'],
+						'id'				=> (int)$drow['id'],
+						'name'				=> $drow['name'],
+						'description'		=> $drow['description'],
 						'sort_id'			=> (int)$drow['sort_id'],
 						'active'			=> (int)$drow['active'],
 						'special'			=> (int)$drow['special'],
-						'value'			=> (int)$drow['value'],
-						'image'			=> $drow['image'],
-						'image_colors'			=> $drow['image_colors'],
-						'adjustment'			=> $drow['adjustment'],
-						'adjustment_value'			=> (int)$drow['adjustment_value'],
+						'value'				=> (int)$drow['value'],
+						'image'				=> $drow['image'],
+						'image_colors'		=> $drow['image_colors'],
+						'adjustment'		=> $drow['adjustment'],
+						'adjustment_value'	=> (int)$drow['adjustment_value'],
 
 					);
 				}
@@ -133,7 +136,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		}
 		
 		public function get_html_name($intAwardID, $strLink, $strSuffix){
-			return '<a href="'.$this->root_path.'plugins/awards/admin/add_award.php'.$this->SID.'&aid='.$intAwardID.'">'.$this->get_name($intAwardID).'</a>';
+			return '<a href="'.$this->root_path.'plugins/awards/admin/add_award.php'.$this->SID.'&aid='.$intAwardID.'"><strong>'.$this->get_name($intAwardID).'</strong></a>';
 		}
 
 		/**

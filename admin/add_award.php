@@ -45,7 +45,7 @@ class awards_add_award extends page_generic
 		
 		$handler = array(
 			'save'		=> array('process' => 'save', 'check' => 'a_awards_add', 'csrf' => true),
-			#'update'	=> array('process' => 'update', 'check' => 'a_awards_add', 'csrf' => true),
+			'update'	=> array('process' => 'update', 'check' => 'a_awards_add', 'csrf' => true),
 			'aid'		=> array('process' => 'edit', 'check' => 'a_awards_add'),
 		);
 		parent::__construct(false, $handler, array('add_award', 'name'), null, 'selected_ids[]');
@@ -55,10 +55,86 @@ class awards_add_award extends page_generic
 
 
 
+/*$strName, $strDescription, $intSortID, $intActive, $intSpecial, $intValue,
+						$strImage, $arrImageColors, $strAdjustment, $intAdjustmentValue
+*/
+
+	/**
+	  * Save
+	  * save the new award
+	  */
+	public function save(){
+		$id = $this->in->get('aid', 0);
+		$strName = $this->in->get('name');
+		$strDescription = $this->in->get('description');
+		$intSortID = $this->in->get('sort_id', 99999999);
+		$intActive = $this->in->get('active_state', 1);
+		$intSpecial = $this->in->get('special_state', 1);
+		$intValue = $this->in->get('value', 10);
+		$strImage = $this->in->get('icon', 'default.svg');
+		#$arrImageColors = $this->in->getArray('image_colors', '');
+		$strAdjustment = $this->in->get('adjustment');
+		$intAdjustmentValue = $this->in->get('adjustment_value', 0);
+		#$strDescription = $this->in->get('description', '', 'raw'); // TinyMCE	
+		
+		if ($strName == "" ) {
+			$this->core->message($this->user->lang('name'), $this->user->lang('missing_values'), 'red');
+			$this->edit();
+			return;
+		}
+		
+		if ($id){
+			$blnResult = $this->pdh->put('awards_achievements', 'update', array(
+				$id, $strName, $strDescription, $intSortID, $intActive, $intSpecial, $intValue,
+				$strImage, $arrImageColors, $strAdjustment, $intAdjustmentValue
+			));
+		} else {
+			$blnResult = $this->pdh->put('awards_achievements', 'add', array(
+				$strName, $strDescription, $intActive, $intSpecial, $intValue,
+				$strImage, $arrImageColors, $strAdjustment, $intAdjustmentValue
+			));
+		}
+		
+		if ($blnResult){
+			$this->pdh->process_hook_queue();
+			$this->core->message($this->user->lang('aw_add_success'), $this->user->lang('success'), 'green');
+		} else {
+			$this->core->message($this->user->lang('aw_add_nosuccess'), $this->user->lang('error'), 'red');
+		}
+		
+		$this->display();
+	}
+	
+	
+	/**
+	  * Update
+	  * update the awards
+	  */
+	public function update(){
+		
+		$arrSortables = $this->in->getArray('sortCategories', 'int');
+		$arrSortablesFlipped = array_flip($arrSortables);
+	
+		$arrSpecial = $this->in->getArray('special', 'int');
+		foreach($arrPublished as $key => $val){
+			$this->pdh->put('mediacenter_categories', 'update_sortandpublished', array($key, (int)$arrSortablesFlipped[$key], (int)$val));
+		}
+		$this->pdh->process_hook_queue();
+		$this->core->message($this->user->lang('pk_succ_saved'), $this->user->lang('success'), 'green');
+	}
 
 
 
 
+
+
+
+
+
+	/**
+	  * Edit
+	  * edit award
+	  */
 	public function edit(){
 		$id = $this->in->get('aid', 0);
 		
@@ -72,22 +148,20 @@ class awards_add_award extends page_generic
 		if ($id){
 			$this->tpl->assign_vars(array(
 				'NAME' 				=> $this->pdh->get('awards_achievements', 'name', array($id)),
-				'R_ACTIVE_STATE'	=> new hradio('active_state]', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => $this->pdh->get('awards_achievements', 'active', array($id)))),
-				'R_SPECIAL_STATE'	=> new hradio('special_state]', array('options' => array(1 => $this->user->lang('published'), 0 => $this->user->lang('not_published')), 'value' => $this->pdh->get('awards_achievements', 'special', array($id)))),
+				'R_ACTIVE_STATE'	=> new hradio('active_state', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => $this->pdh->get('awards_achievements', 'active', array($id)))),
+				'R_SPECIAL_STATE'	=> new hradio('special_state', array('options' => array(1 => $this->user->lang('published'), 0 => $this->user->lang('not_published')), 'value' => $this->pdh->get('awards_achievements', 'special', array($id)))),
 				'DESCRIPTION'		=> $this->pdh->get('awards_achievements', 'description', array($id)),
 				'SPINNER_VALUE' 	=> new hspinner('value', array('value' =>  ($this->pdh->get('awards_achievements', 'value', array($id))), 'max'  => 99999, 'min'  => 0,'step' => 5,'onlyinteger' => true)),
-				'R_ACTIVE_STATE'	=> new hradio('active_state]', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => $this->pdh->get('awards_achievements', 'active', array($id)))),				
 				'DD_ADJ_MODULE' 	=> new hdropdown('adjustment', array('options' => $arrAdjDropdown, 'value' => $this->pdh->get('awards_achievements', 'adjustment', array($id)))),
 				'SPINNER_ADJ_VALUE'	=> new hspinner('adjustment_value', array('value' =>  ($this->pdh->get('awards_achievements', 'adjustment_value', array($id))), 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),
 			));
 		} else {
 			$this->tpl->assign_vars(array(
 				'NAME' 				=> '',
-				'R_ACTIVE_STATE'	=> new hradio('active_state]', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => 1)),
-				'R_SPECIAL_STATE'	=> new hradio('special_state]', array('options' => array(1 => $this->user->lang('published'), 0 => $this->user->lang('not_published')), 'value' => 1)),
+				'R_ACTIVE_STATE'	=> new hradio('active_state', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => 1)),
+				'R_SPECIAL_STATE'	=> new hradio('special_state', array('options' => array(1 => $this->user->lang('published'), 0 => $this->user->lang('not_published')), 'value' => 1)),
 				'DESCRIPTION'		=> '',
 				'SPINNER_VALUE' 	=> new hspinner('value', array('value' =>  10, 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),	
-				'R_ACTIVE_STATE'	=> new hradio('active_state]', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => $this->pdh->get('awards_achievements', 'active', array($id)))),
 				'DD_ADJ_MODULE' 	=> new hdropdown('adjustment', array('options' => $arrAdjDropdown, 'value' => NULL)),
 				'SPINNER_ADJ_VALUE'	=> new hspinner('adjustment_value', array('value' =>  0, 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),	
 			));
@@ -146,6 +220,28 @@ class awards_add_award extends page_generic
 			'template_file'		=> 'admin/add_award_edit.html',
 			'display'			=> true)
 		);
+	}
+
+
+	/**
+	  * Delete
+	  * delete selected awards
+	  */
+	public function delete(){
+		$retu = array();
+		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
+			foreach($this->in->getArray('selected_ids','int') as $id) {
+				$pos[] = stripslashes($this->pdh->get('awards_achievements', 'name', array($id)));
+				$retu[$id] = $this->pdh->put('awards_achievements', 'delete', array($id));
+			}
+		}
+
+		if(!empty($pos)) {
+			$messages[] = array('title' => $this->user->lang('del_suc'), 'text' => implode(', ', $pos), 'color' => 'green');
+			$this->core->messages($messages);
+		}
+		
+		$this->pdh->process_hook_queue();
 	}
 
 
