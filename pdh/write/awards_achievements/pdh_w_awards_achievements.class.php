@@ -29,16 +29,20 @@ if(!defined('EQDKP_INC')) {
 if(!class_exists('pdh_w_awards_achievements')) {
   class pdh_w_awards_achievements extends pdh_w_generic
   {
-
 	private $arrLogLang = array(
-		'id'			=> "{L_ID}",
-		'name'			=> "{L_NAME}",
-		'description'	=> "{L_DESCRIPTION}",
-		'published'		=> "{L_PUBLISHED}",
-		'sort_id'		=> "{L_SORTATION}",		
+		'id'				=> "{L_ID}",
+		'name'				=> "{L_NAME}",
+		'description'		=> "{L_DESCRIPTION}",
+		'sort_id'			=> "{L_SORTATION}",
+		'active'			=> "{L_ACTIVE}",
+		'special'			=> "{L_AW_SPECIAL}",
+		'value'				=> "{L_VALUE}",
+		'image'				=> "{L_ICON}",
+		'image_colors'		=> "{L_IMAGE_COLORS}",
+		'adjustment'		=> "{L_AW_ADJ_MODULE}",
+		'adjustment_value'  => "{L_AW_ADJ_VALUE}",
 	);
-
-
+	
 
 	/**
 	  * Delete all selected Awards
@@ -70,7 +74,7 @@ if(!class_exists('pdh_w_awards_achievements')) {
 	
 	
 	/**
-	  * Add Award
+	  * Add a Award
 	  */
 	public function add($strName, $strDescription, $intActive, $intSpecial, $intValue,
 						$strImage, $arrImageColors, $strAdjustment, $intAdjustmentValue){
@@ -107,7 +111,7 @@ if(!class_exists('pdh_w_awards_achievements')) {
 	
 	
 	/**
-	  * Add Award
+	  * Update a Award
 	  */
 	public function update($id, $strName, $strDescription, $intSortID, $intActive, $intSpecial, $intValue,
 							$strImage, $arrImageColors, $strAdjustment, $intAdjustmentValue){
@@ -141,29 +145,6 @@ if(!class_exists('pdh_w_awards_achievements')) {
 			return $id;
 		}
 		
-		return false;
-	}
-	
-	public function update_sortandpublished($id, $intSortID, $intPublished){
-		$arrOldData = array(
-			'published' => $this->pdh->get('mediacenter_categories', 'published', array($id)),
-		);
-		
-		$objQuery = $this->db->prepare("UPDATE __mediacenter_categories :p WHERE id=?")->set(array(
-			'sort_id'		=> $intSortID,
-			'published'		=> $intPublished,
-		))->execute($id);
-		
-		if ($objQuery){
-			$arrNewData = array(
-				'published' => $intPublished,	
-			);
-			$log_action = $this->logs->diff($arrOldData, $arrNewData, $this->arrLogLang, array());
-			if ($log_action) $this->log_insert("action_category_updated", $log_action, $id, $this->pdh->get('mediacenter_categories', 'name', array($id)), 1, 'mediacenter');
-			
-			$this->pdh->enqueue_hook('mediacenter_categories_update');
-			return $id;
-		}
 		return false;
 	}
 		
