@@ -79,12 +79,22 @@ class awards_manage_assignments extends page_generic
 		// ---------------------------------------------
 		
 		if ($id){
-			$arrAdjID = $this->pdh->get('awards_assignments', 'adj_id', array($id));
-			$strAdjID = implode(',',$arrAdjID);
+			$strAdjID = $this->pdh->get('awards_assignments', 'adj_id', array($id));
+			$arrAdjID = explode(',',$strAdjID);
+			
 			// upd ADJUSTMENT
-			if($this->pdh->put('adjustment', 'update_adjustment', array($intAdjID, $fltDKP, $strName, $intUserID, $intEventID, 0, $intDate, true))){
+			if($this->pdh->put('adjustment', 'update_adjustment', array($arrAdjID[0], $fltDKP, $strName, $intUserID, $intEventID, 0, $intDate, true))){
+	
+				// refresh pdh
+				$this->pdh->process_hook_queue();
+				
+				// get new data (AdjustmentIDs and AdjustmentGroupKey) for update_assignment 
+				$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]));
+				$arrIDofGK = $this->pdh->get('adjustment', 'ids_of_group_key', array($strAdjGK));
+				$strIDofGK = implode(',',$arrIDofGK);
+				
 				// upd ASSIGNMENT
-				if ($this->pdh->put('awards_assignments', 'update', array($id, $intDate, $intAchievmentID, $strAdjID, $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]))))){
+				if ($this->pdh->put('awards_assignments', 'update', array($id, $intDate, $intAchievmentID, $strIDofGK, $strAdjGK))){
 					$blnResult = true;
 				} else {
 					// del ADJUSTMENT if add_assignment failed
@@ -158,6 +168,16 @@ class awards_manage_assignments extends page_generic
 			'template_file'		=> 'admin/manage_assignments_edit.html',
 			'display'			=> true)
 		);
+	}
+	
+	
+	/**
+	  * Delete
+	  * delete selected assignments
+	  */
+	public function delete(){
+		
+		#$this->pdh->process_hook_queue();
 	}
 	
 
