@@ -32,9 +32,9 @@ if(!class_exists('pdh_w_awards_assignments')) {
 	private $arrLogLang = array(
 			'id'				=> '{L_ID}',
 			'date'				=> '{L_DATE}',
-			'user_id'			=> '{L_MEMBERS}',
 			'achievement_id'	=> '{L_AW_ACHIEVEMENT}',
-			'adj_id'			=> '{L_ADJUSTMENT}',
+			'adj_id'			=> '{L_AW_ADJ_ID}',
+			'adj_group_key'		=> '{L_AW_ADJ_GK}',
 	);
 	
 
@@ -70,12 +70,13 @@ if(!class_exists('pdh_w_awards_assignments')) {
 	/**
 	  * Add a Assignment
 	  */
-	public function add($intDate, $intUserID, $intAchievmentID, $intAdjID){
+	public function add($intDate=false, $intAchievmentID, $intAdjID, $intAdjGK){
+		$intDate = ($intDate) ? $intDate : $this->time->time;
 		$arrQuery  = array(
 			'date' 				=> $intDate,
-			'user_id'			=> $intUserID,
 			'achievement_id'	=> $intAchievmentID,
 			'adj_id'			=> $intAdjID,
+			'adj_group_key'		=> $intAdjGK,
 		);
 		
 		$objQuery = $this->db->prepare("INSERT INTO __awards_assignments :p")->set($arrQuery)->execute();
@@ -88,7 +89,6 @@ if(!class_exists('pdh_w_awards_assignments')) {
 			$this->pdh->enqueue_hook('awards_assignments_update');
 			return $id;
 		}
-		
 		return false;
 	}
 	
@@ -96,12 +96,13 @@ if(!class_exists('pdh_w_awards_assignments')) {
 	/**
 	  * Update a Assignment
 	  */
-	public function update($id, $intDate, $intUserID, $intAchievmentID, $intAdjID){
+	public function update($id, $intDate=false, $intAchievmentID, $intAdjID, $intAdjGK){
+		$intDate = ($intDate) ? $intDate : $this->time->time;
 		$arrQuery = array(
 			'date' 				=> $intDate,
-			'user_id'			=> $intUserID,
 			'achievement_id'	=> $intAchievmentID,
 			'adj_id'			=> $intAdjID,
+			'adj_group_key'		=> $intAdjGK,
 		);
 		
 		$arrOldData = $this->pdh->get('awards_assignments', 'data', array($id));

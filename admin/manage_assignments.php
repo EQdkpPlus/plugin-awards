@@ -44,7 +44,7 @@ class awards_manage_assignments extends page_generic
 		$this->user->check_auth('a_awards_manage');
 		
 		$handler = array(
-			'save' => array('process' => 'save', 'check' => 'a_awards_manage', 'csrf' => true),
+			'save' 		=> array('process' => 'save', 'check' => 'a_awards_manage', 'csrf' => true),
 			'aid'		=> array('process' => 'edit', 'check' => 'a_awards_manage'),
 		);
 		parent::__construct(false, $handler, array('manage_assignments', 'name'), null, 'selected_ids[]');
@@ -54,7 +54,7 @@ class awards_manage_assignments extends page_generic
 	
 	
 	
-	private function get_post(){
+/*	private function get_post(){
 		foreach($this->in->getArray('members','int') as $member) {
 			$adj['members'][] = (int) $member;
 		}
@@ -66,10 +66,31 @@ class awards_manage_assignments extends page_generic
 		}
 		
 		return $adj;
+	}*/
+	
+	
+	
+	// überarbeite get_post()
+	// debuge wieso bei falschem add_ die adjustments nicht gelöscht werden<br />
+	// mache array to string für die add_assignments, weil intAdjID = array
+	
+	
+	
+		
+	private function get_post(){
+		foreach($this->in->getArray('members','int') as $member) {
+			$adj['members'][] = (int) $member;
+		}
+		if(empty($adj['members'])) {
+			$missing[] = $this->user->lang('members');
+		}
+		if(!empty($missing)) {
+			// MUSS ÜBERARBEITET WERDEN
+			$this->update(array('title' => $this->user->lang('missing_values'), 'text' => implode(', ',$missing), 'color' => 'red'));
+		}
+		
+		return $adj;
 	}
-	
-	
-	
 	
 	
 	/**
@@ -78,7 +99,6 @@ class awards_manage_assignments extends page_generic
 	  */
 	public function save(){
 		$id 			 = $this->in->get('aid', 0);
-		$intUserID 		 = $this->in->get('members', 0);
 		$intDate 		 = $this->in->get('date', 0);
 		$intAchievmentID = $this->in->get('achievment', 0);
 		
@@ -94,15 +114,25 @@ class awards_manage_assignments extends page_generic
 			// upd ADJUSTMENT
 			if($this->pdh->put('adjustment', 'update_adjustment', array($intAdjID, $fltDKP, $strName, $intUserID, $intEventID, 0, $intDate, true))){
 				// add ASSIGNMENT
-				$blnResult = $this->pdh->put('awards_assignments', 'update', array($id, $intDate, $intUserID, $intAchievmentID, $intAdjID));
-			} else { $blnResult = false; }
+				$blnResult = $this->pdh->put('awards_assignments', 'update', array($id, $intDate, $intAchievmentID, $intAdjID, $intAdjGK));
+			} else {
+				// del ADJUSTMENT if add_assignment failed
+				$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($intAdjID));
+				$this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK));
+				$blnResult = false;
+			}
 		} else {
 			// add ADJUSTMENT
 			$intAdjID = $this->pdh->put('adjustment', 'add_adjustment', array($fltDKP, $strName, $intUserID, $intEventID, 0, $intDate));
 			if($intAdjID > 0){
 				// add ASSIGNMENT
-				$blnResult = $this->pdh->put('awards_assignments', 'add', array($intDate, $intUserID, $intAchievmentID, $intAdjID));
-			} else { $blnResult = false; }
+				$blnResult = $this->pdh->put('awards_assignments', 'add', array($intDate, $intAchievmentID, $intAdjID, $intAdjGK));
+			} else {
+				// del ADJUSTMENT if add_assignment failed
+				$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($intAdjID));
+				$this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK));
+				$blnResult = false;
+			}
 		}
 		
 		if ($blnResult){
@@ -123,7 +153,6 @@ class awards_manage_assignments extends page_generic
 	public function edit(){
 		$id 			 = $this->in->get('aid', 0);
 		$intDate		 = $this->pdh->get('awards_assignments', 'date', array($id));
-		$intUserID		 = $this->pdh->get('awards_assignments', 'user_id', array($id));
 		
 		//fetch achievements for select
 		$achievements = array();

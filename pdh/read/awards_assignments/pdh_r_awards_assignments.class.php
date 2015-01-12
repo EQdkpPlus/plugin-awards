@@ -41,11 +41,11 @@ if ( !class_exists( "pdh_r_awards_assignments" ) ) {
 	);
 
 	public $presets = array(
-		'awards_assignments_id' 			=> array('id', array('%intAssignmentID%'), array()),
+		'awards_assignments_id'				=> array('id', array('%intAssignmentID%'), array()),
 		'awards_assignments_date' 			=> array('date', array('%intAssignmentID%'), array()),
-		'awards_assignments_user_id' 		=> array('user_id', array('%intAssignmentID%'), array()),
 		'awards_assignments_achievement_id' => array('achievement_id', array('%intAssignmentID%'), array()),
 		'awards_assignments_adj_id' 		=> array('adj_id', array('%intAssignmentID%'), array()),
+		'awards_assignments_adj_group_key'  => array('adj_group_key', array('%intAssignmentID%'), array()),
 	);
 
 	public function reset(){
@@ -68,9 +68,10 @@ if ( !class_exists( "pdh_r_awards_assignments" ) ) {
 					$this->awards_assignments[(int)$drow['id']] = array(
 						'id'				=> (int)$drow['id'],
 						'date'				=> (int)$drow['date'],
-						'user_id'			=> (int)$drow['user_id'],
 						'achievement_id'	=> (int)$drow['achievement_id'],
 						'adj_id'			=> (int)$drow['adj_id'],
+						'adj_group_key'		=> $drow['adj_group_key'],
+
 					);
 				}
 
@@ -127,27 +128,7 @@ if ( !class_exists( "pdh_r_awards_assignments" ) ) {
 		}
 
 		/**
-		 * Returns user_id for $intAssignmentID
-		 * @param integer $intAssignmentID
-		 * @return multitype user_id
-		 */
-		 public function get_user_id($intAssignmentID){
-			if (isset($this->awards_assignments[$intAssignmentID])){
-				return $this->awards_assignments[$intAssignmentID]['user_id'];
-			}
-			return false;
-		}
-		
-		public function get_member_name($intAssignmentID) {
-			return $this->pdh->get('member', 'name', array($this->get_user_id($intAssignmentID)));
-		}
-
-		public function get_html_member_name($intAssignmentID) {
-			return $this->pdh->geth('member', 'name', array($this->get_user_id($intAssignmentID)));
-		}
-
-		/**
-		 * Returns  for achievement_id $intAssignmentID
+		 * Returns achievement_id for $intAssignmentID
 		 * @param integer $intAssignmentID
 		 * @return multitype achievement_id
 		 */
@@ -157,7 +138,7 @@ if ( !class_exists( "pdh_r_awards_assignments" ) ) {
 			}
 			return false;
 		}
-		
+
 		/**
 		 * Returns adj_id for $intAssignmentID
 		 * @param integer $intAssignmentID
@@ -166,6 +147,18 @@ if ( !class_exists( "pdh_r_awards_assignments" ) ) {
 		 public function get_adj_id($intAssignmentID){
 			if (isset($this->awards_assignments[$intAssignmentID])){
 				return $this->awards_assignments[$intAssignmentID]['adj_id'];
+			}
+			return false;
+		}
+
+		/**
+		 * Returns adj_group_key for $intAssignmentID
+		 * @param integer $intAssignmentID
+		 * @return multitype adj_group_key
+		 */
+		 public function get_adj_group_key($intAssignmentID){
+			if (isset($this->awards_assignments[$intAssignmentID])){
+				return $this->awards_assignments[$intAssignmentID]['adj_group_key'];
 			}
 			return false;
 		}
