@@ -64,18 +64,20 @@ class awards_manage_assignments extends page_generic
 		$fltDKP 	= $this->pdh->get('awards_achievements', 'dkp', array($intAchievmentID));
 		$strName	= $this->user->lang('aw_achievement').': '.$this->pdh->get('awards_achievements', 'name', array($intAchievmentID));
 		$intEventID = $this->pdh->get('awards_achievements', 'event_id', array($intAchievmentID));
+		
 		// ---------------------------------------------
-		foreach($this->in->getArray('members','int') as $member) {
-			$intUserID[] = (int) $member;
-		}
-		if(empty($intUserID)) {
-			$missing[] = $this->user->lang('members');
-		}
-		if(!empty($missing)) {
-			// SEND ERROR MESSAGE
-			return;
-		}
+			foreach($this->in->getArray('members','int') as $member) {
+				$intUserID[] = (int) $member;
+			}
+			if(empty($intUserID)) {
+				$missing[] = $this->user->lang('members');
+			}
+			if(!empty($missing)) {
+				// SEND ERROR MESSAGE
+				return;
+			}
 		// ---------------------------------------------
+		
 		if ($id){
 			$arrAdjID = $this->pdh->get('awards_assignments', 'adj_id', array($id));
 			$strAdjID = implode(',',$arrAdjID);
@@ -205,6 +207,7 @@ class awards_manage_assignments extends page_generic
 			'display'			=> true)
 		);
 	}
+	
 
 }
 registry::register('awards_manage_assignments');

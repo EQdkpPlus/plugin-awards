@@ -79,6 +79,12 @@ class awards extends plugin_generic
 		
 		$this->add_pdh_write_module('awards_achievements');
 		$this->add_pdh_write_module('awards_assignments');
+		
+		// -- Routing -----------------------------------------
+		#$this->routing->addRoute('MeineSeite', 'site', 'plugins/awards/pageobjects');
+		
+		// -- Hooks -------------------------------------------
+  		#$this->add_hook('portal', 'awards_userprofile_customtabs_hook', 'userprofile');
 
 		// -- Menu --------------------------------------------
 		$this->add_menu('admin', $this->gen_admin_menu());
@@ -100,6 +106,15 @@ class awards extends plugin_generic
 		  $this->add_sql(SQL_INSTALL, $awardsSQL['install'][$i]);
 	}
 
+
+	/**
+	  * pre_uninstall
+	  * Define Post Uninstall
+	  */
+	public function pre_uninstall(){
+		
+	}
+	
 
 	/**
 	  * post_uninstall
@@ -138,6 +153,25 @@ class awards extends plugin_generic
 		));
 
 		return $admin_menu;
+	}
+	
+	
+	/**
+	  * gen_main_menu
+	  * Generate the Main Menu
+	  */
+	private function gen_main_menu(){
+		$main_menu = array();
+		
+		$main_menu = array(
+			1 => array (
+				'link'	 => $this->routing->build('MeineSeite', false, false, true, true),
+				'text'	 => $this->user->lang('aw_view_achievements'),
+				'check'	 => 'u_awards_view',
+			),
+    	);
+		
+		return $main_menu;
 	}
 
 }
