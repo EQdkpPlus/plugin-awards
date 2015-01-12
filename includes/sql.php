@@ -52,7 +52,7 @@ $awardsSQL = array(
 			`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
 			`date` INT(11) NOT NULL DEFAULT '0',
 			`achievement_id` INT(10) UNSIGNED NOT NULL,
-			`adj_id` INT(10) UNSIGNED NOT NULL,
+			`adj_id` VARCHAR(32) NULL DEFAULT NULL,
 			`adj_group_key` VARCHAR(32) NULL DEFAULT NULL,
 			PRIMARY KEY (`id`)
 		)

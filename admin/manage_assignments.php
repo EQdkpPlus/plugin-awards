@@ -71,8 +71,8 @@ class awards_manage_assignments extends page_generic
 	
 	
 	// überarbeite get_post()
-	// debuge wieso bei falschem add_ die adjustments nicht gelöscht werden<br />
 	// mache array to string für die add_assignments, weil intAdjID = array
+	// debugge wieso falsches add_assign endsteht
 	
 	
 	
@@ -110,27 +110,41 @@ class awards_manage_assignments extends page_generic
 		$intUserID = $adj['members'];
 		
 		if ($id){
-			$intAdjID = $this->pdh->get('awards_assignments', 'adj_id', array($id));
+			$arrAdjID = $this->pdh->get('awards_assignments', 'adj_id', array($id));
+			$strAdjID = implode(',',$arrAdjID);
 			// upd ADJUSTMENT
 			if($this->pdh->put('adjustment', 'update_adjustment', array($intAdjID, $fltDKP, $strName, $intUserID, $intEventID, 0, $intDate, true))){
-				// add ASSIGNMENT
-				$blnResult = $this->pdh->put('awards_assignments', 'update', array($id, $intDate, $intAchievmentID, $intAdjID, $intAdjGK));
+				// upd ASSIGNMENT
+				if ($this->pdh->put('awards_assignments', 'update', array($id, $intDate, $intAchievmentID, $strAdjID, $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]))))){
+					$blnResult = true;
+				} else {
+					// del ADJUSTMENT if add_assignment failed
+					$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]));
+					$this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK));
+					$this->pdh->put('awards_assignments', 'delete', array($id));
+					$blnResult = false;
+				}
 			} else {
 				// del ADJUSTMENT if add_assignment failed
-				$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($intAdjID));
+				$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]));
 				$this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK));
 				$blnResult = false;
 			}
 		} else {
 			// add ADJUSTMENT
-			$intAdjID = $this->pdh->put('adjustment', 'add_adjustment', array($fltDKP, $strName, $intUserID, $intEventID, 0, $intDate));
-			if($intAdjID > 0){
+			$arrAdjID = $this->pdh->put('adjustment', 'add_adjustment', array($fltDKP, $strName, $intUserID, $intEventID, 0, $intDate));
+			$strAdjID = implode(',',$arrAdjID);
+			if($arrAdjID > 0){
 				// add ASSIGNMENT
-				$blnResult = $this->pdh->put('awards_assignments', 'add', array($intDate, $intAchievmentID, $intAdjID, $intAdjGK));
+				if ($this->pdh->put('awards_assignments', 'add', array($intDate, $intAchievmentID, $strAdjID, $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]))))){
+					$blnResult = true;
+				} else {
+					// del ADJUSTMENT if add_assignment failed
+					$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]));
+					$this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK));
+					$blnResult = false;
+				}
 			} else {
-				// del ADJUSTMENT if add_assignment failed
-				$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($intAdjID));
-				$this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK));
 				$blnResult = false;
 			}
 		}
@@ -180,8 +194,6 @@ class awards_manage_assignments extends page_generic
 		);
 	}
 	
-	
-	
 
 	/**
 	  * Display
@@ -201,9 +213,10 @@ class awards_manage_assignments extends page_generic
 			'table_sort_dir'		=> 'asc',
 			'table_sort_col'		=> 0,
 			'table_presets'			=> array(
-				array('name' => 'awards_assignments_date',	  'sort' => true, 'th_add' => '', 'td_add' => ''),
-				array('name' => 'awards_assignments_user_id', 'sort' => true, 'th_add' => '', 'td_add' => ''),
-				array('name' => 'awards_assignments_name',    'sort' => true, 'th_add' => '', 'td_add' => ''),
+				array('name' => 'awards_assignments_date',			 'sort' => true, 'th_add' => '', 'td_add' => ''),
+				array('name' => 'awards_assignments_achievement_id', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+				array('name' => 'awards_assignments_adj_id',		 'sort' => true, 'th_add' => '', 'td_add' => ''),
+				array('name' => 'awards_assignments_adj_group_key',  'sort' => true, 'th_add' => '', 'td_add' => ''),
 			),
 		);
 		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->root_path.'plugins/awards/admin/manage_assignments.php', '%link_url_suffix%' => ''));

@@ -70,13 +70,13 @@ if(!class_exists('pdh_w_awards_assignments')) {
 	/**
 	  * Add a Assignment
 	  */
-	public function add($intDate=false, $intAchievmentID, $intAdjID, $intAdjGK){
+	public function add($intDate=false, $intAchievmentID, $intAdjID, $strAdjGK){
 		$intDate = ($intDate) ? $intDate : $this->time->time;
 		$arrQuery  = array(
 			'date' 				=> $intDate,
 			'achievement_id'	=> $intAchievmentID,
 			'adj_id'			=> $intAdjID,
-			'adj_group_key'		=> $intAdjGK,
+			'adj_group_key'		=> $strAdjGK,
 		);
 		
 		$objQuery = $this->db->prepare("INSERT INTO __awards_assignments :p")->set($arrQuery)->execute();
@@ -96,13 +96,13 @@ if(!class_exists('pdh_w_awards_assignments')) {
 	/**
 	  * Update a Assignment
 	  */
-	public function update($id, $intDate=false, $intAchievmentID, $intAdjID, $intAdjGK){
+	public function update($id, $intDate=false, $intAchievmentID, $intAdjID, $strAdjGK){
 		$intDate = ($intDate) ? $intDate : $this->time->time;
 		$arrQuery = array(
 			'date' 				=> $intDate,
 			'achievement_id'	=> $intAchievmentID,
 			'adj_id'			=> $intAdjID,
-			'adj_group_key'		=> $intAdjGK,
+			'adj_group_key'		=> $strAdjGK,
 		);
 		
 		$arrOldData = $this->pdh->get('awards_assignments', 'data', array($id));
