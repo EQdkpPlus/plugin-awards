@@ -50,9 +50,10 @@ $awardsSQL = array(
 		",
 		2 => "CREATE TABLE `__awards_assignments` (
 			`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-			`date` INT(10) NULL DEFAULT '0',
-			`user_id` INT(10) UNSIGNED NULL DEFAULT '0',
-			`achievement_id` INT(10) UNSIGNED NULL DEFAULT '0',
+			`date` INT(11) NOT NULL DEFAULT '0',
+			`achievement_id` INT(10) UNSIGNED NOT NULL,
+			`adj_id` VARCHAR(32) NULL DEFAULT NULL,
+			`adj_group_key` VARCHAR(32) NULL DEFAULT NULL,
 			PRIMARY KEY (`id`)
 		)
 		DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
