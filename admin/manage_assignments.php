@@ -54,6 +54,23 @@ class awards_manage_assignments extends page_generic
 	
 	
 	
+	private function get_post(){
+		foreach($this->in->getArray('members','int') as $member) {
+			$adj['members'][] = (int) $member;
+		}
+		if(empty($adj['members'])) {
+			$missing[] = $this->user->lang('members');
+		}
+		if(!empty($missing)) {
+			$this->update(array('title' => $this->user->lang('missing_values'), 'text' => implode(', ',$missing), 'color' => 'red'));
+		}
+		
+		return $adj;
+	}
+	
+	
+	
+	
 	
 	/**
 	  * Save
@@ -69,9 +86,11 @@ class awards_manage_assignments extends page_generic
 		$strName	= $this->user->lang('aw_achievement').': '.$this->pdh->get('awards_achievements', 'name', array($intAchievmentID));
 		$intEventID = $this->pdh->get('awards_achievements', 'event_id', array($intAchievmentID));
 		
-		$intAdjID = $this->pdh->get('awards_assignments', 'adj_id', array($id));
+		$adj = $this->get_post();
+		$intUserID = $adj['members'];
 		
 		if ($id){
+			$intAdjID = $this->pdh->get('awards_assignments', 'adj_id', array($id));
 			// upd ADJUSTMENT
 			if($this->pdh->put('adjustment', 'update_adjustment', array($intAdjID, $fltDKP, $strName, $intUserID, $intEventID, 0, $intDate, true))){
 				// add ASSIGNMENT
@@ -109,8 +128,8 @@ class awards_manage_assignments extends page_generic
 		//fetch achievements for select
 		$achievements = array();
 		$achievement_ids = $this->pdh->get('awards_achievements', 'id_list');
-		foreach($achievement_ids as $id) {
-			$achievements[$id] = $this->pdh->get('awards_achievements', 'name', array($id));
+		foreach($achievement_ids as $aid) {
+			$achievements[$aid] = $this->pdh->get('awards_achievements', 'name', array($aid));
 		}
 		
 		//fetch members for select
@@ -125,7 +144,7 @@ class awards_manage_assignments extends page_generic
 		
 		// -- EQDKP ---------------------------------------------------------------
 		$this->core->set_vars(array(
-			'page_title'		=> (($id) ? $this->user->lang('aw_add_assignment').': '.$this->pdh->get('awards_assignments', 'name', array($id)) : $this->user->lang('aw_add_assignment')),
+			'page_title'		=> (($id) ? $this->user->lang('aw_add_assignment').': '.$this->user->lang('aw_add_assignment') : $this->user->lang('aw_add_assignment')),
 			'template_path'		=> $this->pm->get_data('awards', 'template_path'),
 			'template_file'		=> 'admin/manage_assignments_edit.html',
 			'display'			=> true)

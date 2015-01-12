@@ -169,6 +169,10 @@ if ( !class_exists( "pdh_r_awards_assignments" ) ) {
 			}
 			return false;
 		}
+		
+		public function get_checkbox_check($intAchievementID){
+			return true;
+		}
 
 	}//end class
 }//end if
