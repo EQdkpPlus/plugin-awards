@@ -26,9 +26,9 @@ if ( !defined('EQDKP_INC') ){
 $module_lang = array(
 	'id'					=> 'ID',
 	'date'					=> 'Datum',
-	'achievement_id'		=> 'Erfolg ID',
-	'adj_id'				=> 'Adj ID',
-	'adj_group_key'			=> 'Adj GK',
+	'achievement_id'		=> 'Erfolgs ID',
+	'adj_id'				=> 'Korrektur ID',
+	'adj_group_key'			=> 'Korrektur GK',
 );
 
 

@@ -51,6 +51,9 @@ $lang = array(
   'aw_dkp'						=> 'DKP',
   'aw_event_id'					=> 'Ereignis ID',
   'aw_achievement'				=> 'Erfolg',
+  
+  
+  
   'aw_adj_id'					=> 'Korrektur ID',
   'aw_adj_gk'					=> 'Korrektur Group Key',
   

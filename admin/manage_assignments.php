@@ -52,47 +52,6 @@ class awards_manage_assignments extends page_generic
 	}
 	
 	
-	
-	
-/*	private function get_post(){
-		foreach($this->in->getArray('members','int') as $member) {
-			$adj['members'][] = (int) $member;
-		}
-		if(empty($adj['members'])) {
-			$missing[] = $this->user->lang('members');
-		}
-		if(!empty($missing)) {
-			$this->update(array('title' => $this->user->lang('missing_values'), 'text' => implode(', ',$missing), 'color' => 'red'));
-		}
-		
-		return $adj;
-	}*/
-	
-	
-	
-	// überarbeite get_post()
-	// mache array to string für die add_assignments, weil intAdjID = array
-	// debugge wieso falsches add_assign endsteht
-	
-	
-	
-		
-	private function get_post(){
-		foreach($this->in->getArray('members','int') as $member) {
-			$adj['members'][] = (int) $member;
-		}
-		if(empty($adj['members'])) {
-			$missing[] = $this->user->lang('members');
-		}
-		if(!empty($missing)) {
-			// MUSS ÜBERARBEITET WERDEN
-			$this->update(array('title' => $this->user->lang('missing_values'), 'text' => implode(', ',$missing), 'color' => 'red'));
-		}
-		
-		return $adj;
-	}
-	
-	
 	/**
 	  * Save
 	  * save the assignment
@@ -105,10 +64,18 @@ class awards_manage_assignments extends page_generic
 		$fltDKP 	= $this->pdh->get('awards_achievements', 'dkp', array($intAchievmentID));
 		$strName	= $this->user->lang('aw_achievement').': '.$this->pdh->get('awards_achievements', 'name', array($intAchievmentID));
 		$intEventID = $this->pdh->get('awards_achievements', 'event_id', array($intAchievmentID));
-		
-		$adj = $this->get_post();
-		$intUserID = $adj['members'];
-		
+		// ---------------------------------------------
+		foreach($this->in->getArray('members','int') as $member) {
+			$intUserID[] = (int) $member;
+		}
+		if(empty($intUserID)) {
+			$missing[] = $this->user->lang('members');
+		}
+		if(!empty($missing)) {
+			// SEND ERROR MESSAGE
+			return;
+		}
+		// ---------------------------------------------
 		if ($id){
 			$arrAdjID = $this->pdh->get('awards_assignments', 'adj_id', array($id));
 			$strAdjID = implode(',',$arrAdjID);
@@ -125,9 +92,6 @@ class awards_manage_assignments extends page_generic
 					$blnResult = false;
 				}
 			} else {
-				// del ADJUSTMENT if add_assignment failed
-				$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]));
-				$this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK));
 				$blnResult = false;
 			}
 		} else {
@@ -206,17 +170,18 @@ class awards_manage_assignments extends page_generic
 			'table_main_sub'		=> '%intAssignmentID%',
 			'table_subs'			=> array('%intAssignmentID%', '%intAssignmentID%'),
 			'page_ref'				=> 'manage_assignments.php',
-			'show_numbers'			=> true,
+			'show_numbers'			=> false,
 			'show_select_boxes'		=> true,
 			'selectboxes_checkall'	=> true,
 			'show_detail_twink'		=> false,
 			'table_sort_dir'		=> 'asc',
 			'table_sort_col'		=> 0,
 			'table_presets'			=> array(
-				array('name' => 'awards_assignments_date',			 'sort' => true, 'th_add' => '', 'td_add' => ''),
-				array('name' => 'awards_assignments_achievement_id', 'sort' => true, 'th_add' => '', 'td_add' => ''),
-				array('name' => 'awards_assignments_adj_id',		 'sort' => true, 'th_add' => '', 'td_add' => ''),
-				array('name' => 'awards_assignments_adj_group_key',  'sort' => true, 'th_add' => '', 'td_add' => ''),
+				array('name' => 'awards_assignments_id',			 'sort' => false, 'th_add' => '', 'td_add' => ''),
+				array('name' => 'awards_assignments_date',			 'sort' => false, 'th_add' => '', 'td_add' => ''),
+				array('name' => 'awards_assignments_achievement_id', 'sort' => false, 'th_add' => '', 'td_add' => ''),
+				array('name' => 'awards_assignments_adj_id',		 'sort' => false, 'th_add' => '', 'td_add' => ''),
+				array('name' => 'awards_assignments_adj_group_key',  'sort' => false, 'th_add' => '', 'td_add' => ''),
 			),
 		);
 		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->root_path.'plugins/awards/admin/manage_assignments.php', '%link_url_suffix%' => ''));
