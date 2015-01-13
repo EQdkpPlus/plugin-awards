@@ -111,6 +111,10 @@ class awards_manage_assignments extends page_generic
 				
 				// add ASSIGNMENT
 				if ($this->pdh->put('awards_assignments', 'add', array($intDate, $intAchievmentID, $strAdjID, $strAdjGK))){
+					
+					// add ntfy
+					#$this->ntfy->add_persistent('guildrequest_open', sprintf($this->user->lang('gr_notification_open'), $intOpen), $this->routing->build('ListApplications', false, false, true, true), 0, 'fa-pencil-square-o');
+					
 					$blnResult = true;
 				} else {
 					// del ADJUSTMENT if add_assignment failed
