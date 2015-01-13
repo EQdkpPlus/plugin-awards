@@ -84,6 +84,7 @@ class awards extends plugin_generic
 		$this->routing->addRoute('Awards', 'awards', 'plugins/awards/pageobjects');
 		
 		// -- Hooks -------------------------------------------
+		$this->add_hook('portal', 'awards_portal_hook', 'portal');
   		$this->add_hook('userprofile_customtabs', 'awards_userprofile_customtabs_hook', 'userprofile_customtabs');
 
 		// -- Menu --------------------------------------------

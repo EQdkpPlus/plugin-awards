@@ -10,21 +10,55 @@
 
 <script type="text/javascript"></script>
 
-<div>
+<div id="awards">
 	<div class="contentHeader">
-			<h1 class="contentTitle">{L_aw_achievements}</h1>
+		<h1 class="contentTitle">{L_aw_achievements}</h1>
+	</div>
+	
+	<div class="contentBody">
+		<div class="aw-tabs">
+			<ul>
+				<li class="aw-tab-user">Show User Awards Tab</li>
+				<li class="aw-tab-assign">Manage Assignment Tab</li>
+				<li class="aw-tab-achiev">Manage Achievement Tab</li>
+			</ul>
 		</div>
-		<div class="tableHeader floatRight">
-			<button class="mainoption" type="button" name="add" onclick="window.location='manage_achievements.php{SID}&amp;aid=0'"><i class="fa fa-plus"></i>{L_aw_add_achievement}</button>
+		<div class="clear"></div>
+		
+		<div class="aw-cat">
+			<ul>
+				<li>Allgemein</li>
+				<li>Aktivität</li>
+				<li>Kategorie 3</li>
+				<li>Kategorie 4</li>
+				<li>Kategorie 5</li>
+			</ul>
 		</div>
-
-
-
-
-
-
-
-<div class="contentFooter"></div>
+		
+		<div class="aw-list">
+			<div class="aw-progress">{PROGRESSBAR}</div>
+			<div class="reached">
+				<div class="ac-{ACHIEVEMENT.ID}">
+					<div class="ac-main">
+						<h3>{ACHIEVEMENT.TITLE}</h3>
+						{ACHIEVEMENT.DESCRIPTION}
+						<small><strong>{ACHIEVEMENT.DATE}</strong></small>
+					</div>
+					<div class="ac-icon floatLeft"></div>
+						<img src="{ACHIEVEMENT.IMG_URL}" />
+					<div class="ac-points floatRight">
+						<span class="ac-points-big">{ACHIEVEMENT.DKP}</span> <span class="ac-points-small">{ACHIEVEMENT.POINTS}</span> tause wenn dkp 0
+					</div>
+				</div>
+				<div class="ac-{ACHIEVEMENT.ID}" style="display:show;">
+					TABELLE ALLER NUTZER (grün markierte haben den erfolg)<br />... eigentlich ausgeblendet / jQuery macht alles ...
+				</div>
+			</div>
+			<div class="unreached">LIST unreached</div>
+		</div>
+	</div>
+	
+	<div class="contentFooter"></div>
 </div>
 
 

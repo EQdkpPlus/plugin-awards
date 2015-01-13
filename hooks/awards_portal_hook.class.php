@@ -19,51 +19,29 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*+----------------------------------------------------------------------------
-  | awards_pageobject
-  +--------------------------------------------------------------------------*/
-class awards_pageobject extends pageobject
-{
-	/**
-	  * Constructor
-	  */
-	public function __construct(){
-		// plugin installed?
-		if (!$this->pm->check('awards', PLUGIN_INSTALLED))
-		  message_die($this->user->lang('aw_plugin_not_installed'));
-
-		#$this->user->check_auth('a_awards_view');
-
-		$handler = array();
-		parent::__construct(false, $handler);
-		$this->process();
-	}
-
-
-	/**
-	  * Display
-	  * display all achievements
-	  */
-	public function display(){
-
-
-
-
-
-
-		$this->tpl->assign_vars(array(
-			'AW_TITLE'			=> '',
-			'AW_COUNT'			=> '',
-		));
-
-		// -- EQDKP ---------------------------------------------------------------
-		$this->core->set_vars(array(
-			'page_title'    => $this->user->lang('awards'),
-			'template_path' => $this->pm->get_data('awards', 'template_path'),
-			'template_file' => 'awards.html',
-			'display'       => true
-		));
-
-	}
+if (!defined('EQDKP_INC')){
+  header('HTTP/1.0 404 Not Found');exit;
 }
+
+/*+----------------------------------------------------------------------------
+  | awards_portal_hook
+  +--------------------------------------------------------------------------*/
+if (!class_exists('awards_portal_hook')){
+  class awards_portal_hook extends gen_class
+  {
+
+	/**
+      * Portal
+      * portal hook
+      */
+	public function portal(){
+		if ($this->user->check_auth("u_awards_view", false) && $this->user->is_signedin()){
+			$this->tpl->css_file($this->root_path.'plugins/awards/templates/base_template/awards.css');
+			#$this->tpl->js_file($this->root_path.'plugins/awards/includes/js/awards.js');
+		}
+	}
+	
+	
+  }
+} 
 ?>
