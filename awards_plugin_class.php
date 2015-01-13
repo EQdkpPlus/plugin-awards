@@ -81,14 +81,14 @@ class awards extends plugin_generic
 		$this->add_pdh_write_module('awards_assignments');
 		
 		// -- Routing -----------------------------------------
-		#$this->routing->addRoute('MeineSeite', 'site', 'plugins/awards/pageobjects');
+		$this->routing->addRoute('Awards', 'list_all_achievements', 'plugins/awards/pageobjects');
 		
 		// -- Hooks -------------------------------------------
   		$this->add_hook('portal', 'awards_userprofile_customtabs_hook', 'userprofile_customtabs');
 
 		// -- Menu --------------------------------------------
 		$this->add_menu('admin', $this->gen_admin_menu());
-		#$this->add_menu('main', $this->gen_main_menu());
+		$this->add_menu('main', $this->gen_main_menu());
 
 	}
 
@@ -161,12 +161,10 @@ class awards extends plugin_generic
 	  * Generate the Main Menu
 	  */
 	private function gen_main_menu(){
-		$main_menu = array();
-		
 		$main_menu = array(
 			1 => array (
-				'link'	 => $this->routing->build('MeineSeite', false, false, true, true),
-				'text'	 => $this->user->lang('aw_view_achievements'),
+				'link'	 => $this->routing->build('Awards', false, false, true, true),
+				'text'	 => $this->user->lang('awards'),
 				'check'	 => 'u_awards_view',
 			),
     	);

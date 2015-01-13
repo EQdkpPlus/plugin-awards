@@ -4,6 +4,7 @@
 
 - Edit/Add Achievements (erfolge für zuweisung)
 
+    - vorauswahl der Felder
     - Image (himageuploader) beschränken auf kb oder px und only .png
     - isUserOrCharacterAward (boolean -> hradio)
     - Update List über AJAX und Save Button entfernen
@@ -12,18 +13,15 @@
 
 - Edit/Add Assignments (zuweisung an Char)
 
-    - GET member_data wenn update_assignment
-    - GET time_data wenn add_assignment
+    - vorauswahl der Felder
     - PDH erweitern um die Daten der Korrektur auf Liste an zu zeigen
 
 
-- Show Awards (aggregate awards from UserID and Usergroup and CharacterIDs)
+- Show Achievements (Benutzerspezifisch und Alle Nutzer) -- als pageobject!
 
-    - Show Image, Description and Time of Awarding
-    - Auf der Benutzerprofilseite, entsprechender Hook wird dann noch eingebaut
-
-
-- Pageobject, wo alle Awards aufgelistet werden, und wenn man einen anklickt, man sieht, wer wann den Award bekommen hat. 
+    - Show Image, Description and Time of Awarding, etc..
+    - Auf der Benutzerprofilseite über Hook einbinden
+    - klick auf erfolg gibt mehr infos (wer alles diesen erfolg erhielt etc)
 
 
 - Automatisieren
