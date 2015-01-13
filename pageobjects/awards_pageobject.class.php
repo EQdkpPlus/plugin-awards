@@ -19,17 +19,10 @@
  *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-// EQdkp required files/vars
-#define('EQDKP_INC', true);
-#define('PLUGIN', 'awards');
-
-#$eqdkp_root_path = './../../../';
-#include_once($eqdkp_root_path.'common.php');
-
 /*+----------------------------------------------------------------------------
-  | list_all_achievements_pageobject
+  | awards_pageobject
   +--------------------------------------------------------------------------*/
-class list_all_achievements_pageobject extends pageobject
+class awards_pageobject extends pageobject
 {
 	/**
 	  * Constructor
@@ -67,7 +60,7 @@ class list_all_achievements_pageobject extends pageobject
 		$this->core->set_vars(array(
 			'page_title'    => $this->user->lang('awards'),
 			'template_path' => $this->pm->get_data('awards', 'template_path'),
-			'template_file' => 'list_all_achievements.html',
+			'template_file' => 'awards.html',
 			'display'       => true
 		));
 

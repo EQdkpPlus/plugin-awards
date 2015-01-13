@@ -81,10 +81,10 @@ class awards extends plugin_generic
 		$this->add_pdh_write_module('awards_assignments');
 		
 		// -- Routing -----------------------------------------
-		$this->routing->addRoute('Awards', 'list_all_achievements', 'plugins/awards/pageobjects');
+		$this->routing->addRoute('Awards', 'awards', 'plugins/awards/pageobjects');
 		
 		// -- Hooks -------------------------------------------
-  		$this->add_hook('portal', 'awards_userprofile_customtabs_hook', 'userprofile_customtabs');
+  		$this->add_hook('userprofile_customtabs', 'awards_userprofile_customtabs_hook', 'userprofile_customtabs');
 
 		// -- Menu --------------------------------------------
 		$this->add_menu('admin', $this->gen_admin_menu());

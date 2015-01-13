@@ -177,8 +177,22 @@ class awards_manage_assignments extends page_generic
 	  * delete selected assignments
 	  */
 	public function delete(){
+		$arrAdjID = array();
+		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
+			foreach($this->in->getArray('selected_ids','int') as $id) {
+				$strAdjGK = $this->pdh->get('awards_assignments', 'adj_group_key', array($id));
+				
+				if($this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK)))
+					$retu = $this->pdh->put('awards_assignments', 'delete', array($id));
+			}
+		}
+
+		if(!empty($retu)) {
+			$messages[] = array('title' => $this->user->lang('del_suc'), 'text' => $this->user->lang('aw_del_assign'), 'color' => 'green');
+			$this->core->messages($messages);
+		}
 		
-		#$this->pdh->process_hook_queue();
+		$this->pdh->process_hook_queue();
 	}
 	
 

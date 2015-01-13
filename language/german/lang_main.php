@@ -75,6 +75,7 @@ $lang = array(
   'aw_add_nosuccess'			=> '%s konnte nicht hinzugefügt werden',
   'aw_assign_success'			=> '%s wurde %s zugewiesen',
   'aw_assign_nosuccess'			=> '%s konnte nicht zugewiesen werden',
+  'aw_del_assign'				=> 'Zuweisung(en) entfernt',
   
   'aw_confirm_delete_achievement'	=> 'Bist du sicher, dass Du die Erfolge %s wirklich löschen willst? Alle erhaltenen DKP werden dabei auch gelöscht!',
   
