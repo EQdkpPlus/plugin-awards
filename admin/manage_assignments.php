@@ -79,28 +79,22 @@ class awards_manage_assignments extends page_generic
 		// ---------------------------------------------
 		
 		if ($id){
-			$strAdjID = $this->pdh->get('awards_assignments', 'adj_id', array($id));
-			$arrAdjID = explode(',',$strAdjID);
+			$strAdjGK = $this->pdh->get('awards_assignments', 'adj_group_key', array($id));
 			
 			// upd ADJUSTMENT
-			if($this->pdh->put('adjustment', 'update_adjustment', array($arrAdjID[0], $fltDKP, $strName, $intUserID, $intEventID, 0, $intDate, true))){
-	
-				// refresh pdh
-				$this->pdh->process_hook_queue();
+			$arrAdjID = $this->pdh->put('adjustment', 'update_adjustment', array($strAdjGK, $fltDKP, $strName, $intUserID, $intEventID, 0, $intDate));
+			if($arrAdjID[0]){
 				
-				// get new data (AdjustmentIDs and AdjustmentGroupKey) for update_assignment 
-				$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]));
-				$arrIDofGK = $this->pdh->get('adjustment', 'ids_of_group_key', array($strAdjGK));
-				$strIDofGK = implode(',',$arrIDofGK);
+				$this->pdh->process_hook_queue();
+				$strAdjGK  = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[1]));
+				$strAdjID = serialize($arrAdjID);
 				
 				// upd ASSIGNMENT
-				if ($this->pdh->put('awards_assignments', 'update', array($id, $intDate, $intAchievmentID, $strIDofGK, $strAdjGK))){
+				if ($this->pdh->put('awards_assignments', 'update', array($id, $intDate, $intAchievmentID, $strAdjID, $strAdjGK))){
 					$blnResult = true;
 				} else {
-					// del ADJUSTMENT if add_assignment failed
-					$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]));
-					$this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK));
-					$this->pdh->put('awards_assignments', 'delete', array($id));
+					// DELETE or BACKUP if add_assignment failed
+					// ......
 					$blnResult = false;
 				}
 			} else {
@@ -109,14 +103,17 @@ class awards_manage_assignments extends page_generic
 		} else {
 			// add ADJUSTMENT
 			$arrAdjID = $this->pdh->put('adjustment', 'add_adjustment', array($fltDKP, $strName, $intUserID, $intEventID, 0, $intDate));
-			$strAdjID = implode(',',$arrAdjID);
 			if($arrAdjID > 0){
+				
+				$this->pdh->process_hook_queue();
+				$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]));
+				$strAdjID = serialize($arrAdjID);
+				
 				// add ASSIGNMENT
-				if ($this->pdh->put('awards_assignments', 'add', array($intDate, $intAchievmentID, $strAdjID, $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]))))){
+				if ($this->pdh->put('awards_assignments', 'add', array($intDate, $intAchievmentID, $strAdjID, $strAdjGK))){
 					$blnResult = true;
 				} else {
 					// del ADJUSTMENT if add_assignment failed
-					$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]));
 					$this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK));
 					$blnResult = false;
 				}
@@ -190,7 +187,7 @@ class awards_manage_assignments extends page_generic
 		$hptt_page_settings = array(
 			'name'					=> 'hptt_aw_admin_manage_awards',
 			'table_main_sub'		=> '%intAssignmentID%',
-			'table_subs'			=> array('%intAssignmentID%', '%intAssignmentID%'),
+			'table_subs'			=> array('%intAssignmentID%', '%link_url%', '%link_url_suffix%'),
 			'page_ref'				=> 'manage_assignments.php',
 			'show_numbers'			=> false,
 			'show_select_boxes'		=> true,
@@ -210,12 +207,15 @@ class awards_manage_assignments extends page_generic
 		$page_suffix = '&amp;start='.$this->in->get('start', 0);
 		$sort_suffix = '?sort='.$this->in->get('sort');
 		
+		//footer
 		$item_count = count($view_list);
+		$strFooterText = sprintf($this->user->lang('listassign_footcount'), $adj_count, $this->user->data['user_alimit']);
 		
 		$this->confirm_delete($this->user->lang('aw_confirm_delete_assignment'));
 
 		$this->tpl->assign_vars(array(
-			'ASSIGNMENTS_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix,null,1,null,false, array('awards_assignments', 'checkbox_check')),
+			'ASSIGNMENTS_LIST'	=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_alimit'], $strFooterText),
+			'PAGINATION' 		=> generate_pagination('manage_assignments.php'.$sort_suffix, $adj_count, $this->user->data['user_alimit'], $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count())
 		);
 	

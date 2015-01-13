@@ -252,7 +252,7 @@ class awards_manage_achievements extends page_generic
 		$hptt_page_settings = array(
 			'name'					=> 'hptt_aw_admin_manage_achievements',
 			'table_main_sub'		=> '%intAchievementID%',
-			'table_subs'			=> array('%intAchievementID%', '%intAchievementID%'),
+			'table_subs'			=> array('%intAchievementID%', '%link_url%', '%link_url_suffix%'),
 			'page_ref'				=> 'manage_achievements.php',
 			'show_numbers'			=> false,
 			'show_select_boxes'		=> true,
@@ -277,11 +277,13 @@ class awards_manage_achievements extends page_generic
 		$sort_suffix = '?sort='.$this->in->get('sort');
 		
 		$item_count = count($view_list);
+		$strFooterText = sprintf($this->user->lang('listachiev_footcount'), $adj_count, $this->user->data['user_alimit']);
 		
 		$this->confirm_delete($this->user->lang('aw_confirm_delete_achievement'));
 
 		$this->tpl->assign_vars(array(
-			'ACHIEVEMENTS_LIST'	=> $hptt->get_html_table($this->in->get('sort'), $page_suffix,null,1,null,false, array('awards_achievements', 'checkbox_check')),
+			'ACHIEVEMENTS_LIST'	=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_alimit'], $strFooterText),
+			'PAGINATION' 		=> generate_pagination('manage_achievements.php'.$sort_suffix, $adj_count, $this->user->data['user_alimit'], $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count())
 		);
 
