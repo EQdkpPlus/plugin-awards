@@ -77,7 +77,7 @@ if(!class_exists('pdh_w_awards_achievements')) {
 	/**
 	  * Add a Achievement
 	  */
-	public function add($strName, $strDescription, $intActive, $intSpecial,
+	public function add($strName, $strDescription, $blnActive, $blnSpecial,
 						$intPoints, $strIcon, $arrIconColors, $strModule, $fltDKP, $intEventID){
 		// Parse TinyMC Code of 'Description'
 		#$strDescription = $this->bbcode->replace_shorttags($strDescription);
@@ -87,8 +87,8 @@ if(!class_exists('pdh_w_awards_achievements')) {
 			'name' 				=> $strName,
 			'description'		=> $strDescription,
 			'sort_id'			=> 99999999,
-			'active'			=> $intActive,
-			'special'			=> $intSpecial,
+			'active'			=> $blnActive,
+			'special'			=> $blnSpecial,
 			'points'			=> $intPoints,
 			'icon' 				=> $strIcon,
 			'icon_colors'		=> serialize($arrIconColors),
@@ -115,7 +115,7 @@ if(!class_exists('pdh_w_awards_achievements')) {
 	/**
 	  * Update a Achievement
 	  */
-	public function update($id, $strName, $strDescription, $intSortID, $intActive, $intSpecial,
+	public function update($id, $strName, $strDescription, $intSortID, $blnActive, $blnSpecial,
 							$intPoints, $strIcon, $arrIconColors, $strModule, $fltDKP, $intEventID){
 		// Parse TinyMC Code of 'Description'
 		#$strDescription = $this->bbcode->replace_shorttags($strDescription);
@@ -125,8 +125,8 @@ if(!class_exists('pdh_w_awards_achievements')) {
 			'name' 				=> $strName,
 			'description'		=> $strDescription,
 			'sort_id'			=> $intSortID,
-			'active'			=> $intActive,
-			'special'			=> $intSpecial,
+			'active'			=> $blnActive,
+			'special'			=> $blnSpecial,
 			'points'			=> $intPoints,
 			'icon' 				=> $strIcon,
 			'icon_colors'		=> serialize($arrIconColors),

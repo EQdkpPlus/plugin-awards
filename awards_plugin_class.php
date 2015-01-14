@@ -22,7 +22,28 @@
 if (!defined('EQDKP_INC')){
 	header('HTTP/1.0 404 Not Found');exit;
 }
-
+/*+------ NOTES - FOR - DEVELOPMENT -------------------------------------------
+  |
+  | Wichtige Variablen werden zusammen gesetzt aus:
+  |     $strAchName(s)____kleines 's' am Ende wenn array()
+  |       |  |  |____Element (ID, Name, GroupKey, IconColors)
+  |       |  |____Objekt (Ach, Adj, Ass) => Achievement, Adjustment, ...
+  |       |____Typ (int, flt, str, arr, bln) => integer, float, string, ...
+  | 
+  | System (EqDKP Core) Variablen sind verschieden, doch häufig mit
+  |    '_' geschrieben somit sollte diese Schreibweise vermieden werden
+  |     um eine bessere Sicht zuhaben was stammt vom Core und was von uns.
+  | 
+  | Unwichtige Variablen sollten vollständig klein geschrieben werden ...
+  |  zB.: Variablen für den einmaligen Gebruach, oder
+  |       Variablen die als Verbindung zwischen 2 direkt aufeinander folgenden
+  |          Methoden dienen (Methoden nur zur leserlichkeit getrennt),
+  |       Variablen die nicht explizit mit dem Verwendungszweck im
+  |          zusammenhang stehen
+  | 
+  | Diese Grundsätze gelten aber nur als Richtlinien und Hilfestellungen,
+  |    da es immer auf den Code ankommt ;)
+  +--------------------------------------------------------------------------*/
 
 /*+----------------------------------------------------------------------------
   | awards

@@ -59,20 +59,20 @@ class awards_manage_achievements extends page_generic
 	  */
 	public function save(){
 		$id 			= $this->in->get('aid', 0);
-		$strName		= $this->in->get('name');
-		$strDescription = $this->in->get('description');
-		#$strDescription = $this->in->get('description', '', 'raw'); // TinyMCE	
-		$intSortID		= $this->in->get('sort_id', 99999999);
-		$intActive		= $this->in->get('active_state', 1);
-		$intSpecial		= $this->in->get('special_state', 1);
-		$intPoints 		= $this->in->get('points', 10);
-		$strIcon		= $this->in->get('icon', 'default.svg');
-		$arrIconColors  = array();
-		$strModule		= $this->in->get('module');
-		$fltDKP 		= $this->in->get('dkp', 0);
+		$strAchName		= $this->in->get('name');
+		$strAchDescription = $this->in->get('description');
+		#$strAchDescription = $this->in->get('description', '', 'raw'); // TinyMCE	
+		$intAchSortID		= $this->in->get('sort_id', 99999999);
+		$blnAchActive		= $this->in->get('active_state', 1);
+		$blnAchSpecial		= $this->in->get('special_state', 1);
+		$intAchPoints 		= $this->in->get('points', 10);
+		$strAchIcon		= $this->in->get('icon', 'default.svg');
+		$arrAchIconColors  = array();
+		$strAchModule		= $this->in->get('module');
+		$fltAchDKP 		= $this->in->get('dkp', 0);
 		$intMDKP 		= $this->in->getArray('mdkp2event', 'int');
 		
-		if ($strName == "" ){
+		if ($strAchName == "" ){
 			$this->core->message($this->user->lang('name'), $this->user->lang('missing_values'), 'red');
 			$this->edit();
 			return;
@@ -81,26 +81,26 @@ class awards_manage_achievements extends page_generic
 		if ($id){
 			// get and upd EVENT
 			$intEventID = $this->pdh->get('awards_achievements', 'event_id', array($id));
-			if($this->pdh->put('event', 'update_event', array($intEventID, $strName, 0, ''))){
+			if($this->pdh->put('event', 'update_event', array($intEventID, $strAchName, 0, ''))){
 				// upd MDKP
 				if($this->pdh->put('multidkp', 'add_multidkp2event', array($intEventID, $intMDKP))){
 					// upd ACHIEVEMENT
 					$blnResult = $this->pdh->put('awards_achievements', 'update', array(
-						$id, $strName, $strDescription, $intSortID, $intActive, $intSpecial,
-						$intPoints, $strIcon, $arrIconColors, $strModule, $fltDKP, $intEventID
+						$id, $strAchName, $strAchDescription, $intAchSortID, $blnAchActive, $blnAchSpecial,
+						$intAchPoints, $strAchIcon, $arrAchIconColors, $strAchModule, $fltAchDKP, $intEventID
 					));
 				} else { $blnResult = false; } // <-- if MDKP fail
 			} else { $blnResult = false; } // <-- if EVENT fail
 		} else {
 			// add EVENT
-			$intEventID = $this->pdh->put('event', 'add_event', array($strName, 0, ''));
+			$intEventID = $this->pdh->put('event', 'add_event', array($strAchName, 0, ''));
 			if($intEventID > 0){
 				// add EVENT to MDKP
 				if($this->pdh->put('multidkp', 'add_multidkp2event', array($intEventID, $intMDKP))){
 					// add ACHIEVEMENT
 					$blnResult = $this->pdh->put('awards_achievements', 'add', array(
-						$strName, $strDescription, $intActive, $intSpecial,
-						$intPoints, $strIcon, $arrIconColors, $strModule, $fltDKP, $intEventID
+						$strAchName, $strAchDescription, $blnAchActive, $blnAchSpecial,
+						$intAchPoints, $strAchIcon, $arrAchIconColors, $strAchModule, $fltAchDKP, $intEventID
 					));
 				} else { $this->pdh->put('event', 'delete_event', array($intEventID)); } // <-- if MDKP fail, delete EVENT
 			} else { $blnResult = false; } // <-- if EVENT fail
@@ -108,9 +108,9 @@ class awards_manage_achievements extends page_generic
 		
 		if ($blnResult){
 			$this->pdh->process_hook_queue();
-			$this->core->message(sprintf( $this->user->lang('aw_add_success'), $strName ), $this->user->lang('success'), 'green');
+			$this->core->message(sprintf( $this->user->lang('aw_add_success'), $strAchName ), $this->user->lang('success'), 'green');
 		} else {
-			$this->core->message(sprintf( $this->user->lang('aw_add_nosuccess'), $strName ), $this->user->lang('error'), 'red');
+			$this->core->message(sprintf( $this->user->lang('aw_add_nosuccess'), $strAchName ), $this->user->lang('error'), 'red');
 		}
 		
 		$this->display();
@@ -220,9 +220,9 @@ class awards_manage_achievements extends page_generic
 		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
 			foreach($this->in->getArray('selected_ids','int') as $id) {
 				$pos[] = stripslashes($this->pdh->get('awards_achievements', 'name', array($id)));
-				$intEventID = $this->pdh->get('awards_achievements', 'event_id', array($id));
+				$intAchEventID = $this->pdh->get('awards_achievements', 'event_id', array($id));
 				
-				if($this->pdh->put('event', 'delete_event', array($intEventID)))
+				if($this->pdh->put('event', 'delete_event', array($intAchEventID)))
 					$retu[$id] = $this->pdh->put('awards_achievements', 'delete', array($id));
 			}
 		}
@@ -277,23 +277,23 @@ class awards_manage_achievements extends page_generic
 		$sort_suffix = '?sort='.$this->in->get('sort');
 		
 		$item_count = count($view_list);
-		$strFooterText = sprintf($this->user->lang('listachiev_footcount'), $adj_count, $this->user->data['user_alimit']);
+		$strfootertext = sprintf($this->user->lang('listachiev_footcount'), $adj_count, $this->user->data['user_alimit']);
 		
 		$this->confirm_delete($this->user->lang('aw_confirm_delete_achievement'));
 
 		$this->tpl->assign_vars(array(
-			'ACHIEVEMENTS_LIST'	=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_alimit'], $strFooterText),
+			'ACHIEVEMENTS_LIST'	=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_alimit'], $strfootertext),
 			'PAGINATION' 		=> generate_pagination('manage_achievements.php'.$sort_suffix, $adj_count, $this->user->data['user_alimit'], $this->in->get('start', 0)),
-			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count())
-		);
+			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count()
+		));
 
 		// -- EQDKP ---------------------------------------------------------------
 		$this->core->set_vars(array(
 			'page_title'		=> $this->user->lang('aw_manage_achievements'),
 			'template_path'		=> $this->pm->get_data('awards', 'template_path'),
 			'template_file'		=> 'admin/manage_achievements.html',
-			'display'			=> true)
-		);
+			'display'			=> true
+		));
 	}
 
 
@@ -301,40 +301,7 @@ class awards_manage_achievements extends page_generic
 
 
 
-/*	public function save(){
-		$award = $this->get_post();
-		if($this->in->get('a',0)) {*/
-			/*if (!empty($award['name']) == true){
-				$intActive = (isset($award['active']) && (int)$award['active']) ? 1 : 0;
-				$intSpecial = (isset($award['special']) && (int)$award['special']) ? 1 : 0;
-				// pdh->put
-			} else { $retu = false }*/
-/*			$retu = $this->pdh->put('awards', 'update_award', array($this->in->get('a',0), $award['name'], $award['description'], $intActive, $intSpecial, $award['value'], $award['image'], $award['image_colors'], $award['adjustment'], $award['adjustment_value']));
-		} else {
-			$retu = $this->pdh->put('awards', 'add_award', array($adj['value'], $adj['reason'], $adj['members'], $adj['event'], $adj['raid_id'], $adj['date']));	
-		}
-		
-		if($retu) {
-			$message = array('title' => $this->user->lang('save_suc'), 'text' => $award['name'].$this->user->lang('aw_add_success'), 'color' => 'green');
-		} else {
-			$message = array('title' => $this->user->lang('save_nosuc'), 'text' => $award['name'].$this->user->lang('aw_add_nosuccess'), 'color' => 'red');
-		}
-		
-		$this->display($message);
-	}
-
-	public function delete() {
-		$ids = array();
-		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
-			foreach($this->in->getArray('selected_ids','int') as $s_id)
-			{
-				$new_ids = $this->pdh->get('awardst', 'ids_of_group_key', array($this->pdh->get('awards', 'group_key', array($s_id))));
-				$ids = array_merge($ids, $new_ids);
-			}
-		} else {
-			$ids = $this->pdh->get('awards', 'ids_of_group_key', array($this->in->get('selected_ids','')));
-		}
-		
+/* Spickzettel ...
 		$retu = array();
 		foreach($ids as $id) {
 			$retu[$id] = $this->pdh->put('awards', 'delete_award', array($id));
@@ -354,9 +321,9 @@ class awards_manage_achievements extends page_generic
 			$messages[] = array('title' => $this->user->lang('del_no_suc'), 'text' => implode(', ', $neg), 'color' => 'red');
 		}
 		$this->display($messages);
-	}*/
+*/
 
-    // -- EQDKP ---------------------------------------------------------------
+
 }
 registry::register('awards_manage_achievements');
 

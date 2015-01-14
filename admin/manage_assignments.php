@@ -58,12 +58,12 @@ class awards_manage_assignments extends page_generic
 	  */
 	public function save(){
 		$id 			 = $this->in->get('aid', 0);
-		$intDate 		 = $this->in->get('date', 0);
-		$intAchievmentID = $this->in->get('achievment', 0);
+		$intAssDate 		 = $this->in->get('date', 0);
+		$intAchID = $this->in->get('achievment', 0);
 		
-		$fltDKP 	= $this->pdh->get('awards_achievements', 'dkp', array($intAchievmentID));
-		$strName	= $this->user->lang('aw_achievement').': '.$this->pdh->get('awards_achievements', 'name', array($intAchievmentID));
-		$intEventID = $this->pdh->get('awards_achievements', 'event_id', array($intAchievmentID));
+		$fltAchDKP 	= $this->pdh->get('awards_achievements', 'dkp', array($intAchID));
+		$strAchName	= $this->user->lang('aw_achievement').': '.$this->pdh->get('awards_achievements', 'name', array($intAchID));
+		$intAchEventID = $this->pdh->get('awards_achievements', 'event_id', array($intAchID));
 		
 		// ---------------------------------------------
 			foreach($this->in->getArray('members','int') as $member) {
@@ -82,7 +82,7 @@ class awards_manage_assignments extends page_generic
 			$strAdjGK = $this->pdh->get('awards_assignments', 'adj_group_key', array($id));
 			
 			// upd ADJUSTMENT
-			$arrAdjID = $this->pdh->put('adjustment', 'update_adjustment', array($strAdjGK, $fltDKP, $strName, $intUserID, $intEventID, 0, $intDate));
+			$arrAdjID = $this->pdh->put('adjustment', 'update_adjustment', array($strAdjGK, $fltAchDKP, $strAchName, $intUserID, $intAchEventID, 0, $intAssDate));
 			if($arrAdjID[0]){
 				
 				$this->pdh->process_hook_queue();
@@ -90,7 +90,7 @@ class awards_manage_assignments extends page_generic
 				$strAdjID = serialize($arrAdjID);
 				
 				// upd ASSIGNMENT
-				if ($this->pdh->put('awards_assignments', 'update', array($id, $intDate, $intAchievmentID, $strAdjID, $strAdjGK))){
+				if ($this->pdh->put('awards_assignments', 'update', array($id, $intAssDate, $intAchID, $strAdjID, $strAdjGK))){
 					$blnResult = true;
 				} else {
 					// DELETE or BACKUP if add_assignment failed
@@ -102,7 +102,7 @@ class awards_manage_assignments extends page_generic
 			}
 		} else {
 			// add ADJUSTMENT
-			$arrAdjID = $this->pdh->put('adjustment', 'add_adjustment', array($fltDKP, $strName, $intUserID, $intEventID, 0, $intDate));
+			$arrAdjID = $this->pdh->put('adjustment', 'add_adjustment', array($fltAchDKP, $strAchName, $intUserID, $intAchEventID, 0, $intAssDate));
 			if($arrAdjID > 0){
 				
 				$this->pdh->process_hook_queue();
@@ -110,7 +110,7 @@ class awards_manage_assignments extends page_generic
 				$strAdjID = serialize($arrAdjID);
 				
 				// add ASSIGNMENT
-				if ($this->pdh->put('awards_assignments', 'add', array($intDate, $intAchievmentID, $strAdjID, $strAdjGK))){
+				if ($this->pdh->put('awards_assignments', 'add', array($intAssDate, $intAchID, $strAdjID, $strAdjGK))){
 					
 					// add ntfy
 					#$this->ntfy->add_persistent('guildrequest_open', sprintf($this->user->lang('gr_notification_open'), $intOpen), $this->routing->build('ListApplications', false, false, true, true), 0, 'fa-pencil-square-o');
@@ -130,9 +130,9 @@ class awards_manage_assignments extends page_generic
 			$this->pdh->process_hook_queue();
 			
 			foreach($intUserID as $userid) $arrusernames[] = $this->pdh->get('member', 'name', array($userid));
-			$this->core->message(sprintf( $this->user->lang('aw_assign_success'), $strName, implode(', ',$arrusernames) ), $this->user->lang('success'), 'green');
+			$this->core->message(sprintf( $this->user->lang('aw_assign_success'), $strAchName, implode(', ',$arrusernames) ), $this->user->lang('success'), 'green');
 		} else {
-			$this->core->message(sprintf( $this->user->lang('aw_assign_nosuccess'), $strName ), $this->user->lang('error'), 'red');
+			$this->core->message(sprintf( $this->user->lang('aw_assign_nosuccess'), $strAchName ), $this->user->lang('error'), 'red');
 		}
 		
 		$this->display();
@@ -145,7 +145,7 @@ class awards_manage_assignments extends page_generic
 	  */	
 	public function edit(){
 		$id 			 = $this->in->get('aid', 0);
-		$intDate		 = $this->pdh->get('awards_assignments', 'date', array($id));
+		$intAssDate		 = $this->pdh->get('awards_assignments', 'date', array($id));
 		
 		//fetch achievements for select
 		$achievements = array();
@@ -160,7 +160,7 @@ class awards_manage_assignments extends page_generic
 		$this->tpl->assign_vars(array(
 			'AID' => $id,
 			'DD_ACHIEVEMENT' => new hdropdown('achievment', array('options' => $achievements, 'value' => ((isset($achievements)) ? $achievements : ''), 'name', array($id))),
-			'DATE'			 => $this->jquery->Calendar('date', $this->time->user_date(((isset($intDate)) ? $intDate : $this->time->time), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
+			'DATE'			 => $this->jquery->Calendar('date', $this->time->user_date(((isset($intAssDate)) ? $intAssDate : $this->time->time), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 			'MEMBERS'		 => $this->jquery->MultiSelect('members', $members, ((isset($intUserID)) ? $intUserID : ''), array('width' => 350, 'filter' => true)),
 		));
 		

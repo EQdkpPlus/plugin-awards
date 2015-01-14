@@ -70,12 +70,12 @@ if(!class_exists('pdh_w_awards_assignments')) {
 	/**
 	  * Add a Assignment
 	  */
-	public function add($intDate=false, $intAchievmentID, $intAdjID, $strAdjGK){
-		$intDate = ($intDate) ? $intDate : $this->time->time;
+	public function add($intAssDate=false, $intAchID, $arrAdjID, $strAdjGK){
+		$intAssDate = ($intAssDate) ? $intAssDate : $this->time->time;
 		$arrQuery  = array(
-			'date' 				=> $intDate,
-			'achievement_id'	=> $intAchievmentID,
-			'adj_id'			=> $intAdjID,
+			'date' 				=> $intAssDate,
+			'achievement_id'	=> $intAchID,
+			'adj_id'			=> $arrAdjID,
 			'adj_group_key'		=> $strAdjGK,
 		);
 		
@@ -96,12 +96,12 @@ if(!class_exists('pdh_w_awards_assignments')) {
 	/**
 	  * Update a Assignment
 	  */
-	public function update($id, $intDate=false, $intAchievmentID, $intAdjID, $strAdjGK){
-		$intDate = ($intDate) ? $intDate : $this->time->time;
+	public function update($id, $intAssDate=false, $intAchID, $arrAdjID, $strAdjGK){
+		$intAssDate = ($intAssDate) ? $intAssDate : $this->time->time;
 		$arrQuery = array(
-			'date' 				=> $intDate,
-			'achievement_id'	=> $intAchievmentID,
-			'adj_id'			=> $intAdjID,
+			'date' 				=> $intAssDate,
+			'achievement_id'	=> $intAchID,
+			'adj_id'			=> $arrAdjID,
 			'adj_group_key'		=> $strAdjGK,
 		);
 		
