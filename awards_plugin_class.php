@@ -113,7 +113,17 @@ class awards extends plugin_generic
 	  * Define Post Uninstall
 	  */
 	public function pre_uninstall(){
+		$arrAchievementIDs = $this->pdh->get('awards_achievements', 'id_list');
+		foreach($arrAchievementIDs as $intAchievementID){
+			$intAchievementEventID = $this->pdh->get('awards_achievements', 'event_id', array($intAchievementID));
+			$this->pdh->put('event', 'delete_event', array($intAchievementEventID));
+		}
 		
+		$arrAssignmentIDs = $this->pdh->get('awards_assignments', 'id_list');
+		foreach($arrAssignmentIDs as $intAssignmentID){
+			$strAssignmentGroupKey = $this->pdh->get('awards_assignments', 'adj_group_key');
+			$this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAssignmentGroupKey));
+		}
 	}
 	
 
