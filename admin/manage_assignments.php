@@ -128,9 +128,11 @@ class awards_manage_assignments extends page_generic
 		
 		if ($blnResult){
 			$this->pdh->process_hook_queue();
-			$this->core->message($this->user->lang('aw_assign_success'), $this->user->lang('success'), 'green');
+			
+			foreach($intUserID as $userid) $arrusernames[] = $this->pdh->get('member', 'name', array($userid));
+			$this->core->message(sprintf( $this->user->lang('aw_assign_success'), $strName, implode(', ',$arrusernames) ), $this->user->lang('success'), 'green');
 		} else {
-			$this->core->message($this->user->lang('aw_assign_nosuccess'), $this->user->lang('error'), 'red');
+			$this->core->message(sprintf( $this->user->lang('aw_assign_nosuccess'), $strName ), $this->user->lang('error'), 'red');
 		}
 		
 		$this->display();
@@ -227,12 +229,12 @@ class awards_manage_assignments extends page_generic
 		
 		//footer
 		$item_count = count($view_list);
-		$strFooterText = sprintf($this->user->lang('listassign_footcount'), $adj_count, $this->user->data['user_alimit']);
+		$strfootertext = sprintf($this->user->lang('listassign_footcount'), $adj_count, $this->user->data['user_alimit']);
 		
 		$this->confirm_delete($this->user->lang('aw_confirm_delete_assignment'));
 
 		$this->tpl->assign_vars(array(
-			'ASSIGNMENTS_LIST'	=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_alimit'], $strFooterText),
+			'ASSIGNMENTS_LIST'	=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_alimit'], $strfootertext),
 			'PAGINATION' 		=> generate_pagination('manage_assignments.php'.$sort_suffix, $adj_count, $this->user->data['user_alimit'], $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count())
 		);
