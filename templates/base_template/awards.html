@@ -18,20 +18,20 @@
 	<div class="contentBody">
 		<div class="aw-tabs">
 			<ul>
-				<li class="aw-tab-user">Show User Awards Tab</li>
-				<li class="aw-tab-assign">Manage Assignment Tab</li>
-				<li class="aw-tab-achiev">Manage Achievement Tab</li>
+				<li class="aw-tab-user"><a href="">Show User Awards Tab</a></li>
+				<li class="aw-tab-assign"><a href="">Manage Assignment Tab</a></li>
+				<li class="aw-tab-achiev"><a href="">Manage Achievement Tab</a></li>
 			</ul>
 		</div>
 		<div class="clear"></div>
 		
 		<div class="aw-cat">
 			<ul>
-				<li>Allgemein</li>
-				<li>Aktivität</li>
-				<li>Kategorie 3</li>
-				<li>Kategorie 4</li>
-				<li>Kategorie 5</li>
+				<li><a href="">Allgemein</a></li>
+				<li><a href="">Aktivität</a></li>
+				<li><a href="">Kategorie 3</a></li>
+				<li><a href="">Kategorie 4</a></li>
+				<li><a href="">Kategorie 5</a></li>
 			</ul>
 		</div>
 		
@@ -40,21 +40,40 @@
 			<div class="reached">
 				<div class="ac-{ACHIEVEMENT.ID}">
 					<div class="ac-main">
-						<h3>{ACHIEVEMENT.TITLE}</h3>
-						{ACHIEVEMENT.DESCRIPTION}
-						<small><strong>{ACHIEVEMENT.DATE}</strong></small>
+						<h3 class="ac-title">{ACHIEVEMENT.TITLE}</h3>
+						<span class="ac-description">{ACHIEVEMENT.DESCRIPTION}</span>
+						<span class="ac-date">{ACHIEVEMENT.DATE}</span>
 					</div>
 					<div class="ac-icon floatLeft"></div>
 						<img src="{ACHIEVEMENT.IMG_URL}" />
 					<div class="ac-points floatRight">
-						<span class="ac-points-big">{ACHIEVEMENT.DKP}</span> <span class="ac-points-small">{ACHIEVEMENT.POINTS}</span> tause wenn dkp 0
+						<span class="ac-points-small">{ACHIEVEMENT.POINTS}</span> tause wenn dkp 0
+						<span class="ac-points-big">{ACHIEVEMENT.DKP}</span>
 					</div>
 				</div>
-				<div class="ac-{ACHIEVEMENT.ID}" style="display:show;">
+				<div class="ac-{ACHIEVEMENT.ID} ac-user-list" style="display:show;">
 					TABELLE ALLER NUTZER (grün markierte haben den erfolg)<br />... eigentlich ausgeblendet / jQuery macht alles ...
 				</div>
 			</div>
-			<div class="unreached">LIST unreached</div>
+			<!-- Hier folgt der nicht erhaltene (ausgegraute) Errfolg -->
+			<div class="unreached">
+				<div class="ac-{ACHIEVEMENT.ID}">
+					<div class="ac-main">
+						<h3 class="ac-title">{ACHIEVEMENT.TITLE}</h3>
+						<span class="ac-description">{ACHIEVEMENT.DESCRIPTION}</span>
+						<span class="ac-date">{ACHIEVEMENT.DATE}</span>
+					</div>
+					<div class="ac-icon floatLeft"></div>
+						<img src="{ACHIEVEMENT.IMG_URL}" />
+					<div class="ac-points floatRight">
+						<span class="ac-points-small">{ACHIEVEMENT.POINTS}</span> tause wenn dkp 0
+						<span class="ac-points-big">{ACHIEVEMENT.DKP}</span>
+					</div>
+				</div>
+				<div class="ac-{ACHIEVEMENT.ID} ac-user-list" style="display:show;">
+					TABELLE ALLER NUTZER (grün markierte haben den erfolg)<br />... eigentlich ausgeblendet / jQuery macht alles ...
+				</div>
+			</div>
 		</div>
 	</div>
 	
