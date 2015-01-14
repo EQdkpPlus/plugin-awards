@@ -136,7 +136,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 			return false;
 		}
 		
-		public function get_html_name($intAchievementID, $strLink, $strSuffix){
+		public function get_html_name($intAchievementID){
 			return '<a href="'.$this->root_path.'plugins/awards/admin/manage_achievements.php'.$this->SID.'&aid='.$intAchievementID.'"><strong>'.$this->get_name($intAchievementID).'</strong></a>';
 		}
 
@@ -222,7 +222,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 			return false;
 		}
 		
-		public function get_html_points($intAchievementID, $strLink, $strSuffix){
+		public function get_html_points($intAchievementID){
 			return $this->get_points($intAchievementID).' <span class="adminicon" />';
 		}
 

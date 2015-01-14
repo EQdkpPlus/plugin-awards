@@ -22,7 +22,28 @@
 if (!defined('EQDKP_INC')){
 	header('HTTP/1.0 404 Not Found');exit;
 }
-
+/*+------ NOTES - FOR - DEVELOPMENT -------------------------------------------
+  |
+  | Wichtige Variablen werden zusammen gesetzt aus:
+  |     $strAchName(s)____kleines 's' am Ende wenn array()
+  |       |  |  |____Element (ID, Name, GroupKey, IconColors)
+  |       |  |____Objekt (Ach, Adj, Ass) => Achievement, Adjustment, ...
+  |       |____Typ (int, flt, str, arr, bln) => integer, float, string, ...
+  | 
+  | System (EqDKP Core) Variablen sind verschieden, doch häufig mit
+  |    '_' geschrieben somit sollte diese Schreibweise vermieden werden
+  |     um eine bessere Sicht zuhaben was stammt vom Core und was von uns.
+  | 
+  | Unwichtige Variablen sollten vollständig klein geschrieben werden ...
+  |  zB.: Variablen für den einmaligen Gebruach, oder
+  |       Variablen die als Verbindung zwischen 2 direkt aufeinander folgenden
+  |          Methoden dienen (Methoden nur zur leserlichkeit getrennt),
+  |       Variablen die nicht explizit mit dem Verwendungszweck im
+  |          zusammenhang stehen
+  | 
+  | Diese Grundsätze gelten aber nur als Richtlinien und Hilfestellungen,
+  |    da es immer auf den Code ankommt ;)
+  +--------------------------------------------------------------------------*/
 
 /*+----------------------------------------------------------------------------
   | awards
@@ -79,10 +100,17 @@ class awards extends plugin_generic
 		
 		$this->add_pdh_write_module('awards_achievements');
 		$this->add_pdh_write_module('awards_assignments');
+		
+		// -- Routing -----------------------------------------
+		$this->routing->addRoute('Awards', 'awards', 'plugins/awards/pageobjects');
+		
+		// -- Hooks -------------------------------------------
+		$this->add_hook('portal', 'awards_portal_hook', 'portal');
+  		$this->add_hook('userprofile_customtabs', 'awards_userprofile_customtabs_hook', 'userprofile_customtabs');
 
 		// -- Menu --------------------------------------------
 		$this->add_menu('admin', $this->gen_admin_menu());
-		#$this->add_menu('main', $this->gen_main_menu());
+		$this->add_menu('main', $this->gen_main_menu());
 
 	}
 
@@ -100,6 +128,25 @@ class awards extends plugin_generic
 		  $this->add_sql(SQL_INSTALL, $awardsSQL['install'][$i]);
 	}
 
+
+	/**
+	  * pre_uninstall
+	  * Define Post Uninstall
+	  */
+	public function pre_uninstall(){
+		$arrAchievementIDs = $this->pdh->get('awards_achievements', 'id_list');
+		foreach($arrAchievementIDs as $intAchievementID){
+			$intAchievementEventID = $this->pdh->get('awards_achievements', 'event_id', array($intAchievementID));
+			$this->pdh->put('event', 'delete_event', array($intAchievementEventID));
+		}
+		
+		$arrAssignmentIDs = $this->pdh->get('awards_assignments', 'id_list');
+		foreach($arrAssignmentIDs as $intAssignmentID){
+			$strAssignmentGroupKey = $this->pdh->get('awards_assignments', 'adj_group_key');
+			$this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAssignmentGroupKey));
+		}
+	}
+	
 
 	/**
 	  * post_uninstall
@@ -138,6 +185,23 @@ class awards extends plugin_generic
 		));
 
 		return $admin_menu;
+	}
+	
+	
+	/**
+	  * gen_main_menu
+	  * Generate the Main Menu
+	  */
+	private function gen_main_menu(){
+		$main_menu = array(
+			1 => array (
+				'link'	 => $this->routing->build('Awards', false, false, true, true),
+				'text'	 => $this->user->lang('awards'),
+				'check'	 => 'u_awards_view',
+			),
+    	);
+		
+		return $main_menu;
 	}
 
 }

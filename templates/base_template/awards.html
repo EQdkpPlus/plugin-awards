@@ -1,0 +1,89 @@
+<!-- IF S_NORMAL_HEADER -->
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
+		<li class="current"><a href="">{L_awards}: {L_aw_achievements}</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<!-- ENDIF -->
+
+<script type="text/javascript"></script>
+
+<div id="awards">
+	<div class="contentHeader">
+		<h1 class="contentTitle">{L_aw_achievements}</h1>
+	</div>
+	
+	<div class="contentBody">
+		<div class="aw-tabs">
+			<ul>
+				<li class="aw-tab-user"><a href="">Show User Awards Tab</a></li>
+				<li class="aw-tab-assign"><a href="">Manage Assignment Tab</a></li>
+				<li class="aw-tab-achiev"><a href="">Manage Achievement Tab</a></li>
+			</ul>
+		</div>
+		<div class="clear"></div>
+		
+		<div class="aw-cat">
+			<ul>
+				<li><a href="">Allgemein</a></li>
+				<li><a href="">Aktivität</a></li>
+				<li><a href="">Kategorie 3</a></li>
+				<li><a href="">Kategorie 4</a></li>
+				<li><a href="">Kategorie 5</a></li>
+			</ul>
+		</div>
+		
+		<div class="aw-list">
+			<div class="aw-progress">{PROGRESSBAR}</div>
+			<div class="reached">
+				<div class="ac-{ACHIEVEMENT.ID}">
+					<div class="ac-main">
+						<h3 class="ac-title">{ACHIEVEMENT.TITLE}</h3>
+						<span class="ac-description">{ACHIEVEMENT.DESCRIPTION}</span>
+						<span class="ac-date">{ACHIEVEMENT.DATE}</span>
+					</div>
+					<div class="ac-icon floatLeft"></div>
+						<img src="{ACHIEVEMENT.IMG_URL}" />
+					<div class="ac-points floatRight">
+						<span class="ac-points-small">{ACHIEVEMENT.POINTS}</span> tause wenn dkp 0
+						<span class="ac-points-big">{ACHIEVEMENT.DKP}</span>
+					</div>
+				</div>
+				<div class="ac-{ACHIEVEMENT.ID} ac-user-list" style="display:show;">
+					TABELLE ALLER NUTZER (grün markierte haben den erfolg)<br />... eigentlich ausgeblendet / jQuery macht alles ...
+				</div>
+			</div>
+			<!-- Hier folgt der nicht erhaltene (ausgegraute) Errfolg -->
+			<div class="unreached">
+				<div class="ac-{ACHIEVEMENT.ID}">
+					<div class="ac-main">
+						<h3 class="ac-title">{ACHIEVEMENT.TITLE}</h3>
+						<span class="ac-description">{ACHIEVEMENT.DESCRIPTION}</span>
+						<span class="ac-date">{ACHIEVEMENT.DATE}</span>
+					</div>
+					<div class="ac-icon floatLeft"></div>
+						<img src="{ACHIEVEMENT.IMG_URL}" />
+					<div class="ac-points floatRight">
+						<span class="ac-points-small">{ACHIEVEMENT.POINTS}</span> tause wenn dkp 0
+						<span class="ac-points-big">{ACHIEVEMENT.DKP}</span>
+					</div>
+				</div>
+				<div class="ac-{ACHIEVEMENT.ID} ac-user-list" style="display:show;">
+					TABELLE ALLER NUTZER (grün markierte haben den erfolg)<br />... eigentlich ausgeblendet / jQuery macht alles ...
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="contentFooter"></div>
+</div>
+
+
+
+
+
+
+
+<div class="clear"></div>

@@ -52,6 +52,8 @@ $lang = array(
   'aw_event_id'					=> 'Ereignis ID',
   'aw_achievement'				=> 'Erfolg',
   
+  'aw_listachiev_footcount'		=> '... %1\$d Erfolg(e) gefunden / %2\$d pro Seite',
+  'aw_listassign_footcount'		=> '... %1\$d Zuweisung(en) gefunden / %2\$d pro Seite',
   
   
   'aw_adj_id'					=> 'Korrektur ID',
@@ -71,8 +73,9 @@ $lang = array(
   'aw_plugin_not_installed'		=> 'Das Awards-Plugin ist nicht installiert.',
   'aw_add_success'				=> '%s wurde hinzugefügt',
   'aw_add_nosuccess'			=> '%s konnte nicht hinzugefügt werden',
-  'aw_assign_success'			=> '%s wurde %s zugewiesen',
+  'aw_assign_success'			=> '%s wurde<br />%s zugewiesen',
   'aw_assign_nosuccess'			=> '%s konnte nicht zugewiesen werden',
+  'aw_del_assign'				=> 'Zuweisung(en) entfernt',
   
   'aw_confirm_delete_achievement'	=> 'Bist du sicher, dass Du die Erfolge %s wirklich löschen willst? Alle erhaltenen DKP werden dabei auch gelöscht!',
   

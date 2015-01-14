@@ -58,37 +58,43 @@ class awards_manage_assignments extends page_generic
 	  */
 	public function save(){
 		$id 			 = $this->in->get('aid', 0);
-		$intDate 		 = $this->in->get('date', 0);
-		$intAchievmentID = $this->in->get('achievment', 0);
+		$intAssDate 		 = $this->in->get('date', 0);
+		$intAchID = $this->in->get('achievment', 0);
 		
-		$fltDKP 	= $this->pdh->get('awards_achievements', 'dkp', array($intAchievmentID));
-		$strName	= $this->user->lang('aw_achievement').': '.$this->pdh->get('awards_achievements', 'name', array($intAchievmentID));
-		$intEventID = $this->pdh->get('awards_achievements', 'event_id', array($intAchievmentID));
+		$fltAchDKP 	= $this->pdh->get('awards_achievements', 'dkp', array($intAchID));
+		$strAchName	= $this->user->lang('aw_achievement').': '.$this->pdh->get('awards_achievements', 'name', array($intAchID));
+		$intAchEventID = $this->pdh->get('awards_achievements', 'event_id', array($intAchID));
+		
 		// ---------------------------------------------
-		foreach($this->in->getArray('members','int') as $member) {
-			$intUserID[] = (int) $member;
-		}
-		if(empty($intUserID)) {
-			$missing[] = $this->user->lang('members');
-		}
-		if(!empty($missing)) {
-			// SEND ERROR MESSAGE
-			return;
-		}
+			foreach($this->in->getArray('members','int') as $member) {
+				$intUserID[] = (int) $member;
+			}
+			if(empty($intUserID)) {
+				$missing[] = $this->user->lang('members');
+			}
+			if(!empty($missing)) {
+				// SEND ERROR MESSAGE
+				return;
+			}
 		// ---------------------------------------------
+		
 		if ($id){
-			$arrAdjID = $this->pdh->get('awards_assignments', 'adj_id', array($id));
-			$strAdjID = implode(',',$arrAdjID);
+			$strAdjGK = $this->pdh->get('awards_assignments', 'adj_group_key', array($id));
+			
 			// upd ADJUSTMENT
-			if($this->pdh->put('adjustment', 'update_adjustment', array($intAdjID, $fltDKP, $strName, $intUserID, $intEventID, 0, $intDate, true))){
+			$arrAdjID = $this->pdh->put('adjustment', 'update_adjustment', array($strAdjGK, $fltAchDKP, $strAchName, $intUserID, $intAchEventID, 0, $intAssDate));
+			if($arrAdjID[0]){
+				
+				$this->pdh->process_hook_queue();
+				$strAdjGK  = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[1]));
+				$strAdjID = serialize($arrAdjID);
+				
 				// upd ASSIGNMENT
-				if ($this->pdh->put('awards_assignments', 'update', array($id, $intDate, $intAchievmentID, $strAdjID, $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]))))){
+				if ($this->pdh->put('awards_assignments', 'update', array($id, $intAssDate, $intAchID, $strAdjID, $strAdjGK))){
 					$blnResult = true;
 				} else {
-					// del ADJUSTMENT if add_assignment failed
-					$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]));
-					$this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK));
-					$this->pdh->put('awards_assignments', 'delete', array($id));
+					// DELETE or BACKUP if add_assignment failed
+					// ......
 					$blnResult = false;
 				}
 			} else {
@@ -96,15 +102,22 @@ class awards_manage_assignments extends page_generic
 			}
 		} else {
 			// add ADJUSTMENT
-			$arrAdjID = $this->pdh->put('adjustment', 'add_adjustment', array($fltDKP, $strName, $intUserID, $intEventID, 0, $intDate));
-			$strAdjID = implode(',',$arrAdjID);
+			$arrAdjID = $this->pdh->put('adjustment', 'add_adjustment', array($fltAchDKP, $strAchName, $intUserID, $intAchEventID, 0, $intAssDate));
 			if($arrAdjID > 0){
+				
+				$this->pdh->process_hook_queue();
+				$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]));
+				$strAdjID = serialize($arrAdjID);
+				
 				// add ASSIGNMENT
-				if ($this->pdh->put('awards_assignments', 'add', array($intDate, $intAchievmentID, $strAdjID, $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]))))){
+				if ($this->pdh->put('awards_assignments', 'add', array($intAssDate, $intAchID, $strAdjID, $strAdjGK))){
+					
+					// add ntfy
+					#$this->ntfy->add_persistent('guildrequest_open', sprintf($this->user->lang('gr_notification_open'), $intOpen), $this->routing->build('ListApplications', false, false, true, true), 0, 'fa-pencil-square-o');
+					
 					$blnResult = true;
 				} else {
 					// del ADJUSTMENT if add_assignment failed
-					$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]));
 					$this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK));
 					$blnResult = false;
 				}
@@ -115,9 +128,11 @@ class awards_manage_assignments extends page_generic
 		
 		if ($blnResult){
 			$this->pdh->process_hook_queue();
-			$this->core->message($this->user->lang('aw_assign_success'), $this->user->lang('success'), 'green');
+			
+			foreach($intUserID as $userid) $arrusernames[] = $this->pdh->get('member', 'name', array($userid));
+			$this->core->message(sprintf( $this->user->lang('aw_assign_success'), $strAchName, implode(', ',$arrusernames) ), $this->user->lang('success'), 'green');
 		} else {
-			$this->core->message($this->user->lang('aw_assign_nosuccess'), $this->user->lang('error'), 'red');
+			$this->core->message(sprintf( $this->user->lang('aw_assign_nosuccess'), $strAchName ), $this->user->lang('error'), 'red');
 		}
 		
 		$this->display();
@@ -130,7 +145,7 @@ class awards_manage_assignments extends page_generic
 	  */	
 	public function edit(){
 		$id 			 = $this->in->get('aid', 0);
-		$intDate		 = $this->pdh->get('awards_assignments', 'date', array($id));
+		$intAssDate		 = $this->pdh->get('awards_assignments', 'date', array($id));
 		
 		//fetch achievements for select
 		$achievements = array();
@@ -145,7 +160,7 @@ class awards_manage_assignments extends page_generic
 		$this->tpl->assign_vars(array(
 			'AID' => $id,
 			'DD_ACHIEVEMENT' => new hdropdown('achievment', array('options' => $achievements, 'value' => ((isset($achievements)) ? $achievements : ''), 'name', array($id))),
-			'DATE'			 => $this->jquery->Calendar('date', $this->time->user_date(((isset($intDate)) ? $intDate : $this->time->time), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
+			'DATE'			 => $this->jquery->Calendar('date', $this->time->user_date(((isset($intAssDate)) ? $intAssDate : $this->time->time), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 			'MEMBERS'		 => $this->jquery->MultiSelect('members', $members, ((isset($intUserID)) ? $intUserID : ''), array('width' => 350, 'filter' => true)),
 		));
 		
@@ -158,6 +173,30 @@ class awards_manage_assignments extends page_generic
 		);
 	}
 	
+	
+	/**
+	  * Delete
+	  * delete selected assignments
+	  */
+	public function delete(){
+		$arrAdjID = array();
+		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
+			foreach($this->in->getArray('selected_ids','int') as $id) {
+				$strAdjGK = $this->pdh->get('awards_assignments', 'adj_group_key', array($id));
+				
+				if($this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK)))
+					$retu = $this->pdh->put('awards_assignments', 'delete', array($id));
+			}
+		}
+
+		if(!empty($retu)) {
+			$messages[] = array('title' => $this->user->lang('del_suc'), 'text' => $this->user->lang('aw_del_assign'), 'color' => 'green');
+			$this->core->messages($messages);
+		}
+		
+		$this->pdh->process_hook_queue();
+	}
+	
 
 	/**
 	  * Display
@@ -168,7 +207,7 @@ class awards_manage_assignments extends page_generic
 		$hptt_page_settings = array(
 			'name'					=> 'hptt_aw_admin_manage_awards',
 			'table_main_sub'		=> '%intAssignmentID%',
-			'table_subs'			=> array('%intAssignmentID%', '%intAssignmentID%'),
+			'table_subs'			=> array('%intAssignmentID%', '%link_url%', '%link_url_suffix%'),
 			'page_ref'				=> 'manage_assignments.php',
 			'show_numbers'			=> false,
 			'show_select_boxes'		=> true,
@@ -188,12 +227,15 @@ class awards_manage_assignments extends page_generic
 		$page_suffix = '&amp;start='.$this->in->get('start', 0);
 		$sort_suffix = '?sort='.$this->in->get('sort');
 		
+		//footer
 		$item_count = count($view_list);
+		$strfootertext = sprintf($this->user->lang('listassign_footcount'), $adj_count, $this->user->data['user_alimit']);
 		
 		$this->confirm_delete($this->user->lang('aw_confirm_delete_assignment'));
 
 		$this->tpl->assign_vars(array(
-			'ASSIGNMENTS_LIST'		=> $hptt->get_html_table($this->in->get('sort'), $page_suffix,null,1,null,false, array('awards_assignments', 'checkbox_check')),
+			'ASSIGNMENTS_LIST'	=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_alimit'], $strfootertext),
+			'PAGINATION' 		=> generate_pagination('manage_assignments.php'.$sort_suffix, $adj_count, $this->user->data['user_alimit'], $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count())
 		);
 	
@@ -205,6 +247,7 @@ class awards_manage_assignments extends page_generic
 			'display'			=> true)
 		);
 	}
+	
 
 }
 registry::register('awards_manage_assignments');
