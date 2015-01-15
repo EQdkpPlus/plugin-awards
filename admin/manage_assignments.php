@@ -84,6 +84,9 @@ class awards_manage_assignments extends page_generic
 						$strAdjID = serialize($arrAdjID);
 						
 						if ($this->pdh->put('awards_assignments', 'update', array($id, $intAssDate, $intAchID, $strAdjID, $strAdjGK))){
+							foreach($intUserID as $add_ntfy)
+								$this->ntfy->add('awards_new_award', 'awards', "Plugin: ".$this->user->lang('awards'), $this->routing->build('User', $this->get_name($add_ntfy), 'u'.$add_ntfy).substr(md5($this->user->lang('aw_customtab_title')), 0, 9), $add_ntfy, 'Glückwunsch du hast ein Erfolg erhalten.', false);
+							
 							$blnResult = true;
 						
 						} else { $blnResult = false; /* DELETE or BACKUP if add_assignment failed */ }

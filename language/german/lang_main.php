@@ -52,6 +52,7 @@ $lang = array(
   'aw_event_id'					=> 'Ereignis ID',
   'aw_achievement'				=> 'Erfolg',
   
+  'aw_customtab_title'			=> 'Meine Erfolge',
   'aw_listachiev_footcount'		=> '... %1\$d Erfolg(e) gefunden / %2\$d pro Seite',
   'aw_listassign_footcount'		=> '... %1\$d Zuweisung(en) gefunden / %2\$d pro Seite',
   
