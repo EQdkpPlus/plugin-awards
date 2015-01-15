@@ -60,6 +60,7 @@ class awards_manage_assignments extends page_generic
 		$intAssDate		= $this->in->get('date', 0);
 		$intAchID		= $this->in->get('achievment', 0);
 		
+		$blnAchActive	= $this->pdh->get('awards_achievements', 'active', array($intAchID));
 		$fltAchDKP		= $this->pdh->get('awards_achievements', 'dkp', array($intAchID));
 		$strAchName		= $this->user->lang('aw_achievement').': '.$this->pdh->get('awards_achievements', 'name', array($intAchID));
 		$intAchEventID	= $this->pdh->get('awards_achievements', 'event_id', array($intAchID));
@@ -72,35 +73,37 @@ class awards_manage_assignments extends page_generic
 		if(!empty($missing)){ return; }
 		
 		
-		if ($id){ //update Assignment
-			$strAdjGK = $this->pdh->get('awards_assignments', 'adj_group_key', array($id));
-			$arrAdjID = $this->pdh->put('adjustment', 'update_adjustment', array($strAdjGK, $fltAchDKP, $strAchName, $intUserID, $intAchEventID, 0, $intAssDate));
-			
-			if($arrAdjID[0]){
-				$this->pdh->process_hook_queue();
-				$strAdjGK  = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[1]));
-				$strAdjID = serialize($arrAdjID);
+		if($blnAchActive == 1 ){
+			if ($id){ //update Assignment
+					$strAdjGK = $this->pdh->get('awards_assignments', 'adj_group_key', array($id));
+					$arrAdjID = $this->pdh->put('adjustment', 'update_adjustment', array($strAdjGK, $fltAchDKP, $strAchName, $intUserID, $intAchEventID, 0, $intAssDate));
+					
+					if($arrAdjID[0]){
+						$this->pdh->process_hook_queue();
+						$strAdjGK  = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[1]));
+						$strAdjID = serialize($arrAdjID);
+						
+						if ($this->pdh->put('awards_assignments', 'update', array($id, $intAssDate, $intAchID, $strAdjID, $strAdjGK))){
+							$blnResult = true;
+						
+						} else { $blnResult = false; /* DELETE or BACKUP if add_assignment failed */ }
+					} else { $blnResult = false; }
 				
-				if ($this->pdh->put('awards_assignments', 'update', array($id, $intAssDate, $intAchID, $strAdjID, $strAdjGK))){
-					$blnResult = true;
+			} else { //add Assignment
+				$arrAdjID = $this->pdh->put('adjustment', 'add_adjustment', array($fltAchDKP, $strAchName, $intUserID, $intAchEventID, 0, $intAssDate));
 				
-				} else { $blnResult = false; /* DELETE or BACKUP if add_assignment failed */ }
-			} else { $blnResult = false; }
-			
-		} else { //add Assignment
-			$arrAdjID = $this->pdh->put('adjustment', 'add_adjustment', array($fltAchDKP, $strAchName, $intUserID, $intAchEventID, 0, $intAssDate));
-			
-			if($arrAdjID > 0){
-				$this->pdh->process_hook_queue();
-				$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]));
-				$strAdjID = serialize($arrAdjID);
-				
-				if ($this->pdh->put('awards_assignments', 'add', array($intAssDate, $intAchID, $strAdjID, $strAdjGK))){
-					$blnResult = true;
-				
-				} else { $blnResult = false; $this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK)); }
-			} else { $blnResult = false; }
-		}
+				if($arrAdjID > 0){
+					$this->pdh->process_hook_queue();
+					$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]));
+					$strAdjID = serialize($arrAdjID);
+					
+					if ($this->pdh->put('awards_assignments', 'add', array($intAssDate, $intAchID, $strAdjID, $strAdjGK))){
+						$blnResult = true;
+					
+					} else { $blnResult = false; $this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK)); }
+				} else { $blnResult = false; }
+			}
+		} else { $blnResult = false; }
 		
 		//output Message
 		if ($blnResult){
