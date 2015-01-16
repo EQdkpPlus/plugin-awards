@@ -27,7 +27,6 @@ define('PLUGIN', 'awards');
 $eqdkp_root_path = './../../../';
 include_once($eqdkp_root_path.'common.php');
 
-
 /*+----------------------------------------------------------------------------
   | awards_manage_achievements
   +--------------------------------------------------------------------------*/
@@ -51,6 +50,12 @@ class awards_manage_achievements extends page_generic
 	}
 
 
+	private function hmultilang(){
+		$hmultilang_description = new htextareamultilang('description', array('rows' => '3', 'cols' => '50'));
+		return $hmultilang_description;
+	}
+
+
 	/**
 	  * Save
 	  * save the achievement
@@ -59,11 +64,8 @@ class awards_manage_achievements extends page_generic
 		$id 				= $this->in->get('aid', 0);
 		$arrAchName			= $this->in->getArray('name');
 		$strAchName			= serialize($arrAchName);
-		
-		$arrAchDescription  = $this->in->get('description', '');
-	d($arrAchDescription);
-		$strAchDescription	= serialize($arrAchDescription);
-	d($strAchDescription);
+		$test = $this->hmultilang()->_inpval();
+	d($test);
 	
 		$intAchSortID		= $this->in->get('sort_id', 99999999);
 		$blnAchActive		= $this->in->get('active_state', 1);
@@ -160,7 +162,7 @@ class awards_manage_achievements extends page_generic
 		} else {
 			$this->tpl->assign_vars(array(
 				'ML_NAME'			=> new htextmultilang('name', array('size' => 30, 'required' => true)),
-				'ML_DESCRIPTION'	=> new htextareamultilang('description', array('rows' => '3', 'cols' => '50')),
+				'ML_DESCRIPTION'	=> $this->hmultilang(),
 				'R_ACTIVE_STATE'	=> new hradio('active_state', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => 1)),
 				'R_SPECIAL_STATE'	=> new hradio('special_state', array('options' => array(1 => $this->user->lang('published'), 0 => $this->user->lang('not_published')), 'value' => 1)),
 				'SPINNER_POINTS'	=> new hspinner('points', array('value' =>  10, 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),	
