@@ -90,11 +90,8 @@ class awards_manage_assignments extends page_generic
 							$blnResult = true;
 						
 						} else { $blnResult = false;
-								//create adj backup cause assignment update failed
-								/*$arrOldAdjIDs = $this->pdh->get('awards_assignments', 'date', array($intAssID));
-								$arrOldAdjUserIDs = unserialize($this->pdh->get('adjustment', 'member', array($arrOldAdjIDs[0])));*/
 								$this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK));
-								/*$this->pdh->put('awards_assignments', 'backup_old_adjustments', array($intAssID));*/
+								$this->pdh->put('awards_assignments', 'delete', array($intAssID));
 						}
 					} else { $blnResult = false; }
 				
