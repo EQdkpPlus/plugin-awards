@@ -137,7 +137,10 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		}
 		
 		public function get_html_name($intAchievementID){
-			return '<a href="'.$this->root_path.'plugins/awards/admin/manage_achievements.php'.$this->SID.'&aid='.$intAchievementID.'"><strong>'.$this->get_name($intAchievementID).'</strong></a>';
+			if($this->user->check_auth('a_awards_add')){
+				return '<a href="'.$this->root_path.'plugins/awards/admin/manage_achievements.php'.$this->SID.'&aid='.$intAchievementID.'"><strong>'.$this->user->multilangValue($this->get_name($intAchievementID)).'</strong></a>';
+			}
+			return '<strong>'.$this->user->multilangValue($this->get_name($intAchievementID)).'</strong>';
 		}
 
 		/**
@@ -150,6 +153,10 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 				return $this->awards_achievements[$intAchievementID]['description'];
 			}
 			return false;
+		}
+		
+		public function get_html_description($intAchievementID){
+			return $this->user->multilangValue($this->get_description($intAchievementID));
 		}
 
 		/**

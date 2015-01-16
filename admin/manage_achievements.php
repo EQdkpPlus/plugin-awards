@@ -55,10 +55,16 @@ class awards_manage_achievements extends page_generic
 	  * Save
 	  * save the achievement
 	  */
-	public function save(){
+	public function save(){	
 		$id 				= $this->in->get('aid', 0);
-		$strAchName			= $this->in->get('name');
-		$strAchDescription  = $this->in->get('description');
+		$arrAchName			= $this->in->getArray('name');
+		$strAchName			= serialize($arrAchName);
+		
+		$arrAchDescription  = $this->in->get('description', '');
+	d($arrAchDescription);
+		$strAchDescription	= serialize($arrAchDescription);
+	d($strAchDescription);
+	
 		$intAchSortID		= $this->in->get('sort_id', 99999999);
 		$blnAchActive		= $this->in->get('active_state', 1);
 		$blnAchSpecial		= $this->in->get('special_state', 1);
@@ -68,12 +74,6 @@ class awards_manage_achievements extends page_generic
 		$strAchModule		= $this->in->get('module');
 		$fltAchDKP			= $this->in->get('dkp', 0);
 		$intMDKP			= $this->in->getArray('mdkp2event', 'int');
-		
-		//check form correct filled
-		if ($strAchName == "" ){
-			$this->core->message($this->user->lang('name'), $this->user->lang('missing_values'), 'red');
-			$this->edit(); return;
-		}
 		
 		
 		if ($id){ //update Achievement
@@ -148,24 +148,24 @@ class awards_manage_achievements extends page_generic
 		
 		if ($id){
 			$this->tpl->assign_vars(array(
-				'NAME' 				=> $this->pdh->get('awards_achievements', 'name', array($id)),
+				'ML_NAME'			=> new htextmultilang('name', array('value' => $this->user->multilangValue(unserialize($this->pdh->get('awards_achievements', 'name', array($id)))), 'size' => 30, 'required' => true)),
+				'ML_DESCRIPTION'	=> new htextareamultilang('description', array('value' => $this->user->multilangValue(unserialize($this->pdh->get('awards_achievements', 'description', array($id)))), 'rows' => '3', 'cols' => '50')),
 				'R_ACTIVE_STATE'	=> new hradio('active_state', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => $this->pdh->get('awards_achievements', 'active', array($id)))),
 				'R_SPECIAL_STATE'	=> new hradio('special_state', array('options' => array(1 => $this->user->lang('published'), 0 => $this->user->lang('not_published')), 'value' => $this->pdh->get('awards_achievements', 'special', array($id)))),
-				'DESCRIPTION'		=> $this->pdh->get('awards_achievements', 'description', array($id)),
 				'SPINNER_POINTS' 	=> new hspinner('points', array('value' =>  ($this->pdh->get('awards_achievements', 'points', array($id))), 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),
-				'DD_MODULE'			=> new hdropdown('module', array('options' => $arrAdjDropdown, 'value' => $this->pdh->get('awards_achievements', 'module', array($id)))),
 				'SPINNER_DKP'		=> new hspinner('dkp', array('value' =>  ($this->pdh->get('awards_achievements', 'dkp', array($id))), 'max'  => 99999, 'min'  => -99999, 'step' => 5)),
+				'DD_MODULE'			=> new hdropdown('module', array('options' => $arrAdjDropdown, 'value' => $this->pdh->get('awards_achievements', 'module', array($id)))),
 				'MDKP2EVENT'		=> $this->jquery->Multiselect('mdkp2event', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), $event['mdkp2event']),
 			));
 		} else {
 			$this->tpl->assign_vars(array(
-				'NAME' 				=> '',
+				'ML_NAME'			=> new htextmultilang('name', array('size' => 30, 'required' => true)),
+				'ML_DESCRIPTION'	=> new htextareamultilang('description', array('rows' => '3', 'cols' => '50')),
 				'R_ACTIVE_STATE'	=> new hradio('active_state', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => 1)),
 				'R_SPECIAL_STATE'	=> new hradio('special_state', array('options' => array(1 => $this->user->lang('published'), 0 => $this->user->lang('not_published')), 'value' => 1)),
-				'DESCRIPTION'		=> '',
 				'SPINNER_POINTS'	=> new hspinner('points', array('value' =>  10, 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),	
-				'DD_MODULE'			=> new hdropdown('module', array('options' => $arrAdjDropdown, 'value' => NULL)),
 				'SPINNER_DKP'		=> new hspinner('dkp', array('value' =>  0, 'max'  => 99999, 'min'  => -99999, 'step' => 5)),
+				'DD_MODULE'			=> new hdropdown('module', array('options' => $arrAdjDropdown, 'value' => NULL)),
 				'MDKP2EVENT'		=> $this->jquery->Multiselect('mdkp2event', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), $event['mdkp2event']),
 			));
 		}
