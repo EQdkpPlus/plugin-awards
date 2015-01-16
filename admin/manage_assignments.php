@@ -160,9 +160,11 @@ class awards_manage_assignments extends page_generic
 		//fetch achievements for select
 		$achievements			= array();
 		$achievement_ids		= $this->pdh->get('awards_achievements', 'id_list');
-		foreach($achievement_ids as $aid) {
+		foreach($achievement_ids as $aid)
 			$achievements[$aid] = $this->pdh->get('awards_achievements', 'name', array($aid));
-		}
+		
+		//pre_select achievement for select
+		$achievement = $this->pdh->get('awards_assignments', 'achievement_id', array($intAssID));
 		
 		//fetch members for select
 		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(false,true,false)), 'member', 'name', 'asc')));
@@ -176,7 +178,7 @@ class awards_manage_assignments extends page_generic
 		
 		$this->tpl->assign_vars(array(
 			'AID' => $intAssID,
-			'DD_ACHIEVEMENT' => new hdropdown('achievment', array('options' => $achievements, 'value' => ((isset($achievements)) ? $achievements : ''), 'name', array($intAssID))),
+			'DD_ACHIEVEMENT' => new hdropdown('achievment', array('options' => $achievements, 'value' => (isset($achievement) ? $achievement : ''), 'name', array($intAssID))),
 			'DATE'			 => $this->jquery->Calendar('date', $this->time->user_date( (is_int($intAssDate) ? $intAssDate : $this->time->time), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 			'MEMBERS'		 => $this->jquery->MultiSelect('members', $members, ((isset($arrAdjUserIDs)) ? $arrAdjUserIDs : ''), array('width' => 350, 'filter' => true)),
 		));
