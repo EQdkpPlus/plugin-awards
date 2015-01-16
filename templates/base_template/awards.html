@@ -10,80 +10,75 @@
 
 <script type="text/javascript"></script>
 
-<div id="awards">
+
+
 	<div class="contentHeader">
 		<h1 class="contentTitle">{L_aw_achievements}</h1>
 	</div>
+	<!--Search-->
 	
-	<div class="contentBody">
-		<div class="aw-tabs">
-			<ul>
-				<li class="aw-tab-user"><a href="">Show User Awards Tab</a></li>
-				<li class="aw-tab-assign"><a href="">Manage Assignment Tab</a></li>
-				<li class="aw-tab-achiev"><a href="">Manage Achievement Tab</a></li>
-			</ul>
+	<fieldset class="settings mediumsettings" id="toggleAwardsearch">
+		<legend>{L_search}<span class="toggle_button"></span></legend>
+		<div class="toggle_container">
+			<dl>
+				<dt><label>{L_aw_search_searchby}</label></dt>
+				<dd><input name="search" class="input" type="text" size="40" /></dd>
+			</dl>
+			<dl>
+				<dt><label></label></dt>
+				<dd><label><input name="search_type" class="input" type="radio"value="awardname" checked="checked" />{L_aw_achievement}</label>
+				<label><input name="search_type" class="input" type="radio"value="char" />{L_aw_char}</label>
+				</dd>
+			</dl>
+			
+			<button class="mainoption" type="submit" name="searchbutton"><i class="fa fa-search"></i>{L_search}</button>
 		</div>
+	</fieldset><!-- Search -->
+<br>
+<div id="awards" class="table fullwidth scrollable-x">
+
+				<!-- IF S_ADMIN -->
+				<div class="aw-admin" role="tab"><ul>
+					<li class="adminicon aw_admin"><a href="{EQDKP_ROOT_PATH}plugins/awards/admin/manage_achievements.php{SID}">{L_aw_manage_achievements}</a></li>
+					<li class="adminicon aw_admin"><a href="{EQDKP_ROOT_PATH}plugins/awards/admin/manage_assignments.php{SID}">{L_aw_manage_assignments}</a></li>
+				<!-- ENDIF -->
+				</ul>
+				</div>
 		<div class="clear"></div>
+
 		
-		<div class="aw-cat">
-			<ul>
-				<li><a href="">Allgemein</a></li>
-				<li><a href="">Aktivität</a></li>
-				<li><a href="">Kategorie 3</a></li>
-				<li><a href="">Kategorie 4</a></li>
-				<li><a href="">Kategorie 5</a></li>
-			</ul>
-		</div>
+	<table id="awards" class="table fullwitdh aw-list hptt">
+				<tr><td  width="10%"><div class="aw-cat">
+				<ul class="aw-cat">
+					<li><a href="">{L_aw_cat_all}</a></li>
+					<li><a href="">{L_aw_cat_1}</a></li>
+					<li><a href="">{L_aw_cat_2}</a></li>
+					<li><a href="">{L_aw_cat_3}</a></li>
+					<li><a href="">{L_aw_cat_4}</a></li>
+				</ul>
+		</div></td><td>
 		
-		<div class="aw-list">
-			<div class="aw-progress">{PROGRESSBAR}</div>
-			<div class="reached">
-				<div class="ac-{ACHIEVEMENT.ID}">
-					<div class="ac-main">
-						<h3 class="ac-title">{ACHIEVEMENT.TITLE}</h3>
-						<span class="ac-description">{ACHIEVEMENT.DESCRIPTION}</span>
-						<span class="ac-date">{ACHIEVEMENT.DATE}</span>
-					</div>
-					<div class="ac-icon floatLeft"></div>
-						<img src="{ACHIEVEMENT.IMG_URL}" />
-					<div class="ac-points floatRight">
-						<span class="ac-points-small">{ACHIEVEMENT.POINTS}</span> tause wenn dkp 0
-						<span class="ac-points-big">{ACHIEVEMENT.DKP}</span>
-					</div>
-				</div>
-				<div class="ac-{ACHIEVEMENT.ID} ac-user-list" style="display:show;">
-					TABELLE ALLER NUTZER (grün markierte haben den erfolg)<br />... eigentlich ausgeblendet / jQuery macht alles ...
-				</div>
-			</div>
-			<!-- Hier folgt der nicht erhaltene (ausgegraute) Errfolg -->
-			<div class="unreached">
-				<div class="ac-{ACHIEVEMENT.ID}">
-					<div class="ac-main">
-						<h3 class="ac-title">{ACHIEVEMENT.TITLE}</h3>
-						<span class="ac-description">{ACHIEVEMENT.DESCRIPTION}</span>
-						<span class="ac-date">{ACHIEVEMENT.DATE}</span>
-					</div>
-					<div class="ac-icon floatLeft"></div>
-						<img src="{ACHIEVEMENT.IMG_URL}" />
-					<div class="ac-points floatRight">
-						<span class="ac-points-small">{ACHIEVEMENT.POINTS}</span> tause wenn dkp 0
-						<span class="ac-points-big">{ACHIEVEMENT.DKP}</span>
-					</div>
-				</div>
-				<div class="ac-{ACHIEVEMENT.ID} ac-user-list" style="display:show;">
-					TABELLE ALLER NUTZER (grün markierte haben den erfolg)<br />... eigentlich ausgeblendet / jQuery macht alles ...
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div class="contentFooter"></div>
+		<div class="aw-progress">
+				<!-- IF User_logged_in -->
+				<label><input type="radio" name="aw_show" value="0" onchange="form.submit();" {AW_SHOW_USER} /> {L_aw_show_yours}</label>
+				<!-- ENDIF -->
+				<label><input type="radio" name="aw_show" value="1" onchange="form.submit();" {AW_SHOW_ALL} /> {L_aw_show_all}</label>
+
+
+
+				<br>	Inhalt<br>	Inhalt<br>	Inhalt<br><br>	Inhalt<br>	Inhalt<br>	Inhalt<br><br>	Inhalt<br>	Inhalt<br>	Inhalt<br><br>	Inhalt<br>	Inhalt<br>	Inhalt<br>	{aw_PAGE_OUT}
+				
+				<div class="center pagination_wrapper">pageination
+						{aw_PAGINATION}
+				</div></div>
+				</td></tr>
+				<tr></tr>
+	</table>
+	<div class="clear"></div>
+</div>
+
+<div class="clear"></div>
+<div class="contentFooter"></div>
 </div>
 
 
-
-
-
-
-
-<div class="clear"></div>
