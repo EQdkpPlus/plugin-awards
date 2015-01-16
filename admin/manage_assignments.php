@@ -57,7 +57,7 @@ class awards_manage_assignments extends page_generic
 	  */
 	public function save(){
 		$intAssID		= $this->in->get('aid', 0);
-		$intAssDate		= $this->in->get('date', 0);
+		$intAssDate		= $this->time->fromformat($this->in->get('date', '1.1.1970'), 1);
 		$intAchID		= $this->in->get('achievment', 0);
 		
 		$blnAchActive	= $this->pdh->get('awards_achievements', 'active', array($intAchID));
@@ -78,6 +78,10 @@ class awards_manage_assignments extends page_generic
 					$strAdjGK = $this->pdh->get('awards_assignments', 'adj_group_key', array($intAssID));
 					$arrAdjID = $this->pdh->put('adjustment', 'update_adjustment', array($strAdjGK, $fltAchDKP, $strAchName, $arrAdjUserIDs, $intAchEventID, 0, $intAssDate));
 					
+						//create adj backup if assignment failed
+						
+					
+					
 					if($arrAdjID[0]){
 						$this->pdh->process_hook_queue();
 						$strAdjGK  = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[1]));
@@ -85,7 +89,7 @@ class awards_manage_assignments extends page_generic
 						
 						if ($this->pdh->put('awards_assignments', 'update', array($intAssID, $intAssDate, $intAchID, $strAdjID, $strAdjGK))){
 							foreach($arrAdjUserIDs as $add_ntfy)
-								$this->ntfy->add('awards_new_award', 'awards', "Plugin: ".$this->user->lang('awards'), $this->routing->build('User', $this->get_name($add_ntfy), 'u'.$add_ntfy).substr(md5($this->user->lang('aw_customtab_title')), 0, 9), $add_ntfy, 'Glückwunsch du hast ein Erfolg erhalten.', false);
+								$this->ntfy->add('awards_new_award', 'awards', "Plugin: ".$this->user->lang('awards'), $this->routing->build('User', $add_ntfy, 'u'.$add_ntfy).substr(md5($this->user->lang('aw_customtab_title')), 0, 9), $add_ntfy, 'Glückwunsch du hast ein Erfolg erhalten.', false);
 							
 							$blnResult = true;
 						
