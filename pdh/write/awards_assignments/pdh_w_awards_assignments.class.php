@@ -120,8 +120,9 @@ if(!class_exists('pdh_w_awards_assignments')) {
 		
 		return false;
 	}
-		
-		
+
+
+
   } //end class
 } //end if class not exists
 ?>

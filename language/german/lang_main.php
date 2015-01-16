@@ -62,6 +62,7 @@ $lang = array(
   'aw_cat_4'					=> 'Kategorie 4',
   'aw_show_yours'				=> 'Zeige deine Erfolge',
   
+  'aw_customtab_title'			=> 'Meine Erfolge',
   'aw_listachiev_footcount'		=> '... %1\$d Erfolg(e) gefunden / %2\$d pro Seite',
   'aw_listassign_footcount'		=> '... %1\$d Zuweisung(en) gefunden / %2\$d pro Seite',
   

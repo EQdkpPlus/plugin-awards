@@ -37,18 +37,16 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 	  */
 	public function userprofile_customtabs(){
 		
-		#if($this->user->check_auths(array('u_awards_view', 'a_awards_manage'), 'OR', false)){}
-		
-		
-			$out = array(
-				'title'   => "Erfolge",
-				'content' => "Mein Content",		#$this->routing->build('list_user_achievements');
+		if($this->user->check_auths(array('u_awards_view', 'a_awards_manage'), 'OR', false)){
+			$content = 'Mein Content';
+
+
+			$output = array(
+				'title'   => $this->user->lang('aw_customtab_title'),
+				'content' => $content,		#$this->routing->build('list_user_achievements');
 			);
-		
-		
-			return $out;
-		
-		
+			return $output;
+		}
 	}
 	
 	

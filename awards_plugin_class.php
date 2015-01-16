@@ -130,6 +130,15 @@ class awards extends plugin_generic
 
 
 	/**
+	  * post_install
+	  * Define Post Installation
+	  */
+	public function post_install(){
+		$this->ntfy->addNotificationType('awards_new_award', 'notification_awards_new_award', 'awards', 0, 1, 0, NULL, 3, 'fa-gift');
+	}
+
+
+	/**
 	  * pre_uninstall
 	  * Define Post Uninstall
 	  */
@@ -145,6 +154,8 @@ class awards extends plugin_generic
 			$strAssignmentGroupKey = $this->pdh->get('awards_assignments', 'adj_group_key');
 			$this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAssignmentGroupKey));
 		}
+		
+		$this->ntfy->deleteNotificationType(array('awards_new_award'));
 	}
 	
 
