@@ -223,7 +223,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		}
 		
 		public function get_html_points($intAchievementID){
-			return $this->get_points($intAchievementID).' <span class="adminicon" />';
+			return $this->get_points($intAchievementID).' <i class="fa fa-bookmark-o"></i>';
 		}
 
 		/**
@@ -282,6 +282,10 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 				return $this->awards_achievements[$intAchievementID]['dkp'];
 			}
 			return false;
+		}
+		
+		public function get_html_dkp($intAchievementID){
+			return $this->get_dkp($intAchievementID).' <span class="adminicon" />';
 		}
 		
 		/**

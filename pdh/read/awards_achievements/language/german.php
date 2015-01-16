@@ -28,7 +28,7 @@ $module_lang = array(
 	'icon'					=> '',
 	'name'					=> 'Name',
 	'description'			=> 'Beschreibung',
-	'points'				=> 'Punkte',
+	'points'				=> 'AP',
 	'module'				=> 'Modul',
 	'dkp'					=> 'DKP',
 );

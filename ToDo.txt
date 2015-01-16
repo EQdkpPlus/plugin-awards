@@ -1,7 +1,6 @@
 
 - Edit/Add Achievements (erfolge für zuweisung)
 
-    - vorauswahl der Felder
     - Image (himageuploader) beschränken auf kb oder px und only .png
     - Update List über AJAX und Save Button entfernen
     - PDH award_achievments Log Einträge "weitere Infos" mit Spachdaten überarbeiten
@@ -9,7 +8,6 @@
 
 - Edit/Add Assignments (zuweisung an Char)
 
-    - load an adjustment backup if assignment failed on update
     - PDH erweitern um die Daten der Korrektur auf Liste an zu zeigen
 
 

@@ -152,10 +152,10 @@ class awards_manage_achievements extends page_generic
 				'R_ACTIVE_STATE'	=> new hradio('active_state', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => $this->pdh->get('awards_achievements', 'active', array($id)))),
 				'R_SPECIAL_STATE'	=> new hradio('special_state', array('options' => array(1 => $this->user->lang('published'), 0 => $this->user->lang('not_published')), 'value' => $this->pdh->get('awards_achievements', 'special', array($id)))),
 				'DESCRIPTION'		=> $this->pdh->get('awards_achievements', 'description', array($id)),
-				'SPINNER_POINTS' 	=> new hspinner('points', array('value' =>  ($this->pdh->get('awards_achievements', 'points', array($id))), 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),
+				'SPINNER_POINTS' 	=> new hspinner('points', array('value' => $this->pdh->get('awards_achievements', 'points', array($id)), 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),
 				'DD_MODULE'			=> new hdropdown('module', array('options' => $arrAdjDropdown, 'value' => $this->pdh->get('awards_achievements', 'module', array($id)))),
-				'SPINNER_DKP'		=> new hspinner('dkp', array('value' =>  ($this->pdh->get('awards_achievements', 'dkp', array($id))), 'max'  => 99999, 'min'  => -99999, 'step' => 5)),
-				'MDKP2EVENT'		=> $this->jquery->Multiselect('mdkp2event', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), $event['mdkp2event']),
+				'SPINNER_DKP'		=> new hspinner('dkp', array('value' => $this->pdh->get('awards_achievements', 'dkp', array($id)), 'max'  => 99999, 'min'  => -99999, 'step' => 5)),
+				'MDKP2EVENT'		=> $this->jquery->Multiselect('mdkp2event', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), $this->pdh->get('event', 'multidkppools', array($this->pdh->get('awards_achievements', 'special', array($id))))),
 			));
 		} else {
 			$this->tpl->assign_vars(array(
@@ -166,7 +166,7 @@ class awards_manage_achievements extends page_generic
 				'SPINNER_POINTS'	=> new hspinner('points', array('value' =>  10, 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),	
 				'DD_MODULE'			=> new hdropdown('module', array('options' => $arrAdjDropdown, 'value' => NULL)),
 				'SPINNER_DKP'		=> new hspinner('dkp', array('value' =>  0, 'max'  => 99999, 'min'  => -99999, 'step' => 5)),
-				'MDKP2EVENT'		=> $this->jquery->Multiselect('mdkp2event', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), $event['mdkp2event']),
+				'MDKP2EVENT'		=> $this->jquery->Multiselect('mdkp2event', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), 0),
 			));
 		}
 
@@ -187,11 +187,13 @@ class awards_manage_achievements extends page_generic
 		foreach($files as $file) {
 			if(!in_array($file, $ignorefiles)) $icons[] = $icon_folder.'/'.$file;
 		}
-
+		
 		$num = count($icons);
 		$fields = (ceil($num/6))*6;
 		$i = 0;
-
+		
+		if ($id) $strAchIcon = $this->pdh->get('awards_achievements', 'icon', array($id));
+		
 		while($i<$fields)
 		{
 			$this->tpl->assign_block_vars('files_row', array());
@@ -202,7 +204,7 @@ class awards_manage_achievements extends page_generic
 			$icon = (isset($icons[$i])) ? $icons[$i] : '';
 			$this->tpl->assign_block_vars('files_row.fields', array(
 					'NAME'		=> pathinfo($icon, PATHINFO_FILENAME).'.'.pathinfo($icon, PATHINFO_EXTENSION),
-					'CHECKED'	=> (isset($award['icon']) AND pathinfo($icon, PATHINFO_FILENAME).'.'.pathinfo($icon, PATHINFO_EXTENSION) == $award['icon']) ? ' checked="checked"' : '',
+					'CHECKED'	=> (isset($strAchIcon) AND pathinfo($icon, PATHINFO_FILENAME).'.'.pathinfo($icon, PATHINFO_EXTENSION) == $strAchIcon) ? ' checked="checked"' : '',
 					'IMAGE'		=> "<img src='".$icon."' alt='".$icon."' width='48px' style='eventicon' />",
 					'CHECKBOX'	=> ($i < $num) ? true : false)
 				);
@@ -257,9 +259,9 @@ class awards_manage_achievements extends page_generic
 				array('name' => 'awards_achievements_icon',	   'sort' => false, 'th_add' => 'width="20"', 'td_add' => ''),
 				array('name' => 'awards_achievements_name',	   'sort' => true, 'th_add' => '', 'td_add' => ''),
 				array('name' => 'awards_achievements_description', 'sort' => true, 'th_add' => '', 'td_add' => ''),
-				array('name' => 'awards_achievements_points',  'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
+				array('name' => 'awards_achievements_points',  'sort' => true, 'th_add' => 'width="20"', 'td_add' => 'style="text-align:right"'),
+				array('name' => 'awards_achievements_dkp',  'sort' => true, 'th_add' => 'width="20"', 'td_add' => 'style="text-align:right"'),
 				array('name' => 'awards_achievements_module',  'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
-				array('name' => 'awards_achievements_dkp',  'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
 			),
 		);
 		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->root_path.'plugins/awards/admin/manage_achievements.php', '%link_url_suffix%' => ''));
