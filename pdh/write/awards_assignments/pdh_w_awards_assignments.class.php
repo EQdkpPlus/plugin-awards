@@ -120,8 +120,50 @@ if(!class_exists('pdh_w_awards_assignments')) {
 		
 		return false;
 	}
+	
+	
+	/**
+	  * Update a Assignment
+	  */
+	public function backup_old_adjustments($intAssID){
 		
+		$arrOldAdjIDs		= unserialize($this->pdh->get('awards_assignments', 'date', array($intAssID)));
+		$intOldAdjGK		= $this->pdh->get('awards_assignments', 'adj_group_key', array($intAssID));
+		$intOldAssDate		= $this->pdh->get('awards_assignments', 'date', array($intAssID));
 		
+		// müssen zurück und so als Funktions Parameter übergeben werden
+		$intOldAdjEventID	= $this->pdh->get('adjustment', 'event', array($arrOldAdjIDs[0]));
+		$fltOldAdjDKP		= $this->pdh->get('adjustment', 'value', array($arrOldAdjIDs[0]));
+		$arrOldAdjUserIDs	= unserialize($this->pdh->get('adjustment', 'member', array($arrOldAdjIDs[0])));
+		
+		foreach($arrOldAdjIDs as $intOldAdjID){
+			$objQuery = $this->db->prepare("INSERT INTO __awards_assignments :p")->set(array(
+				'adjustment_id'				=> $intOldAdjID,
+				'adjustment_value'			=> $fltOldAdjDKP,
+				'adjustment_date'			=> $intOldAssDate,
+				'member_id'					=> $arrOldAdjUserIDs[$intOldAdjID],
+				'event_id'					=> $intOldAdjEventID,
+				'adjustment_reason'			=> $reason,
+				'raid_id'					=> 0,
+				'adjustment_group_key'		=> $intOldAdjGK,
+				'adjustment_added_by'		=> $this->admin_user
+			))->execute();
+			
+			$objQuery = $this->db->prepare("INSERT INTO __awards_assignments :p")->set($arrQuery)->execute();
+		}
+	}
+	
+	/*
+	$arrOldAdjUserIDs = unserialize($this->pdh->get('adjustment', 'member', array($arrOldAdjIDs[0])));
+	$intOldAdjEventID = $this->pdh->get('adjustment', 'event', array($arrOldAdjIDs[0]));
+	$intOldAssDate	  = $this->pdh->get('awards_assignments', 'date', array($intAssID));
+	$fltOldAdjDKP	  = $this->pdh->get('adjustment', 'value', array($arrOldAdjIDs[0]));
+	foreach($arrOldAdjIDs as $readID)
+		$strOldAdjName[] = $this->pdh->get('adjustment', 'reason', array($arrOldAdjIDs[0]));
+	*/
+
+
+	
   } //end class
 } //end if class not exists
 ?>

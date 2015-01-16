@@ -78,10 +78,6 @@ class awards_manage_assignments extends page_generic
 					$strAdjGK = $this->pdh->get('awards_assignments', 'adj_group_key', array($intAssID));
 					$arrAdjID = $this->pdh->put('adjustment', 'update_adjustment', array($strAdjGK, $fltAchDKP, $strAchName, $arrAdjUserIDs, $intAchEventID, 0, $intAssDate));
 					
-						//create adj backup if assignment failed
-						
-					
-					
 					if($arrAdjID[0]){
 						$this->pdh->process_hook_queue();
 						$strAdjGK  = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[1]));
@@ -93,7 +89,13 @@ class awards_manage_assignments extends page_generic
 							
 							$blnResult = true;
 						
-						} else { $blnResult = false; /* DELETE or BACKUP if add_assignment failed */ }
+						} else { $blnResult = false;
+								//create adj backup cause assignment update failed
+								/*$arrOldAdjIDs = $this->pdh->get('awards_assignments', 'date', array($intAssID));
+								$arrOldAdjUserIDs = unserialize($this->pdh->get('adjustment', 'member', array($arrOldAdjIDs[0])));*/
+								$this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK));
+								/*$this->pdh->put('awards_assignments', 'backup_old_adjustments', array($intAssID));*/
+						}
 					} else { $blnResult = false; }
 				
 			} else { //add Assignment
