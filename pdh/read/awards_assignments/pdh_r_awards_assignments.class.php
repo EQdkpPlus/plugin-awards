@@ -69,7 +69,7 @@ if ( !class_exists( "pdh_r_awards_assignments" ) ) {
 						'id'				=> (int)$drow['id'],
 						'date'				=> (int)$drow['date'],
 						'achievement_id'	=> (int)$drow['achievement_id'],
-						'adj_id'			=> (int)$drow['adj_id'],
+						'adj_id'			=> $drow['adj_id'],
 						'adj_group_key'		=> $drow['adj_group_key'],
 
 					);

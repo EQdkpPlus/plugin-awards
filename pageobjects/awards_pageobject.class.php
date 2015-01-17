@@ -32,13 +32,24 @@ class awards_pageobject extends pageobject
 		if (!$this->pm->check('awards', PLUGIN_INSTALLED))
 		  message_die($this->user->lang('aw_plugin_not_installed'));
 
-		#$this->user->check_auth('a_awards_view');
+		$this->user->check_auth('u_awards_view');
 
-		$handler = array();
+		$handler = array(
+			#'get_table'		=> array('process' => 'set_cookie', 'check' => 'u_awards_view'),
+		);
 		parent::__construct(false, $handler);
 		$this->process();
 	}
-
+	
+/*	// Dont use it now, we use a hardcoded variable while the development and testing
+	private function set_cookie(){
+		//dont set cookies if we dont have a cookie-name or cookie-path
+		$cname = register('config')->get('cookie_name');
+		$cpath = register('config')->get('cookie_path');
+		if(empty($cname) || empty($cpath)) return;
+		setcookie( $cname . '_awards', 1, 604800, $cpath, register('config')->get('cookie_domain'));
+	}
+*/
 
 	/**
 	  * Display
