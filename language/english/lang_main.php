@@ -24,13 +24,118 @@ if (!defined('EQDKP_INC')){
 }
 
 $lang = array(
-  'awards'						=> 'Achievments',
+  'awards'						=> 'Awards',
 
   // Description
-  'awards_short_desc'			=> 'This Plugin allows to obtain achievments',
+  'awards_short_desc'			=> 'Get achievements, fame and honor.',
   'awards_long_desc'			=> 'This Plugin allows to obtain achievments.',
   
-  	
+  // General
+  'aw_achievement'				=> 'Achievement',
+  'aw_achievements'				=> 'Achievements',
+  'aw_ap'						=> 'Award Points',
+  'aw_points'					=> 'Award Points',
+  'aw_dkp'						=> 'DKP',
+  'aw_progress'					=> 'Progress',
+  'aw_all_guild_achievements'	=> 'All guildachievements',
+  'aw_customtab_title'			=> 'My Achievements',
+  'aw_tab_user'					=> 'My Achievements',
+  'aw_user_unreached'			=> 'Has not earned this achievement',
+  'aw_member_unreached'			=> 'not earned',
+  'aw_is_inactive'				=> 'Achievement is inactive',
+  'aw_is_special'				=> 'Achievement is invisible',
+  
+  'user_sett_tab_awards'		=> 'Awards Plugin',
+  'user_sett_fs_awards'			=> 'Awards mainsettings',
+  'user_sett_f_aw_show_hook'	=> 'Show Awards Quick Info',
+  'user_sett_f_aw_layout'		=> 'Layout',
+  'user_sett_f_aw_pagination'	=> 'Achievements per site',
+  'user_sett_f_aw_admin_pagination'   => '[ACP] Achieve/Assignments per site',
+  'user_sett_f_aw_layout_default'	  => 'Default',
+  'user_sett_f_aw_layout_minimalist'  => 'Minimalist',
+  
+  // Admin
+  'aw_manage_achievements'		=> 'Manage achievements',
+  'aw_manage_assignments'		=> 'Manage assignments',
+  'aw_tab_assign'				=> '<i class="adminicon"></i>All achievements',
+  'aw_tab_achieve'				=> '<i class="adminicon"></i>All assignments',
+  
+  'aw_add_achievement'			=> 'Add achievement',
+  'aw_edit_achievement'			=> 'Edit achievement',
+  'aw_add_assignment'			=> 'Assign achievement',
+  'aw_edit_assignment'			=> 'Edit assignment',
+  
+  'aw_special'					=> 'Special',
+  'aw_value'					=> 'AP worth',
+  'aw_dkp_value'				=> 'DKP worth',
+  'aw_auto_assign'				=> 'Auto-assign',
+  'aw_icon_header'				=> 'Select icon',
+  'aw_upload_icon'				=> 'Add icon',
+  
+  'aw_name_help'				=> 'Name / Title of achievement',
+  'aw_desc_help'				=> 'Description of achievement',
+  'aw_active_help'				=> 'Determines whether this achievement may be assigned.',
+  'aw_special_help'				=> 'Besondere Erfolge sind erst sichtbar wenn diese errungen wurden.',
+  'aw_ap_help'					=> 'Award Points(achievementpoints) serve as Awards own currency',
+  'aw_dkp_help'					=> 'These DKP get the respective player which reached this achievement.',
+  'aw_dkp_warn'					=> 'A later change of DKP is not recommended, already assigned DKP will not be updated!',
+  'aw_event_help'				=> 'Select an Event for this achievement.',
+  'aw_auto_assign_help'			=> '"Plugins: Awards" Cronjob must be activated!',
+  'aw_icon_help'				=> 'Select or upload a matched icon.<br />SVG images have additional a colorswitch option, but for this function you need to optimize your SVG like the <a href="https://eqdkp-plus.eu/wiki/Plugin:_Awards">Wiki</a>.',
+  
+  'aw_sortation'				=> 'Sorting',
+  'aw_icon_colors'				=> 'Icon colors',
+  'aw_module'					=> 'Cronjob Module',
+  'aw_module_settings'			=> 'Cronjob Module settings',
+  
+  'aw_listachiev_footcount'		=> '... %s Achievement(s) founded / %s per site',
+  'aw_listassign_footcount'		=> '... %s Assignment(s) founded / %s per site',
+  
+  // Awards Quick Info
+  'aw_tt_reached_ap'			=> 'Reached Awardpoints',
+  'aw_tt_reached_dkp'			=> 'Reached DKP',
+  'aw_tt_my_awards'				=> 'All my achievements',
+  'aw_tt_all_awards'			=> 'All Guildachievments',
+  
+  
+  // Cronjob Modules
+  'aw_module_row_delete'		=> 'Delete this condition',
+  'aw_module_condition'			=> 'these condtions must be hitted.',
+  'aw_module_all'				=> 'All',
+  'aw_module_any'				=> 'One of',
+  
+  'aw_cronmodule_raids'			=> 'Character was on [x] Raids participated',
+  'aw_cronmodule_inf_raids'		=> 'Raids',
+  'aw_cronmodule_birthday'		=> 'User have birthday',
+  'aw_cronmodule_cap'			=> 'Character reached over [x] DKP',
+  'aw_cronmodule_inf_cap'		=> 'DKP',
+  'aw_cronmodule_items'			=> 'Character reached over [x] Items',
+  'aw_cronmodule_inf_items'		=> 'Items',
+  /* PUT HERE THE LANGUAGE STRIPES OF YOUR OWN MODULE */
+  
+  
+  // System Messages
+  'action_achievement_added'	=> 'Achievement created',
+  'action_achievement_deleted'	=> 'Achievement deleted',
+  'action_achievement_updated'	=> 'Achievement updated',
+  'action_assignment_added'		=> 'Achievement assigned',
+  'action_assignment_deleted'	=> 'Assignment edited',
+  'action_assignment_deleted'	=> 'Assignment deleted',
+  
+  'aw_plugin_not_installed'		=> 'Awards-Plugin is not installed.',
+  'aw_no_permission'			=> 'You don\'t have the permissions.',
+  'aw_add_success'				=> '%s was added',
+  'aw_add_nosuccess'			=> '%s could not be added',
+  'aw_assign_success'			=> '%s was<br />%s assigned',
+  'aw_assign_nosuccess'			=> '%s could not be assigned',
+  'aw_del_assign'				=> 'Assignment(s) deleted',
+  
+  'aw_confirm_delete_achievement'	=> 'Are you sure, that you will delet all %s achievements? All reached DKP will be deleted too!',
+  'aw_confirm_delete_assignment'	=> 'Are you sure, that you will delet all %s assignments? All reached DKP will be deleted too!',
+  
+  'aw_upd_assignment_warning'	=> '<h3>A later editing of an assignment is on your own risk!</h3>
+  									No ones get notifications and while the editing proccess can you get irreversibles errors.<br />
+									So use this function with cautious.',
 );
 
 ?>
