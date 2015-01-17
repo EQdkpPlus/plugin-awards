@@ -27,7 +27,6 @@ define('PLUGIN', 'awards');
 $eqdkp_root_path = './../../../';
 include_once($eqdkp_root_path.'common.php');
 
-
 /*+----------------------------------------------------------------------------
   | awards_manage_achievements
   +--------------------------------------------------------------------------*/
@@ -55,10 +54,14 @@ class awards_manage_achievements extends page_generic
 	  * Save
 	  * save the achievement
 	  */
-	public function save(){
+	public function save(){	
 		$id 				= $this->in->get('aid', 0);
-		$strAchName			= $this->in->get('name');
-		$strAchDescription  = $this->in->get('description');
+		
+		$hmultilangName = new htextmultilang('name');
+		$hmultilangDesc = new htextareamultilang('description');
+		$strAchName			= $hmultilangName->_inpval();
+		$strAchDescription	= $hmultilangDesc->_inpval();
+		
 		$intAchSortID		= $this->in->get('sort_id', 99999999);
 		$blnAchActive		= $this->in->get('active_state', 1);
 		$blnAchSpecial		= $this->in->get('special_state', 1);
@@ -68,12 +71,6 @@ class awards_manage_achievements extends page_generic
 		$strAchModule		= $this->in->get('module');
 		$fltAchDKP			= $this->in->get('dkp', 0);
 		$intMDKP			= $this->in->getArray('mdkp2event', 'int');
-		
-		//check form correct filled
-		if ($strAchName == "" ){
-			$this->core->message($this->user->lang('name'), $this->user->lang('missing_values'), 'red');
-			$this->edit(); return;
-		}
 		
 		
 		if ($id){ //update Achievement
@@ -98,11 +95,10 @@ class awards_manage_achievements extends page_generic
 		//output Message
 		if ($blnResult){
 			$this->pdh->process_hook_queue();
-			$this->core->message(sprintf( $this->user->lang('aw_add_success'), $strAchName ), $this->user->lang('success'), 'green');
+			$this->core->message(sprintf( $this->user->lang('aw_add_success'), $this->user->multilangValue($strAchName) ), $this->user->lang('success'), 'green');
 		} else {
-			$this->core->message(sprintf( $this->user->lang('aw_add_nosuccess'), $strAchName ), $this->user->lang('error'), 'red');
+			$this->core->message(sprintf( $this->user->lang('aw_add_nosuccess'), $this->user->multilangValue($strAchName) ), $this->user->lang('error'), 'red');
 		}
-		
 		$this->display();
 	}
 
@@ -148,24 +144,24 @@ class awards_manage_achievements extends page_generic
 		
 		if ($id){
 			$this->tpl->assign_vars(array(
-				'NAME' 				=> $this->pdh->get('awards_achievements', 'name', array($id)),
+				'ML_NAME'			=> new htextmultilang('name', array('value' => unserialize($this->pdh->get('awards_achievements', 'name', array($id))), 'size' => 30, 'required' => true)),
+				'ML_DESCRIPTION'	=> new htextareamultilang('description', array('value' => unserialize($this->pdh->get('awards_achievements', 'description', array($id))), 'rows' => '3', 'cols' => '50')),
 				'R_ACTIVE_STATE'	=> new hradio('active_state', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => $this->pdh->get('awards_achievements', 'active', array($id)))),
 				'R_SPECIAL_STATE'	=> new hradio('special_state', array('options' => array(1 => $this->user->lang('published'), 0 => $this->user->lang('not_published')), 'value' => $this->pdh->get('awards_achievements', 'special', array($id)))),
-				'DESCRIPTION'		=> $this->pdh->get('awards_achievements', 'description', array($id)),
 				'SPINNER_POINTS' 	=> new hspinner('points', array('value' => $this->pdh->get('awards_achievements', 'points', array($id)), 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),
+				'SPINNER_DKP'		=> new hspinner('dkp', array('value' =>  ($this->pdh->get('awards_achievements', 'dkp', array($id))), 'max'  => 99999, 'min'  => -99999, 'step' => 5)),
 				'DD_MODULE'			=> new hdropdown('module', array('options' => $arrAdjDropdown, 'value' => $this->pdh->get('awards_achievements', 'module', array($id)))),
-				'SPINNER_DKP'		=> new hspinner('dkp', array('value' => $this->pdh->get('awards_achievements', 'dkp', array($id)), 'max'  => 99999, 'min'  => -99999, 'step' => 5)),
 				'MDKP2EVENT'		=> $this->jquery->Multiselect('mdkp2event', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), $this->pdh->get('event', 'multidkppools', array($this->pdh->get('awards_achievements', 'special', array($id))))),
 			));
 		} else {
 			$this->tpl->assign_vars(array(
-				'NAME' 				=> '',
+				'ML_NAME'			=> new htextmultilang('name', array('size' => 30, 'required' => true)),
+				'ML_DESCRIPTION'	=> new htextareamultilang('description', array('rows' => '3', 'cols' => '50')),
 				'R_ACTIVE_STATE'	=> new hradio('active_state', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => 1)),
 				'R_SPECIAL_STATE'	=> new hradio('special_state', array('options' => array(1 => $this->user->lang('published'), 0 => $this->user->lang('not_published')), 'value' => 1)),
-				'DESCRIPTION'		=> '',
 				'SPINNER_POINTS'	=> new hspinner('points', array('value' =>  10, 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),	
-				'DD_MODULE'			=> new hdropdown('module', array('options' => $arrAdjDropdown, 'value' => NULL)),
 				'SPINNER_DKP'		=> new hspinner('dkp', array('value' =>  0, 'max'  => 99999, 'min'  => -99999, 'step' => 5)),
+				'DD_MODULE'			=> new hdropdown('module', array('options' => $arrAdjDropdown, 'value' => NULL)),
 				'MDKP2EVENT'		=> $this->jquery->Multiselect('mdkp2event', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), 0),
 			));
 		}
@@ -213,7 +209,7 @@ class awards_manage_achievements extends page_generic
 		
 		// Icon Upload
 		$this->jquery->fileBrowser('all', 'image', $this->pfh->FolderPath('images','awards', 'absolute'), array('title' => $this->user->lang('aw_upload_icon'), 'onclosejs' => '$(\'#eventSubmBtn\').click();'));
-
+		
 		$this->tpl->assign_vars(array(
 			'AID' => $id,
 		));
@@ -287,33 +283,6 @@ class awards_manage_achievements extends page_generic
 			'display'			=> true
 		));
 	}
-
-
-
-
-
-
-/* Spickzettel ...
-		$retu = array();
-		foreach($ids as $id) {
-			$retu[$id] = $this->pdh->put('awards', 'delete_award', array($id));
-		}
-		foreach($retu as $id => $suc) {
-			if($suc) {
-				$pos[] = stripslashes($this->pdh->get('awards', 'name', array($id)));
-			} else {
-				$neg[] = stripslashes($this->pdh->get('awards', 'name', array($id)));
-			}
-		}
-		
-		if(!empty($pos)) {
-			$messages[] = array('title' => $this->user->lang('del_suc'), 'text' => implode(', ', $pos), 'color' => 'green');
-		}
-		if(!empty($neg)) {
-			$messages[] = array('title' => $this->user->lang('del_no_suc'), 'text' => implode(', ', $neg), 'color' => 'red');
-		}
-		$this->display($messages);
-*/
 
 
 }
