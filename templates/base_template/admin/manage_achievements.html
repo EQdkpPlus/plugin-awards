@@ -11,32 +11,68 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
+		var action = '';
+		var id = '';
+		var value = '';
+		
 		$('.eyeToggleTrigger').on('click', function(event){
+			action = 'special';
+			
 			if ($(this).hasClass('eye')){
 				// set 'special' to inactive
-				$(this).siblings('.special_cb').val(0);
+				$(this).next('.special_cb').val(0);
+				
+				id	  = $(this).next('.special_cb').attr('name');
+				value = $(this).next('.special_cb').val();
+				ajax(action, id, value);
+				
 				$(this).removeClass('eye');
 				$(this).addClass('eye-gray');
 			} else {
 				// set 'special' to active
-				$(this).siblings('.special_cb').val(1);
+				$(this).next('.special_cb').val(1);
+				
+				id	  = $(this).next('.special_cb').attr('name');
+				value = $(this).next('.special_cb').val();
+				ajax(action, id, value);
+				
 				$(this).removeClass('eye-gray');
 				$(this).addClass('eye');
 			}
 		});
 		$('.activeToggleTrigger').on('click', function(event){
+			action = 'active';
+			
 			if ($(this).hasClass('fa-check-square-o')){
 				// set 'active' to inactive
-				$(this).siblings('.active_cb').val(0);
+				$(this).next('.active_cb').val(0);
+				
+				id	  = $(this).next('.active_cb').attr('name');
+				value = $(this).next('.active_cb').val();
+				ajax(action, id, value);
+				
 				$(this).removeClass('fa-check-square-o icon-color-green');
 				$(this).addClass('fa-square-o icon-color-red');
 			} else {
 				// set 'active' to active
-				$(this).siblings('.active_cb').val(1);
+				$(this).next('.active_cb').val(1);
+				
+				id	  = $(this).next('.active_cb').attr('name');
+				value = $(this).next('.active_cb').val();
+				ajax(action, id, value);
+				
 				$(this).removeClass('fa-square-o icon-color-red');
 				$(this).addClass('fa-check-square-o icon-color-green');
 			}
 		});
+		
+		function ajax(action, id, value){
+			$.post('{EQDKP_ROOT_PATH}plugins/awards/ajax.php{SID}&'+action, {
+					id: id,
+					value: value
+				}, function(){
+			});
+		}
 	});
 </script>
 

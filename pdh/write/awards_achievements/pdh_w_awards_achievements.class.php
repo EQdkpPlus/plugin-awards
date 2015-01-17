@@ -43,7 +43,7 @@ if(!class_exists('pdh_w_awards_achievements')) {
 		'dkp' 				=> "{L_AW_DKP}",
 		'event_id' 			=> "{L_AW_EVENT_ID}",
 	);
-	
+
 
 	/**
 	  * Delete all selected Achievements
@@ -62,7 +62,7 @@ if(!class_exists('pdh_w_awards_achievements')) {
 		$this->pdh->enqueue_hook('awards_achievements_update');
 		return true;
 	}
-		
+	
 	private function delete_recursiv($intAchievementID){
 		$arrOldData = $this->pdh->get('awards_achievements', 'data', array($intAchievementID));
 		$this->db->prepare("DELETE FROM __awards_achievements WHERE id =?")->execute($intAchievementID);
@@ -72,17 +72,13 @@ if(!class_exists('pdh_w_awards_achievements')) {
 		
 		return true;
 	}
-	
-	
+
+
 	/**
 	  * Add a Achievement
 	  */
 	public function add($strName, $strDescription, $blnActive, $blnSpecial,
 						$intPoints, $strIcon, $arrIconColors, $strModule, $fltDKP, $intEventID){
-		// Parse TinyMC Code of 'Description'
-		#$strDescription = $this->bbcode->replace_shorttags($strDescription);
-		#$strDescription = $this->embedly->parseString($strDescription);
-		
 		$arrQuery  = array(
 			'name' 				=> $strName,
 			'description'		=> $strDescription,
@@ -110,17 +106,13 @@ if(!class_exists('pdh_w_awards_achievements')) {
 		
 		return false;
 	}
-	
-	
+
+
 	/**
 	  * Update a Achievement
 	  */
 	public function update($id, $strName, $strDescription, $intSortID, $blnActive, $blnSpecial,
 							$intPoints, $strIcon, $arrIconColors, $strModule, $fltDKP, $intEventID){
-		// Parse TinyMC Code of 'Description'
-		#$strDescription = $this->bbcode->replace_shorttags($strDescription);
-		#$strDescription = $this->embedly->parseString($strDescription);
-		
 		$arrQuery = array(
 			'name' 				=> $strName,
 			'description'		=> $strDescription,
@@ -150,8 +142,35 @@ if(!class_exists('pdh_w_awards_achievements')) {
 		
 		return false;
 	}
+
+
+	/**
+	  * Set in/active an Achievement
+	  */
+	public function set_active($id, $blnActive){
+		$objQuery = $this->db->prepare("UPDATE __awards_achievements :p WHERE id=?")->set(array(
+			'active' => $blnActive,
+		))->execute($id);
 		
+		if ($objQuery) return true;
+		return false;
+	}
+
+
+	/**
+	  * Set no/special an Achievement
+	  */
+	public function set_special($id, $blnSpecial){
+		$objQuery = $this->db->prepare("UPDATE __awards_achievements :p WHERE id=?")->set(array(
+			'special' => $blnSpecial,
+		))->execute($id);
 		
+		if ($objQuery) return true;
+		return false;
+	}
+
+
+
   } //end class
 } //end if class not exists
 ?>

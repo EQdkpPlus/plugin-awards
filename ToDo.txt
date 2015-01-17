@@ -2,7 +2,6 @@
 - Edit/Add Achievements (erfolge für zuweisung)
 
     - Image (himageuploader) beschränken auf kb oder px und only .png
-    - Update List über AJAX und Save Button entfernen
     - PDH award_achievments Log Einträge "weitere Infos" mit Spachdaten überarbeiten
 
 

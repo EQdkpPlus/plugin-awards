@@ -182,9 +182,15 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		
 		public function get_html_active($intAchievementID){
 			if ($this->get_active($intAchievementID)){
-				$strImage = '<div><i class="fa fa-check-square-o fa-lg icon-color-green activeToggleTrigger" style="cursor: pointer;"></i></div><input type="hidden" class="active_cb" name="active['.$intAchievementID.']" value="1"/></div>';
+				$strImage = '<div>
+								<i class="fa fa-check-square-o fa-lg icon-color-green activeToggleTrigger" style="cursor: pointer;"></i>
+								<input type="hidden" class="active_cb" name="'.$intAchievementID.'" value="1"/>
+							</div>';
 			} else {
-				$strImage = '<div><i class="fa fa-square-o fa-lg icon-color-red activeToggleTrigger" style="cursor: pointer;"></i></div><input type="hidden" class="active_cb" name="active['.$intAchievementID.']" value="0"/></div>';
+				$strImage = '<div>
+								<i class="fa fa-square-o fa-lg icon-color-red activeToggleTrigger" style="cursor: pointer;"></i>
+								<input type="hidden" class="active_cb" name="'.$intAchievementID.'" value="0"/>
+							</div>';
 			}
 			return $strImage;
 		}
@@ -203,9 +209,15 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		
 		public function get_html_special($intAchievementID){
 			if ($this->get_special($intAchievementID)){
-				$strImage = '<div><div class="eye eyeToggleTrigger"></div><input type="hidden" class="special_cb" name="special['.$intAchievementID.']" value="1"/></div>';
+				$strImage = '<div>
+								<div class="eye eyeToggleTrigger"></div>
+								<input type="hidden" class="special_cb" name="'.$intAchievementID.'" value="1"/>
+							</div>';
 			} else {
-				$strImage = '<div><div class="eye-gray eyeToggleTrigger"></div><input type="hidden" class="special_cb" name="special['.$intAchievementID.']" value="0"/></div>';
+				$strImage = '<div>
+								<div class="eye-gray eyeToggleTrigger"></div>
+								<input type="hidden" class="special_cb" name="'.$intAchievementID.'" value="0"/>
+							</div>';
 			}
 			return $strImage;
 		}
