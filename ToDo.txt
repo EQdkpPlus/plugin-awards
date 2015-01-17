@@ -1,7 +1,6 @@
 
 - Edit/Add Achievements (erfolge für zuweisung)
 
-    - Image (himageuploader) beschränken auf kb oder px und only .png
     - PDH award_achievments Log Einträge "weitere Infos" mit Spachdaten überarbeiten
 
 
@@ -22,8 +21,3 @@
     - Module, z.B. "Hat an x Raids teilgenommen". Bei einem Award wählt man das Modul dann aus (muss aber nicht), und trägt die Zahl für x ein (als setting im Modul hinterlegt, wie z.B. bei den Cronjobs).
     - Ein Cronjob arbeitet dann alle Awards ab, die ein Modul haben. Im Modul wir dann geschaut, ob die User x Raids erreicht haben, und erteilt ihnen dann das Awarding.
 
-
-- Vllt. Multilanguage (siehe hierfür)
-    - Für Verwendung siehe https://github.com/EQdkpPlus/core/commit/e73d59bc5f44d8bf89df8f1d087f6f78fbe949b7
-    - Multilanguage fields  =>  https://github.com/EQdkpPlus/core/commit/fb60747f1a59d01eed9524c76727512aad6a9407
-    - Added function to resolve multilang fields  =>  https://github.com/EQdkpPlus/core/commit/3d857caffe093fd6695b8ca8c881cd4db4406ac8

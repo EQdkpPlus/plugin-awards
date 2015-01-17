@@ -27,7 +27,6 @@ define('PLUGIN', 'awards');
 $eqdkp_root_path = './../../../';
 include_once($eqdkp_root_path.'common.php');
 
-
 /*+----------------------------------------------------------------------------
   | awards_manage_assignments
   +--------------------------------------------------------------------------*/
@@ -62,7 +61,8 @@ class awards_manage_assignments extends page_generic
 		
 		$blnAchActive	= $this->pdh->get('awards_achievements', 'active', array($intAchID));
 		$fltAchDKP		= $this->pdh->get('awards_achievements', 'dkp', array($intAchID));
-		$strAchName		= $this->user->lang('aw_achievement').': '.$this->pdh->get('awards_achievements', 'name', array($intAchID));
+		$arrAchName		= unserialize( $this->pdh->get('awards_achievements', 'name', array($intAchID)) );
+		$strAchName		= $this->user->lang('aw_achievement').': '.$arrAchName[$this->config->get('default_lang')];
 		$intAchEventID	= $this->pdh->get('awards_achievements', 'event_id', array($intAchID));
 		
 		//check form correct filled
@@ -161,7 +161,7 @@ class awards_manage_assignments extends page_generic
 		$achievements			= array();
 		$achievement_ids		= $this->pdh->get('awards_achievements', 'id_list');
 		foreach($achievement_ids as $aid)
-			$achievements[$aid] = $this->pdh->get('awards_achievements', 'name', array($aid));
+			$achievements[]	= $this->user->multilangValue( $this->pdh->get('awards_achievements', 'name', array($aid)) );
 		
 		//pre_select achievement for select
 		$achievement = $this->pdh->get('awards_assignments', 'achievement_id', array($intAssID));
