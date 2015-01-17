@@ -49,21 +49,6 @@ class awards_manage_achievements extends page_generic
 		$this->process();
 	}
 
-private $hmultilangName = '';
-private $hmultilangDesc = '';
-
-	private function init_hmultilang($id = false){
-		if($id){
-			$this->hmultilangName = new htextmultilang('name', array('value' => unserialize($this->pdh->get('awards_achievements', 'name', array($id))), 'size' => 30, 'required' => true));
-			$this->hmultilangDesc = new htextareamultilang('description', array('value' => unserialize($this->pdh->get('awards_achievements', 'description', array($id))), 'rows' => '3', 'cols' => '50'));
-			return true;
-		} else {
-			$this->hmultilangName = new htextmultilang('name', array('size' => 30, 'required' => true));
-			$this->hmultilangDesc = new htextareamultilang('description', array('rows' => '3', 'cols' => '50'));
-			return false;
-		}
-	}
-
 
 	/**
 	  * Save
@@ -72,9 +57,10 @@ private $hmultilangDesc = '';
 	public function save(){	
 		$id 				= $this->in->get('aid', 0);
 		
-		$this->init_hmultilang($id);
-		$strAchName			= $this->hmultilangName->_inpval();
-		$strAchDescription	= $this->hmultilangDesc->_inpval();
+		$hmultilangName = new htextmultilang('name');
+		$hmultilangDesc = new htextareamultilang('description');
+		$strAchName			= $hmultilangName->_inpval();
+		$strAchDescription	= $hmultilangDesc->_inpval();
 		
 		$intAchSortID		= $this->in->get('sort_id', 99999999);
 		$blnAchActive		= $this->in->get('active_state', 1);
@@ -109,11 +95,10 @@ private $hmultilangDesc = '';
 		//output Message
 		if ($blnResult){
 			$this->pdh->process_hook_queue();
-			$this->core->message(sprintf( $this->user->lang('aw_add_success'), $strAchName ), $this->user->lang('success'), 'green');
+			$this->core->message(sprintf( $this->user->lang('aw_add_success'), $this->user->multilangValue($strAchName) ), $this->user->lang('success'), 'green');
 		} else {
-			$this->core->message(sprintf( $this->user->lang('aw_add_nosuccess'), $strAchName ), $this->user->lang('error'), 'red');
+			$this->core->message(sprintf( $this->user->lang('aw_add_nosuccess'), $this->user->multilangValue($strAchName) ), $this->user->lang('error'), 'red');
 		}
-		
 		$this->display();
 	}
 
@@ -149,7 +134,6 @@ private $hmultilangDesc = '';
 	  */
 	public function edit(){
 		$id = $this->in->get('aid', 0);
-		$test = $this->init_hmultilang($id);
 		
 		// Adjustment Module für den Cron
 		$arrAdjDropdown = array(
@@ -160,8 +144,8 @@ private $hmultilangDesc = '';
 		
 		if ($id){
 			$this->tpl->assign_vars(array(
-				'ML_NAME'			=> $this->hmultilangName,
-				'ML_DESCRIPTION'	=> $this->hmultilangDesc,
+				'ML_NAME'			=> new htextmultilang('name', array('value' => unserialize($this->pdh->get('awards_achievements', 'name', array($id))), 'size' => 30, 'required' => true)),
+				'ML_DESCRIPTION'	=> new htextareamultilang('description', array('value' => unserialize($this->pdh->get('awards_achievements', 'description', array($id))), 'rows' => '3', 'cols' => '50')),
 				'R_ACTIVE_STATE'	=> new hradio('active_state', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => $this->pdh->get('awards_achievements', 'active', array($id)))),
 				'R_SPECIAL_STATE'	=> new hradio('special_state', array('options' => array(1 => $this->user->lang('published'), 0 => $this->user->lang('not_published')), 'value' => $this->pdh->get('awards_achievements', 'special', array($id)))),
 				'SPINNER_POINTS' 	=> new hspinner('points', array('value' =>  ($this->pdh->get('awards_achievements', 'points', array($id))), 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),
@@ -171,8 +155,8 @@ private $hmultilangDesc = '';
 			));
 		} else {
 			$this->tpl->assign_vars(array(
-				'ML_NAME'			=> $this->hmultilangName,
-				'ML_DESCRIPTION'	=> $this->hmultilangDesc,
+				'ML_NAME'			=> new htextmultilang('name', array('size' => 30, 'required' => true)),
+				'ML_DESCRIPTION'	=> new htextareamultilang('description', array('rows' => '3', 'cols' => '50')),
 				'R_ACTIVE_STATE'	=> new hradio('active_state', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => 1)),
 				'R_SPECIAL_STATE'	=> new hradio('special_state', array('options' => array(1 => $this->user->lang('published'), 0 => $this->user->lang('not_published')), 'value' => 1)),
 				'SPINNER_POINTS'	=> new hspinner('points', array('value' =>  10, 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),	
@@ -297,33 +281,6 @@ private $hmultilangDesc = '';
 			'display'			=> true
 		));
 	}
-
-
-
-
-
-
-/* Spickzettel ...
-		$retu = array();
-		foreach($ids as $id) {
-			$retu[$id] = $this->pdh->put('awards', 'delete_award', array($id));
-		}
-		foreach($retu as $id => $suc) {
-			if($suc) {
-				$pos[] = stripslashes($this->pdh->get('awards', 'name', array($id)));
-			} else {
-				$neg[] = stripslashes($this->pdh->get('awards', 'name', array($id)));
-			}
-		}
-		
-		if(!empty($pos)) {
-			$messages[] = array('title' => $this->user->lang('del_suc'), 'text' => implode(', ', $pos), 'color' => 'green');
-		}
-		if(!empty($neg)) {
-			$messages[] = array('title' => $this->user->lang('del_no_suc'), 'text' => implode(', ', $neg), 'color' => 'red');
-		}
-		$this->display($messages);
-*/
 
 
 }
