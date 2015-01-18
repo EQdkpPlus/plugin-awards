@@ -97,6 +97,7 @@ class awards extends plugin_generic
 		// -- PDH Modules -------------------------------------
 		$this->add_pdh_read_module('awards_achievements');
 		$this->add_pdh_read_module('awards_assignments');
+		$this->add_pdh_read_module('awards_library');
 		
 		$this->add_pdh_write_module('awards_achievements');
 		$this->add_pdh_write_module('awards_assignments');

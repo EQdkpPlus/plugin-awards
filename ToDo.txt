@@ -6,7 +6,9 @@
 
 - Edit/Add Assignments (zuweisung an Char)
 
-    - PDH erweitern um die Daten der Korrektur auf Liste an zu zeigen
+    - MEMBER SELECT DROPDOWN fixen, er zählt ab 0 wie array = erster Erfolg nicht nutzbar
+	- Neue Zuweisungs routine schreiben... für jede angelegte Korrekur eine neue Zuweisung (für die aufkommende PDH änderung)
+	- PDH erweitern um die Daten der Korrektur auf Liste an zu zeigen
 
 
 - Show Achievements (Benutzerspezifisch und Alle Nutzer) -- als pageobject!
@@ -21,3 +23,19 @@
     - Module, z.B. "Hat an x Raids teilgenommen". Bei einem Award wählt man das Modul dann aus (muss aber nicht), und trägt die Zahl für x ein (als setting im Modul hinterlegt, wie z.B. bei den Cronjobs).
     - Ein Cronjob arbeitet dann alle Awards ab, die ein Modul haben. Im Modul wir dann geschaut, ob die User x Raids erreicht haben, und erteilt ihnen dann das Awarding.
 
+
+
+DAS NEUE PDH MODULE: Query = (jenachdem wie wieviel wir brauchen) HINWEIS: im 2ten Query benötigt es die achievements id änderung
+
+SELECT *
+FROM assignments
+LEFT JOIN adjustments ON assignments.adj_id=adjustments.adjustment_id
+ORDER BY __awards_assignments.date DESC;
+;
+
+SELECT *
+FROM assignments
+LEFT JOIN adjustments ON assignments.adj_id=adjustments.adjustment_id
+LEFT JOIN achievements ON assignments.achievement_id=achievements.id
+ORDER BY __awards_assignments.date DESC;
+;
