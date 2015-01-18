@@ -64,7 +64,36 @@
 				<!-- ENDIF -->
 				<label><input type="radio" name="aw_show" value="1" onchange="form.submit();" {AW_SHOW_ALL} /> {L_aw_show_all}</label>
 
-
+				
+				
+				
+				<table width="100%" border="0" cellspacing="1" cellpadding="2" class="scrollable-x">
+					<!-- BEGIN awards_row -->
+					<tr class="colorswitch">
+						
+						<!-- BEGIN award -->
+						<td class="nowrap">
+							
+							{awards_row.award.NAME}
+							{awards_row.award.DESC}
+							<!-- IF awards_row.award.NAME --> <!-- ENDIF -->
+						</td>
+						<!-- END award -->
+						
+					</tr>
+					<!-- END awards_row -->
+				</table>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
 
 				<br>	Inhalt<br>	Inhalt<br>	Inhalt<br><br>	Inhalt<br>	Inhalt<br>	Inhalt<br><br>	Inhalt<br>	Inhalt<br>	Inhalt<br><br>	Inhalt<br>	Inhalt<br>	Inhalt<br>	{aw_PAGE_OUT}
 				

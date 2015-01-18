@@ -51,15 +51,101 @@ class awards_pageobject extends pageobject
 	}
 */
 
+
+// Gibt an wieviele Erfolge pro Reihe angezeigt werden sollen
+public $xAwardperRow = 2;
+
+
+
 	/**
 	  * Display
 	  * display all achievements
 	  */
 	public function display(){
-
-
-
-
+		
+		
+		//fetch all Assignments
+		$arrLibAssIDs = $this->pdh->get('awards_library', 'id_list');
+		
+		foreach($arrLibAssIDs as $intLibAssID){
+			$arrLibAchIDs[] = $this->pdh->get('awards_library', 'achievement_id', array($intLibAssID));
+		}
+		$arrLibAchIDs = array_unique($arrLibAchIDs);	// die erhaltenen Awards als Award ID
+		
+		/* // Das Läuft ...
+		foreach($arrLibAchIDs as $intLibAchID){
+			#$this->tpl->assign_block_vars('awards_row', array());
+			$this->tpl->assign_var('ACTIVE', true);
+			
+			$this->tpl->assign_block_vars('awards', array(
+				'NAME'		=> 'Name',
+				'DESC'		=> 'Beschreibung',
+			));
+		}
+		*/
+		
+		
+		//prüfe wieviele erfolge existieren /zähle sie
+		//gehe in schleife 1 --"für die reihen"
+		//gehe in schleife 2 führe aus so viel wie "proReihe" angegeben sind --"für die spalten"
+		//rechne in schleife 2 das ergebnis von allen gezählten erfolgen um +1 --"benötigt für:
+		// die berechnung wieviele pro reihe/spalte und welchen Erflg wir aus der library lesen"
+		$allAwards = count($arrLibAchIDs);
+		$award_counter = 1;
+		
+		while($award_counter <= $allAwards){
+			$this->tpl->assign_block_vars('awards_row', array());
+			
+			do{
+				
+				$this->tpl->assign_block_vars('awards_row.award', array(
+					'NAME'		=> 'Name',
+					'DESC'		=> 'Beschreibung',
+				));
+				
+				$award_counter;
+				d($award_counter);
+				
+				$award_counter ++;
+			}while($award_counter <= $this->xAwardperRow);
+			d('#');
+		}
+		
+		
+		// ------------------------------------------------
+/*		$num = count($icons);
+		$fields = (ceil($num/6))*6;
+		$i = 0;
+		
+		if ($id) $strAchIcon = $this->pdh->get('awards_achievements', 'icon', array($id));
+		
+		while($i <= $fields){
+			$this->tpl->assign_block_vars('files_row', array());
+			$this->tpl->assign_var('ICONS', true);
+			$b = $i+6;
+			
+			for($i; $i<$b; $i++){
+			$icon = (isset($icons[$i])) ? $icons[$i] : '';
+			$this->tpl->assign_block_vars('files_row.fields', array(
+					'NAME'		=> pathinfo($icon, PATHINFO_FILENAME).'.'.pathinfo($icon, PATHINFO_EXTENSION),
+					'CHECKED'	=> (isset($strAchIcon) AND pathinfo($icon, PATHINFO_FILENAME).'.'.pathinfo($icon, PATHINFO_EXTENSION) == $strAchIcon) ? ' checked="checked"' : '',
+					'IMAGE'		=> "<img src='".$icon."' alt='".$icon."' width='48px' style='eventicon' />",
+					'CHECKBOX'	=> ($i < $num) ? true : false)
+				);
+			}
+		}*/
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+				
 
 
 		$this->tpl->assign_vars(array(
