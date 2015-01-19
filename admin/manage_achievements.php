@@ -72,10 +72,12 @@ class awards_manage_achievements extends page_generic
 		$fltAchDKP			= $this->in->get('dkp', 0);
 		$intMDKP			= $this->in->getArray('mdkp2event', 'int');
 		
+		$strDefLang			= $this->config->get('default_lang');
+		$strEventName		= unserialize($strAchName);
 		
 		if ($id){ //update Achievement
 			$intEventID = $this->pdh->get('awards_achievements', 'event_id', array($id));
-			if($this->pdh->put('event', 'update_event', array($intEventID, $strAchName, 0, ''))){
+			if($this->pdh->put('event', 'update_event', array($intEventID, $strEventName[$strDefLang], 0, ''))){
 				if($this->pdh->put('multidkp', 'add_multidkp2event', array($intEventID, $intMDKP))){
 					$blnResult = $this->pdh->put('awards_achievements', 'update', array($id, $strAchName, $strAchDescription, $intAchSortID, $blnAchActive, $blnAchSpecial, $intAchPoints, $strAchIcon, $arrAchIconColors, $strAchModule, $fltAchDKP, $intEventID));
 				
@@ -83,7 +85,7 @@ class awards_manage_achievements extends page_generic
 			} else { $blnResult = false; }
 		
 		} else { //add Achievement
-			$intEventID = $this->pdh->put('event', 'add_event', array($strAchName, 0, ''));
+			$intEventID = $this->pdh->put('event', 'add_event', array($strEventName[$strDefLang], 0, ''));
 			if($intEventID > 0){
 				if($this->pdh->put('multidkp', 'add_multidkp2event', array($intEventID, $intMDKP))){
 					$blnResult = $this->pdh->put('awards_achievements', 'add', array($strAchName, $strAchDescription, $blnAchActive, $blnAchSpecial, $intAchPoints, $strAchIcon, $arrAchIconColors, $strAchModule, $fltAchDKP, $intEventID));

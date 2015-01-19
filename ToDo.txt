@@ -1,13 +1,13 @@
 
 - Edit/Add Achievements (erfolge für zuweisung)
 
+	- Prüfe ob die vor auswahl der MultiKonten korrekt stattfindet
     - PDH award_achievments Log Einträge "weitere Infos" mit Spachdaten überarbeiten
 
 
 - Edit/Add Assignments (zuweisung an Char)
 
-    - MEMBER SELECT DROPDOWN fixen, er zählt ab 0 wie array = erster Erfolg nicht nutzbar
-	- Neue Zuweisungs routine schreiben... für jede angelegte Korrekur eine neue Zuweisung (für die aufkommende PDH änderung)
+	- ggf. eine Ansichts verarbeitung mit zugehöriger speicher routine erstellen, like adjustments
 	- PDH erweitern um die Daten der Korrektur auf Liste an zu zeigen
 
 
@@ -25,7 +25,7 @@
 
 
 
-DAS NEUE PDH MODULE: Query = (jenachdem wie wieviel wir brauchen) HINWEIS: im 2ten Query benötigt es die achievements id änderung
+DAS NEUE PDH MODUL: Query = (jenachdem wie wieviel wir brauchen) HINWEIS: im 2ten Query benötigt es die achievements id änderung
 
 SELECT *
 FROM assignments
