@@ -69,44 +69,48 @@ class awards_manage_assignments extends page_generic
 		foreach($this->in->getArray('members','int') as $member) {
 			$arrAdjUserIDs[] = (int) $member;
 		}
-		if(empty($arrAdjUserIDs)){ $missing[] = $this->user->lang('members'); }
-		if(!empty($missing)){ return; }
-		
+		if(empty($arrAdjUserIDs)) $missing[] = $this->user->lang('members');
+		if(!empty($missing)) return;
 		
 		if($blnAchActive == 1 ){
 			if ($intAssID){ //update Assignment
-					$strAdjGK = $this->pdh->get('awards_assignments', 'adj_group_key', array($intAssID));
-					$arrAdjID = $this->pdh->put('adjustment', 'update_adjustment', array($strAdjGK, $fltAchDKP, $strAchName, $arrAdjUserIDs, $intAchEventID, 0, $intAssDate));
+				$blnResult = false;
+				
+				
+/*					$intAdjID = $this->pdh->get('awards_assignments', 'adj_id', array($intAssID));
 					
-					if($arrAdjID[0]){
+					if ($this->pdh->put('awards_assignments', 'update', array($intAssID, $intAssDate, $intAchID, $strAdjID, $strAdjGK)))
+						foreach($arrAdjUserIDs as $add_ntfy)
+							$this->ntfy->add('awards_new_award', 'awards', "Plugin: ".$this->user->lang('awards'), $this->routing->build('User', $add_ntfy, 'u'.$add_ntfy).substr(md5($this->user->lang('aw_customtab_title')), 0, 9), $add_ntfy, 'Glückwunsch du hast ein Erfolg erhalten.', false);
+					
 						$this->pdh->process_hook_queue();
 						$strAdjGK  = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[1]));
-						$strAdjID = serialize($arrAdjID);
 						
 						if ($this->pdh->put('awards_assignments', 'update', array($intAssID, $intAssDate, $intAchID, $strAdjID, $strAdjGK))){
 							foreach($arrAdjUserIDs as $add_ntfy)
 								$this->ntfy->add('awards_new_award', 'awards', "Plugin: ".$this->user->lang('awards'), $this->routing->build('User', $add_ntfy, 'u'.$add_ntfy).substr(md5($this->user->lang('aw_customtab_title')), 0, 9), $add_ntfy, 'Glückwunsch du hast ein Erfolg erhalten.', false);
 							
 							$blnResult = true;
-						
 						} else { $blnResult = false;
 								$this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK));
 								$this->pdh->put('awards_assignments', 'delete', array($intAssID));
 						}
+						
 					} else { $blnResult = false; }
-				
+*/
+			
 			} else { //add Assignment
 				$arrAdjID = $this->pdh->put('adjustment', 'add_adjustment', array($fltAchDKP, $strAchName, $arrAdjUserIDs, $intAchEventID, 0, $intAssDate));
 				
 				if($arrAdjID > 0){
 					$this->pdh->process_hook_queue();
 					$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]));
-					$strAdjID = serialize($arrAdjID);
 					
-					if ($this->pdh->put('awards_assignments', 'add', array($intAssDate, $intAchID, $strAdjID, $strAdjGK))){
-						$blnResult = true;
-					
-					} else { $blnResult = false; $this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK)); }
+					foreach($arrAdjID as $intAdjID){
+						if ($this->pdh->put('awards_assignments', 'add', array($intAssDate, $intAchID, $intAdjID, $strAdjGK))){
+							$blnResult = true;
+						} else { $this->pdh->put('adjustment', 'delete_adjustment', array($intAdjID)); }
+					}
 				} else { $blnResult = false; }
 			}
 		} else { $blnResult = false; }
@@ -161,7 +165,7 @@ class awards_manage_assignments extends page_generic
 		$achievements			= array();
 		$achievement_ids		= $this->pdh->get('awards_achievements', 'id_list');
 		foreach($achievement_ids as $aid)
-			$achievements[]	= $this->user->multilangValue( $this->pdh->get('awards_achievements', 'name', array($aid)) );
+			$achievements[$aid]	= $this->user->multilangValue( $this->pdh->get('awards_achievements', 'name', array($aid)) );
 		
 		//pre_select achievement for select
 		$achievement = $this->pdh->get('awards_assignments', 'achievement_id', array($intAssID));
