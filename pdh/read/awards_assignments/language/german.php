@@ -29,6 +29,7 @@ $module_lang = array(
 	'achievement_id'		=> 'Erfolgs ID',
 	'adj_id'				=> 'Korrektur ID',
 	'adj_group_key'			=> 'Korrektur GK',
+	'm4agk4aid'				=> 'Charaktere',
 );
 
 

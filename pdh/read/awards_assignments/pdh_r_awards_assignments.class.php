@@ -41,11 +41,11 @@ if ( !class_exists( "pdh_r_awards_assignments" ) ) {
 	);
 
 	public $presets = array(
-		'awards_assignments_id'				=> array('id', array('%intAssignmentID%'), array()),
-		'awards_assignments_date' 			=> array('date', array('%intAssignmentID%'), array()),
-		'awards_assignments_achievement_id' => array('achievement_id', array('%intAssignmentID%'), array()),
-		'awards_assignments_adj_id' 		=> array('adj_id', array('%intAssignmentID%'), array()),
-		'awards_assignments_adj_group_key'  => array('adj_group_key', array('%intAssignmentID%'), array()),
+		'awards_assignments_date' 		=> array('date', array('%intAssignmentID%'), array()),
+		'awards_assignments_name'		=> array('name', array('%intAssignmentID%'), array()),
+		'awards_assignments_m4agk4aid'	=> array('m4agk4aid', array('%intAssignmentID%'), array()),
+		'awards_assignments_points'		=> array('points', array('%intAssignmentID%'), array()),
+		'awards_assignments_dkp'		=> array('dkp', array('%intAssignmentID%'), array()),
 	);
 
 	public function reset(){
@@ -162,8 +162,38 @@ if ( !class_exists( "pdh_r_awards_assignments" ) ) {
 			}
 			return false;
 		}
+
+		/**
+		 * Returns all member with the group key of $intAssignmentID
+		 * @param integer $intAssignmentID
+		 * @return array( ID => Member )
+		 */
+		public function get_m4agk4aid($intAssignmentID){
+			$arrAdjIDs = $this->pdh->get('adjustment', 'ids_of_group_key', array($this->get_adj_group_key($intAssignmentID)));
+			return $this->pdh->aget('adjustment', 'member_name', 0, array($arrAdjIDs));
+		}
 		
-		public function get_checkbox_check($intAchievementID){
+		public function get_html_m4agk4aid($intAssignmentID) {
+			$arrAdjIDs = $this->pdh->get('adjustment', 'ids_of_group_key', array($this->get_adj_group_key($intAssignmentID)));
+			return implode(', ', $this->pdh->aget('adjustment', 'html_member_name', 0, array($arrAdjIDs)));
+		}
+
+		public function get_html_name($intAssignmentID){
+			if($this->user->check_auth('a_awards_manage')){
+				return '<a href="'.$this->root_path.'plugins/awards/admin/manage_assignments.php'.$this->SID.'&aid='.$intAssignmentID.'">'.$this->user->multilangValue( $this->pdh->get('awards_achievements', 'name', array( $this->get_achievement_id($intAssignmentID)) ) ).'</a>';
+			}
+			return '<strong>'.$this->user->multilangValue($this->get_name($intAchievementID)).'</strong>';
+		}
+
+		public function get_html_points($intAssignmentID){
+			return $this->pdh->get('awards_achievements', 'html_points', array($this->get_achievement_id($intAssignmentID)));
+		}
+
+		public function get_html_dkp($intAssignmentID){
+			return $this->pdh->get('awards_achievements', 'html_dkp', array($this->get_achievement_id($intAssignmentID)));
+		}
+
+		public function get_checkbox_check($intAssignmentID){
 			return true;
 		}
 

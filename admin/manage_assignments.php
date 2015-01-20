@@ -76,6 +76,8 @@ class awards_manage_assignments extends page_generic
 			if ($intAssID){ //update Assignment
 				$blnResult = false;
 				
+				$intAdjID = $this->pdh->get('awards_assignments', 'adj_id', array($intAssID));
+				$strAdjGK = $this->pdh->get('awards_assignments', 'adj_group_key', array($intAssID));
 				
 /*					$intAdjID = $this->pdh->get('awards_assignments', 'adj_id', array($intAssID));
 					
@@ -202,24 +204,26 @@ class awards_manage_assignments extends page_generic
 	  * display main page
 	  */
 	public function display(){
-		$view_list = $this->pdh->get('awards_assignments', 'id_list', array());
+		$view_list = $this->pdh->aget('awards_assignments', 'adj_group_key', 0, array($this->pdh->get('awards_assignments', 'id_list', array())));
+		$view_list = array_flip($view_list);
+		
 		$hptt_page_settings = array(
 			'name'					=> 'hptt_aw_admin_manage_awards',
 			'table_main_sub'		=> '%intAssignmentID%',
 			'table_subs'			=> array('%intAssignmentID%', '%link_url%', '%link_url_suffix%'),
 			'page_ref'				=> 'manage_assignments.php',
-			'show_numbers'			=> false,
+			'show_numbers'			=> true,
 			'show_select_boxes'		=> true,
 			'selectboxes_checkall'	=> true,
 			'show_detail_twink'		=> false,
-			'table_sort_dir'		=> 'asc',
+			'table_sort_dir'		=> 'desc',
 			'table_sort_col'		=> 0,
 			'table_presets'			=> array(
-				array('name' => 'awards_assignments_id',			 'sort' => false, 'th_add' => '', 'td_add' => ''),
-				array('name' => 'awards_assignments_date',			 'sort' => false, 'th_add' => '', 'td_add' => ''),
-				array('name' => 'awards_assignments_achievement_id', 'sort' => false, 'th_add' => '', 'td_add' => ''),
-				array('name' => 'awards_assignments_adj_id',		 'sort' => false, 'th_add' => '', 'td_add' => ''),
-				array('name' => 'awards_assignments_adj_group_key',  'sort' => false, 'th_add' => '', 'td_add' => ''),
+				array('name' => 'awards_assignments_date',		'sort' => true, 'th_add' => '', 'td_add' => ''),
+				array('name' => 'awards_assignments_name',		'sort' => true, 'th_add' => '', 'td_add' => ''),
+				array('name' => 'awards_assignments_m4agk4aid', 'sort' => true, 'th_add' => '', 'td_add' => ''),
+				array('name' => 'awards_assignments_points',	'sort' => true, 'th_add' => 'width="20"', 'td_add' => 'style="text-align:right"'),
+				array('name' => 'awards_assignments_dkp',		'sort' => true, 'th_add' => 'width="20"', 'td_add' => 'style="text-align:right"'),
 			),
 		);
 		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->root_path.'plugins/awards/admin/manage_assignments.php', '%link_url_suffix%' => ''));
@@ -228,13 +232,13 @@ class awards_manage_assignments extends page_generic
 		
 		//footer
 		$item_count = count($view_list);
-		$strfootertext = sprintf($this->user->lang('listassign_footcount'), $adj_count, $this->user->data['user_alimit']);
+		$strfootertext = sprintf($this->user->lang('listassign_footcount'), $item_count, $this->user->data['user_alimit']);
 		
 		$this->confirm_delete($this->user->lang('aw_confirm_delete_assignment'));
 
 		$this->tpl->assign_vars(array(
 			'ASSIGNMENTS_LIST'	=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_alimit'], $strfootertext),
-			'PAGINATION'		=> generate_pagination('manage_assignments.php'.$sort_suffix, $adj_count, $this->user->data['user_alimit'], $this->in->get('start', 0)),
+			'PAGINATION'		=> generate_pagination('manage_assignments.php'.$sort_suffix, $item_count, $this->user->data['user_alimit'], $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count())
 		);
 	
