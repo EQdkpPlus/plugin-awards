@@ -136,13 +136,14 @@ class awards_manage_assignments extends page_generic
 	  * delete selected assignments
 	  */
 	public function delete(){
-		$arrAdjID = array();
 		if(count($this->in->getArray('selected_ids', 'int')) > 0) {
 			foreach($this->in->getArray('selected_ids','int') as $intAssID) {
 				$strAdjGK = $this->pdh->get('awards_assignments', 'adj_group_key', array($intAssID));
+				$arrAssIDs = $this->pdh->get('awards_assignments', 'ids_of_adj_group_key', array($strAdjGK));
 				
 				if($this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK)))
-					$retu = $this->pdh->put('awards_assignments', 'delete', array($intAssID));
+					foreach($arrAssIDs as $intAssignID)
+						$retu = $this->pdh->put('awards_assignments', 'delete', array($intAssignID));
 			}
 		}
 
@@ -204,6 +205,9 @@ class awards_manage_assignments extends page_generic
 	  * display main page
 	  */
 	public function display(){
+		$test = $this->pdh->get('awards_assignments', 'ids_of_adj_group_key', array('3afebf188c74d62bf1a8c4a8d67de866'));
+		d($test);
+		
 		$view_list = $this->pdh->aget('awards_assignments', 'adj_group_key', 0, array($this->pdh->get('awards_assignments', 'id_list', array())));
 		$view_list = array_flip($view_list);
 		

@@ -2,13 +2,12 @@
 - Edit/Add Achievements (erfolge für zuweisung)
 
 	- Prüfe ob die vor auswahl der MultiKonten korrekt stattfindet
-    - PDH award_achievments Log Einträge "weitere Infos" mit Spachdaten überarbeiten
+    - PDH Log Einträge überarbeiten
 
 
 - Edit/Add Assignments (zuweisung an Char)
 
-	- ggf. eine Ansichts verarbeitung mit zugehöriger speicher routine erstellen, like adjustments
-	- PDH erweitern um die Daten der Korrektur auf Liste an zu zeigen
+	- PDH Log Einträge überarbeiten
 
 
 - Show Achievements (Benutzerspezifisch und Alle Nutzer) -- als pageobject!

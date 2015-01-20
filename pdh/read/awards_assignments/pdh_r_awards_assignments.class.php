@@ -163,6 +163,16 @@ if ( !class_exists( "pdh_r_awards_assignments" ) ) {
 			return false;
 		}
 
+		public function get_ids_of_adj_group_key($group_key){
+			$ids = array();
+			foreach($this->awards_assignments as $id => $det){
+				if($det['adj_group_key'] == $group_key){
+					$ids[] = $id;
+				}
+			}
+			return $ids;
+		}
+
 		/**
 		 * Returns all member with the group key of $intAssignmentID
 		 * @param integer $intAssignmentID
