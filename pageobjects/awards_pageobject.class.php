@@ -63,6 +63,10 @@ public $xAwardperRow = 1; // Gibt an wieviele Erfolge pro Reihe angezeigt werden
 	  */
 	public function display(){
 		
+		//fetch all members
+		$arrAllMemberIDs = $this->pdh->get('member', 'id_list');
+		foreach($arrAllMemberIDs as $intMemberID)
+			$arrAllMembers[] = $this->pdh->get('member', 'name', array($intMemberID));
 		
 		//fetch all Assignments
 		$arrLibAssIDs = $this->pdh->get('awards_library', 'id_list');
@@ -139,6 +143,7 @@ public $xAwardperRow = 1; // Gibt an wieviele Erfolge pro Reihe angezeigt werden
 					$blnAchDKP = 0;
 				}
 				
+				
 				$this->tpl->assign_block_vars('awards_row.award', array(
 					'ID'		=> $intAchID,
 					'TITLE'		=> $strAchName,
@@ -152,7 +157,36 @@ public $xAwardperRow = 1; // Gibt an wieviele Erfolge pro Reihe angezeigt werden
 					'DKP_ACTIVE' => $blnAchDKP,
 				));
 				
-				$award_counter;
+				
+				
+				
+				//fetch and select the Members
+				$arrAssMembers = $this->pdh->get('awards_assignments', 'm4agk4aid', array($arrLibAssIDs[$award_counter]));
+				
+				#d($arrAssMembers);d($arrAllMembers);
+				
+				/*foreach($arrAllMembers as $strAllMember){
+					foreach($arrAssMembers as $strAssMember){
+						if($strAllMember == $strAssMember){
+							$allMember[] = '<strong>'.$strAssMember.'</strong>';
+						} else {
+							$allMember[] = $strAssMember;
+						}
+					}
+				}
+				
+				
+				
+				for($member_count = 0; $c < count($allMember); $member_count++){
+					$this->tpl->assign_block_vars('awards_row.award.members', array(
+						'MEMBER'		=> $allMember[$member_count],
+					));
+				}*/
+				
+				
+				
+				
+				
 				
 				$award_counter ++;
 			}while($award_counter < $this->xAwardperRow);
