@@ -1,0 +1,117 @@
+<!-- IF S_NORMAL_HEADER -->
+<div class="breadcrumb-container">
+	<ul class="breamcrumb">
+		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
+		<li class="current"><a href="">{L_awards}: {L_aw_achievements}</a></li>
+	</ul>
+	<div class="clear"></div>
+</div>
+<!-- ENDIF -->
+
+<script type="text/javascript"></script>
+
+
+
+	<div class="contentHeader">
+		<h1 class="contentTitle">{L_aw_achievements}</h1>
+	</div>
+	<!--Search-->
+	
+	<fieldset class="settings mediumsettings" id="toggleAwardsearch">
+		<legend>{L_search}<span class="toggle_button"></span></legend>
+		<div class="toggle_container">
+			<dl>
+				<dt><label>{L_aw_search_searchby}</label></dt>
+				<dd><input name="search" class="input" type="text" size="40" /></dd>
+			</dl>
+			<dl>
+				<dt><label></label></dt>
+				<dd><label><input name="search_type" class="input" type="radio"value="awardname" checked="checked" />{L_aw_achievement}</label>
+				<label><input name="search_type" class="input" type="radio"value="char" />{L_aw_char}</label>
+				</dd>
+			</dl>
+			
+			<button class="mainoption" type="submit" name="searchbutton"><i class="fa fa-search"></i>{L_search}</button>
+		</div>
+	</fieldset><!-- Search -->
+<br>
+<div id="awards" class="table fullwidth scrollable-x">
+
+				<!-- IF S_ADMIN -->
+				<div class="aw-admin" role="tab"><ul>
+					<li class="adminicon aw_admin"><a href="{EQDKP_ROOT_PATH}plugins/awards/admin/manage_achievements.php{SID}">{L_aw_manage_achievements}</a></li>
+					<li class="adminicon aw_admin"><a href="{EQDKP_ROOT_PATH}plugins/awards/admin/manage_assignments.php{SID}">{L_aw_manage_assignments}</a></li>
+				<!-- ENDIF -->
+				</ul>
+				</div>
+		<div class="clear"></div>
+
+		
+	<table id="awards" class="table fullwitdh aw-list hptt">
+				<tr><td  width="10%"><div class="aw-cat">
+				<ul class="aw-cat">
+					<li><a href="">{L_aw_cat_all}</a></li>
+					<li><a href="">{L_aw_cat_1}</a></li>
+					<li><a href="">{L_aw_cat_2}</a></li>
+					<li><a href="">{L_aw_cat_3}</a></li>
+					<li><a href="">{L_aw_cat_4}</a></li>
+				</ul>
+		</div></td><td>
+		
+		<div class="aw-progress">
+				<!-- IF User_logged_in -->
+				<label><input type="radio" name="aw_show" value="0" onchange="form.submit();" {AW_SHOW_USER} /> {L_aw_show_yours}</label>
+				<!-- ENDIF -->
+				<label><input type="radio" name="aw_show" value="1" onchange="form.submit();" {AW_SHOW_ALL} /> {L_aw_show_all}</label>
+
+				
+				
+				
+				<table width="100%" border="0" cellspacing="1" cellpadding="2" class="scrollable-x">
+					<!-- BEGIN awards_row -->
+					<tr class="colorswitch">
+						<!-- BEGIN award -->
+						<td class="nowrap">
+							
+							{awards_row.award.NAME}
+							{awards_row.award.DESC}
+							
+							{awards_row.award.ICON}
+							<!-- IF awards_row.award.ACTIVE --> <!-- ENDIF -->
+							<!-- IF awards_row.award.SPECIAL --> <!-- ENDIF -->
+							
+							{awards_row.award.AP}
+							{awards_row.award.DKP}
+						</td>
+						<!-- END award -->
+					</tr>
+					<!-- END awards_row -->
+				</table>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+
+				<br>	Inhalt<br>	Inhalt<br>	Inhalt<br><br>	Inhalt<br>	Inhalt<br>	Inhalt<br><br>	Inhalt<br>	Inhalt<br>	Inhalt<br><br>	Inhalt<br>	Inhalt<br>	Inhalt<br>	{aw_PAGE_OUT}
+				
+				<div class="center pagination_wrapper">pageination
+						{aw_PAGINATION}
+				</div></div>
+				</td></tr>
+				<tr></tr>
+	</table>
+	<div class="clear"></div>
+</div>
+
+<div class="clear"></div>
+<div class="contentFooter"></div>
+</div>
+
+

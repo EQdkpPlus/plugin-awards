@@ -20,7 +20,7 @@
 
 /***************************************
  *    TABS  
- ***************************************//
+ ***************************************/
 #awards .aw-tabs,
 #awards .aw-tabs ul {
 	height: 25px;
@@ -33,48 +33,56 @@
 	border-top-left-radius: 7px;
 	border-top-right-radius: 7px;
 	border-bottom-width: 0px;
-	float: left;
+	float: right;
 }
 
-#awards .aw-admin,
-#awards .aw-admin ul {
-	height: 25px;
-	width: 100%;
-	background-color: rgba(255,255,0, 0.1);
-}
-#awards .aw-admin li{
-	padding: 5px 10px;
-	margin: 1px 0.2em 0px 0px;
-	border: 1px solid;
-	border-top-left-radius: 7px;
-	border-top-right-radius: 7px;
-	border-bottom-width: 0px;
-	float: right;
-	background-color: rgba(0,217,108, 0.1);
-}
 #awards .contentBody{
 	margin-top:2em;
-	border: 1px solid;
 }
 
 /***************************************
  *    CONTENT  
- ***************************************//
-#awards  {
-	width: 100%;
-	height: 100%;
-}
-
+ ***************************************/
 .aw-progress {
 background-color: rgba(0,64,255, 0.1);
 }
 
-.aw-cat{
-background-color:rgba(217,0,0, 0.1);
-	left:20px;
+#awards .award {
+	height: 75px;
+	padding: 5px;
+	margin: 1px 0;
+	border: 2px solid #CCC;
 }
-	
-#awards {}
+
+#awards .ac-icon img {
+	width: 50px;
+	border: 2px solid #FFF;
+	border-radius: 4px;
+	box-shadow: 0px 1px 5px #000;
+}
+
+#awards .ac-points {
+	width: 50px;
+}
+
+#awards .ac-main {
+	margin-left: 65px;
+	margin-right: 65px;
+	text-align: center;
+}
+#awards .ac-main .ac-title {
+	margin-bottom: 5px;
+}
+#awards .ac-main .ac-desc {
+	margin-left: 20%;
+	margin-right: 20%;
+}
+#awards .ac-main .ac-date {
+	margin-top: 10px;
+	font-weight: 700;
+	font-size: 12px;
+}
+
 #awards {}
 
 

@@ -83,8 +83,8 @@ if(!class_exists('pdh_w_awards_assignments')) {
 		
 		if ($objQuery){
 			$id = $objQuery->insertId;
-			#$log_action = $this->logs->diff(false, $arrQuery, $this->arrLogLang);
-			#$this->log_insert("action_assignment_added", $log_action, $id, $arrQuery["name"], 1, 'awards');
+			$log_action = $this->logs->diff(false, $arrQuery, $this->arrLogLang);
+			$this->log_insert("action_assignment_added", $log_action, $id, $arrQuery["achievement_id"], 1, 'awards');
 			
 			$this->pdh->enqueue_hook('awards_assignments_update');
 			return $id;
@@ -112,8 +112,8 @@ if(!class_exists('pdh_w_awards_assignments')) {
 		if ($objQuery){
 			$this->pdh->enqueue_hook('awards_assignments_update');
 			
-			#$log_action = $this->logs->diff($arrOldData, $arrQuery, $this->arrLogLang, array('description' => 1), true);
-			#$this->log_insert("action_assignment_updated", $log_action, $id, $arrOldData["name"], 1, 'awards');
+			$log_action = $this->logs->diff($arrOldData, $arrQuery, $this->arrLogLang, array('description' => 1), true);
+			$this->log_insert("action_assignment_updated", $log_action, $id, $arrOldData["achievement_id"], 1, 'awards');
 			
 			return $id;
 		}
