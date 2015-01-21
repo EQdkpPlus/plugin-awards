@@ -95,34 +95,38 @@ $(document).ready(function() {
 			
 			<!-- Hier folgt der nicht erhaltene (ausgegraute) Errfolg -->
 			<div class="unreached">
-				<div class="award ac-{awards_row.award.ID} awToggleTrigger">
+				<!-- BEGIN unreached_row -->
+				<!-- BEGIN award -->
+				<div class="award ac-{unreached_row.award.ID} awToggleTrigger">
 					<div class="ac-icon floatLeft">
-						<img src="{EQDKP_ROOT_PATH}{awards_row.award.ICON_URL}" />
+						<img src="{EQDKP_ROOT_PATH}{unreached_row.award.ICON_URL}" />
 					</div>
 					
 					<div class="ac-points floatRight">
-						<!-- IF awards_row.award.DKP_ACTIVE != "0" -->
-						<span class="ac-points-big" style="<!-- IF awards_row.award.DKP_ACTIVE == "1" -->color: #C03D00;<!-- ELSE -->color: #20C000;<!-- ENDIF -->">
+						<!-- IF unreached_row.award.DKP_ACTIVE != "0" -->
+						<span class="ac-points-big" style="<!-- IF unreached_row.award.DKP_ACTIVE == "1" -->color: #C03D00;<!-- ELSE -->color: #20C000;<!-- ENDIF -->">
 							{awards_row.award.DKP}
-							<span class="ac-points-small">{awards_row.award.AP}</span>
+							<span class="ac-points-small">{unreached_row.award.AP}</span>
 						</span>
 						<!-- ELSE -->
 						<span class="ac-points-big">
-							{awards_row.award.AP}
+							{unreached_row.award.AP}
 						</span>
 						<!-- ENDIF -->
 					</div>
 					
 					<div class="ac-main">
-						<h2 class="ac-title">{ awards_row.award.TITLE }</h2>
-						<p class="ac-desc">{ awards_row.award.DESC }</p>
+						<h2 class="ac-title">{unreached_row.award.TITLE}</h2>
+						<p class="ac-desc">{unreached_row.award.DESC}</p>
 						<p class="ac-date"> </p>
 					</div>
 					
 					<div class="ac-user-list" style="display:none;">
-						Diesen Erfolg hat noch keiner erreciht...
+						Dieser Erfolg wird noch erarbeitet...
 					</div>
 				</div>
+				<!-- END award -->
+				<!-- END unreached_row -->
 			</div>
 			
 			

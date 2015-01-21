@@ -26,7 +26,7 @@
 	height: 25px;
 	width: 100%;
 }
-#awards .aw-tabs li{
+#awards .aw-tabs li {
 	padding: 5px 10px;
 	margin: 1px 0.2em 0px 0px;
 	border: 1px solid;
@@ -34,10 +34,11 @@
 	border-top-right-radius: 7px;
 	border-bottom-width: 0px;
 	float: right;
+	color: #000;
+	box-shadow: 0px 0px 1px #000, 0px 1px 15px rgba(0, 0, 0, 0.3) inset;
 }
-
-#awards .contentBody{
-	margin-top:2em;
+#awards .aw-tabs li:hover {
+	box-shadow: 0px 0px 3px #000, 0px 1px 15px rgba(162, 143, 0, 0.5) inset;
 }
 
 /***************************************

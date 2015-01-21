@@ -40,22 +40,8 @@ class awards_pageobject extends pageobject
 		parent::__construct(false, $handler);
 		$this->process();
 	}
-	
-/*	// Dont use it now, we use a hardcoded variable while the development and testing
-	private function set_cookie(){
-		//dont set cookies if we dont have a cookie-name or cookie-path
-		$cname = register('config')->get('cookie_name');
-		$cpath = register('config')->get('cookie_path');
-		if(empty($cname) || empty($cpath)) return;
-		setcookie( $cname . '_awards', 1, 604800, $cpath, register('config')->get('cookie_domain'));
-	}
-*/
-
-
 
 public $xAwardperRow = 1; // Gibt an wieviele Erfolge pro Reihe angezeigt werden sollen
-
-
 
 	/**
 	  * Display
@@ -80,20 +66,6 @@ public $xAwardperRow = 1; // Gibt an wieviele Erfolge pro Reihe angezeigt werden
 		
 		//rewrite array to read the achievement table later
 		$arrLibAssIDs = array_keys($arrLibAchIDs);
-		
-		
-		/* // Das Läuft ...
-		foreach($arrLibAchIDs as $intLibAchID){
-			#$this->tpl->assign_block_vars('awards_row', array());
-			$this->tpl->assign_var('ACTIVE', true);
-			
-			$this->tpl->assign_block_vars('awards', array(
-				'NAME'		=> 'Name',
-				'DESC'		=> 'Beschreibung',
-			));
-		}
-		*/
-		
 		
 		//prüfe wieviele erfolge existieren /zähle sie
 		//gehe in schleife 1 --"für die reihen"
@@ -157,50 +129,66 @@ public $xAwardperRow = 1; // Gibt an wieviele Erfolge pro Reihe angezeigt werden
 					'DKP_ACTIVE' => $blnAchDKP,
 				));
 				
-				
-				
-				
-				//fetch and select the Members
-				$arrAssMembers = $this->pdh->get('awards_assignments', 'm4agk4aid', array($arrLibAssIDs[$award_counter]));
-				
-				#d($arrAssMembers);d($arrAllMembers);
-				
-				/*foreach($arrAllMembers as $strAllMember){
-					foreach($arrAssMembers as $strAssMember){
-						if($strAllMember == $strAssMember){
-							$allMember[] = '<strong>'.$strAssMember.'</strong>';
-						} else {
-							$allMember[] = $strAssMember;
-						}
-					}
-				}
-				
-				
-				
-				for($member_count = 0; $c < count($allMember); $member_count++){
-					$this->tpl->assign_block_vars('awards_row.award.members', array(
-						'MEMBER'		=> $allMember[$member_count],
-					));
-				}*/
-				
-				
-				
-				
-				
-				
 				$award_counter ++;
 			}while($award_counter < $this->xAwardperRow);
 		}
 		
 		
+		// Generate the 'unreached' list
+		$arrAllAchIDs = $this->pdh->get('awards_achievements', 'id_list');
+		$arrAchIDs = array_diff($arrAllAchIDs, $arrLibAchIDs);
+		
+		$allUnreached = count($arrAchIDs);
+		$unreached_counter = 1;
+		
+		while($unreached_counter <= $allUnreached){
+			$this->tpl->assign_block_vars('unreached_row', array());
+			while($unreached_counter <= $this->xAwardperRow){
+				
+				$strAchName = $this->user->multilangValue( $this->pdh->get('awards_achievements', 'name', array($arrAchIDs[$unreached_counter])) );
+				$strAchDesc = $this->user->multilangValue( $this->pdh->get('awards_achievements', 'description', array($arrAchIDs[$unreached_counter])) );
+				$strAchIcon = $this->pdh->get('awards_achievements', 'icon', array($arrAchIDs[$unreached_counter]));
+				$icon_folder = $this->pfh->FolderPath('images', 'awards');
+				if( file_exists($icon_folder.$strAchIcon) ){
+					$strAchIcon = $icon_folder.$strAchIcon;
+				} else {
+					$strAchIcon = 'plugins/awards/images/'.$strAchIcon;
+				}
+				
+				$blnAchActive  = $this->pdh->get('awards_achievements', 'active', array($arrAchIDs[$unreached_counter]));
+				$blnAchSpecial = $this->pdh->get('awards_achievements', 'special', array($arrAchIDs[$unreached_counter]));
+				$intAchPoints  = $this->pdh->get('awards_achievements', 'points', array($arrAchIDs[$unreached_counter]));
+				$intAchDKP     = $this->pdh->get('awards_achievements', 'dkp', array($arrAchIDs[$unreached_counter]));
+				if($intAchDKP < 0){
+					$blnAchDKP = 1;
+				} elseif($intAchDKP > 0){
+					$blnAchDKP = 2;
+				} else {
+					$blnAchDKP = 0;
+				}
+				
+				
+				$this->tpl->assign_block_vars('unreached_row.award', array(
+					'ID'		=> $arrAchIDs[$unreached_counter],
+					'TITLE'		=> $strAchName,
+					'DESC'		=> $strAchDesc,
+					'ICON_URL'	=> $strAchIcon,
+					'ACTIVE'	=> $blnAchActive,
+					'SPECIAL'	=> $blnAchSpecial,
+					'AP'		=> $intAchPoints,
+					'DKP'		=> $intAchDKP,
+					'DKP_ACTIVE' => $blnAchDKP,
+				));
+				
+			$unreached_counter ++;
+			}
+		}
 		
 		
 		$this->tpl->assign_vars(array(
 			'PROGRESS'			=> '',
-			'AW_TITLE'			=> '',
-			'AW_COUNT'			=> '',
 		));
-
+		
 		// -- EQDKP ---------------------------------------------------------------
 		$this->core->set_vars(array(
 			'page_title'    => $this->user->lang('awards'),
