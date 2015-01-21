@@ -8,7 +8,19 @@
 </div>
 <!-- ENDIF -->
 
-<script type="text/javascript"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('.awToggleTrigger').on('click', function(event){
+		if ($(this).hasClass('member-view')){
+			$(this).children('.ac-user-list').css('display','none');
+			$(this).removeClass('member-view');
+		} else {
+			$(this).addClass('member-view');
+			$(this).children('.ac-user-list').css('display','inline-block');
+		}
+	});
+});
+</script>
 
 <div id="awards">
 	<div class="contentHeader">
@@ -44,18 +56,22 @@
 			<div class="reached">
 				<!-- BEGIN awards_row -->
 				<!-- BEGIN award -->
-				<div class="award ac-{awards_row.award.ID}">
-					
-					
-					
-					
+				<div class="award ac-{awards_row.award.ID} awToggleTrigger">
 					<div class="ac-icon floatLeft">
 						<img src="{EQDKP_ROOT_PATH}{awards_row.award.ICON_URL}" />
 					</div>
 					
 					<div class="ac-points floatRight">
-						<span class="ac-points-small">{awards_row.award.AP}</span> tause wenn dkp 0
-						<span class="ac-points-big">{awards_row.award.DKP}</span>
+						<!-- IF awards_row.award.DKP_ACTIVE != "0" -->
+						<span class="ac-points-big" style="<!-- IF awards_row.award.DKP_ACTIVE == "1" -->color: #C03D00;<!-- ELSE -->color: #20C000;<!-- ENDIF -->">
+							{awards_row.award.DKP}
+							<span class="ac-points-small">{awards_row.award.AP}</span>
+						</span>
+						<!-- ELSE -->
+						<span class="ac-points-big">
+							{awards_row.award.AP}
+						</span>
+						<!-- ENDIF -->
 					</div>
 					
 					<div class="ac-main">
@@ -64,13 +80,9 @@
 						<p class="ac-date">{awards_row.award.DATE}</p>
 					</div>
 					
-					
-					
-					
-				</div>
-				
-				<div class="ac-{ACHIEVEMENT.ID} ac-user-list" style="display:none;">
-					TABELLE ALLER NUTZER (grün markierte haben den erfolg)<br />... eigentlich ausgeblendet / jQuery macht alles ...
+					<div class="ac-user-list" style="display:none;">
+						TABELLE ALLER NUTZER (grün markierte haben den erfolg)<br />... eigentlich ausgeblendet / jQuery macht alles ...
+					</div>
 				</div>
 				<!-- END award -->
 				<!-- END awards_row -->
@@ -80,23 +92,37 @@
 			
 			<!-- Hier folgt der nicht erhaltene (ausgegraute) Errfolg -->
 			<div class="unreached">
-				<div class="ac-{ACHIEVEMENT.ID}">
-					<div class="ac-main">
-						<h3 class="ac-title">{ACHIEVEMENT.TITLE}</h3>
-						<span class="ac-description">{ACHIEVEMENT.DESCRIPTION}</span>
-						<span class="ac-date">{ACHIEVEMENT.DATE}</span>
+				<div class="award ac-{awards_row.award.ID} awToggleTrigger">
+					<div class="ac-icon floatLeft">
+						<img src="{EQDKP_ROOT_PATH}{awards_row.award.ICON_URL}" />
 					</div>
-					<div class="ac-icon floatLeft"></div>
-						<img src="{ACHIEVEMENT.IMG_URL}" />
+					
 					<div class="ac-points floatRight">
-						<span class="ac-points-small">{ACHIEVEMENT.POINTS}</span> tause wenn dkp 0
-						<span class="ac-points-big">{ACHIEVEMENT.DKP}</span>
+						<!-- IF awards_row.award.DKP_ACTIVE != "0" -->
+						<span class="ac-points-big" style="<!-- IF awards_row.award.DKP_ACTIVE == "1" -->color: #C03D00;<!-- ELSE -->color: #20C000;<!-- ENDIF -->">
+							{awards_row.award.DKP}
+							<span class="ac-points-small">{awards_row.award.AP}</span>
+						</span>
+						<!-- ELSE -->
+						<span class="ac-points-big">
+							{awards_row.award.AP}
+						</span>
+						<!-- ENDIF -->
 					</div>
-				</div>
-				<div class="ac-{ACHIEVEMENT.ID} ac-user-list" style="display:show;">
-					TABELLE ALLER NUTZER (grün markierte haben den erfolg)<br />... eigentlich ausgeblendet / jQuery macht alles ...
+					
+					<div class="ac-main">
+						<h2 class="ac-title">{ awards_row.award.TITLE }</h2>
+						<p class="ac-desc">{ awards_row.award.DESC }</p>
+						<p class="ac-date">{awards_row.award.DATE}</p>
+					</div>
+					
+					<div class="ac-user-list" style="display:none;">
+						TABELLE ALLER NUTZER (grün markierte haben den erfolg)<br />... eigentlich ausgeblendet / jQuery macht alles ...
+					</div>
 				</div>
 			</div>
+			
+			
 		</div>
 	</div>
 	

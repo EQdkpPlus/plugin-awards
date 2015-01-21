@@ -73,10 +73,9 @@ public $xAwardperRow = 1; // Gibt an wieviele Erfolge pro Reihe angezeigt werden
 		
 		//merge Awards
 		$arrLibAchIDs = array_unique($arrLibAchIDs);
-		#$arrLibAchIDs = array_values($arrLibAchIDs);
-		$arrLibAssIDs = array_keys($arrLibAchIDs);
-		#d($arrLibAssIDs);
 		
+		//rewrite array to read the achievement table later
+		$arrLibAssIDs = array_keys($arrLibAchIDs);
 		
 		
 		/* // Das Läuft ...
@@ -130,8 +129,15 @@ public $xAwardperRow = 1; // Gibt an wieviele Erfolge pro Reihe angezeigt werden
 				
 				$blnAchActive  = $this->pdh->get('awards_achievements', 'active', array($intAchID));
 				$blnAchSpecial = $this->pdh->get('awards_achievements', 'special', array($intAchID));
-				$strAchPoints  = $this->pdh->get('awards_achievements', 'points', array($intAchID));
-				$strAchDKP     = $this->pdh->get('awards_achievements', 'dkp', array($intAchID));
+				$intAchPoints  = $this->pdh->get('awards_achievements', 'points', array($intAchID));
+				$intAchDKP     = $this->pdh->get('awards_achievements', 'dkp', array($intAchID));
+				if($intAchDKP < 0){
+					$blnAchDKP = 1;
+				} elseif($intAchDKP > 0){
+					$blnAchDKP = 2;
+				} else {
+					$blnAchDKP = 0;
+				}
 				
 				$this->tpl->assign_block_vars('awards_row.award', array(
 					'ID'		=> $intAchID,
@@ -141,8 +147,9 @@ public $xAwardperRow = 1; // Gibt an wieviele Erfolge pro Reihe angezeigt werden
 					'ICON_URL'	=> $strAchIcon,
 					'ACTIVE'	=> $blnAchActive,
 					'SPECIAL'	=> $blnAchSpecial,
-					'AP'		=> $strAchPoints,
-					'DKP'		=> $strAchDKP,
+					'AP'		=> $intAchPoints,
+					'DKP'		=> $intAchDKP,
+					'DKP_ACTIVE' => $blnAchDKP,
 				));
 				
 				$award_counter;
@@ -152,7 +159,10 @@ public $xAwardperRow = 1; // Gibt an wieviele Erfolge pro Reihe angezeigt werden
 		}
 		
 		
+		
+		
 		$this->tpl->assign_vars(array(
+			'PROGRESS'			=> '',
 			'AW_TITLE'			=> '',
 			'AW_COUNT'			=> '',
 		));

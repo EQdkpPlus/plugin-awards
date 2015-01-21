@@ -48,10 +48,33 @@ background-color: rgba(0,64,255, 0.1);
 }
 
 #awards .award {
-	height: 75px;
+	/*height: 75px;*/
+	height: auto;
 	padding: 5px;
 	margin: 1px 0;
 	border: 2px solid #CCC;
+	cursor: pointer;
+	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5) inset;
+}
+#awards .award:hover {
+	border-color: rgba(162, 143, 0, 0.5);
+	box-shadow: none;
+}
+
+#awards .unreached .award {
+	height: auto;
+	border: 2px solid #777;
+	box-shadow: 0px 30px 60px rgba(0, 0, 0, 0.8) inset;
+}
+#awards .unreached .award:hover {
+	border-color: #CCC;
+	box-shadow: 0px 0px 60px rgba(0, 0, 0, 0.5) inset;
+}
+#awards .unreached .award * {
+	opacity: 0.5;
+}
+#awards .unreached .award:hover * {
+	opacity: 0.8;
 }
 
 #awards .ac-icon img {
@@ -60,9 +83,27 @@ background-color: rgba(0,64,255, 0.1);
 	border-radius: 4px;
 	box-shadow: 0px 1px 5px #000;
 }
+#awards .unreached .ac-icon img {
+	opacity: 0.5;
+}
 
 #awards .ac-points {
 	width: 50px;
+}
+#awards .ac-points-big {
+	font-size: 2em;
+	font-weight: 400;
+	position: relative;
+	top: 20px;
+	z-index: 1;
+}
+#awards .ac-points-small {
+	position: absolute;
+	top: -18px;
+	left: 30px;
+	z-index: 2;
+	font-size: 18px;
+	color: #000;
 }
 
 #awards .ac-main {
