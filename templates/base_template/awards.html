@@ -82,9 +82,13 @@ $(document).ready(function() {
 					
 					<div class="ac-user-list" style="display:none;">
 						<!-- BEGIN members -->
-						{awards_row.award.members.MEMBER}
+							<!-- IF awards_row.award.members.MEMBER_REACHED -->
+							<div class="ac-member-reached">{awards_row.award.members.MEMBER_REACHED}</div>
+							<!-- ENDIF -->
+							<!-- IF awards_row.award.members.MEMBER_UNREACHED -->
+							<div class="ac-member-unreached">{awards_row.award.members.MEMBER_UNREACHED}</div>
+							<!-- ENDIF -->
 						<!-- END members -->
-						Sollte evntl. über Member IDs ausgewertet und diese dann über PDH "member" dekoriert werden.
 					</div>
 				</div>
 				<!-- END award -->

@@ -51,8 +51,7 @@ public $xAwardperRow = 1; // Gibt an wieviele Erfolge pro Reihe angezeigt werden
 		
 		//fetch all members
 		$arrAllMemberIDs = $this->pdh->get('member', 'id_list');
-		foreach($arrAllMemberIDs as $intMemberID)
-			$arrAllMembers[] = $this->pdh->get('member', 'name', array($intMemberID));
+		
 		
 		//fetch all Assignments
 		$arrLibAssIDs = $this->pdh->get('awards_library', 'id_list');
@@ -129,6 +128,36 @@ public $xAwardperRow = 1; // Gibt an wieviele Erfolge pro Reihe angezeigt werden
 					'DKP_ACTIVE' => $blnAchDKP,
 				));
 				
+				// ----------------------------------------
+				// Begin of Member List
+				$arrAdjMembers = array();
+				$strAdjGK = $this->pdh->get('awards_library', 'adj_group_key', array($arrLibAssIDs[$award_counter]));
+				$arrAdjIDs = $this->pdh->get('adjustment', 'ids_of_group_key', array($strAdjGK));
+				foreach($arrAdjIDs as $intAdjID){
+					$arrAdjMembers[] = $this->pdh->get('adjustment', 'member', array($intAdjID));
+				}
+				
+				// parse all members who un/reached the award
+				$arrAllUnreachedMember = array_diff($arrAllMemberIDs, $arrAdjMembers);
+				
+				foreach($arrAdjMembers as $intAdjMember){
+					$arrAllReached[] = $this->pdh->get('member', 'memberlink_decorated', array($intAdjMember));
+				}
+				foreach($arrAllUnreachedMember as $intUnreached){
+					$arrAllUnreached[] = $this->pdh->get('member', 'name_decorated', array($intUnreached));
+				}
+				
+				
+				for($member_count = 0; $member_count < count($arrAllMemberIDs); $member_count++){
+					$this->tpl->assign_block_vars('awards_row.award.members', array(
+						'MEMBER_REACHED'		=> $arrAllReached[$member_count],
+						'MEMBER_UNREACHED'		=> $arrAllUnreached[$member_count],
+					));
+				}
+				
+				unset($arrAllUnreached);
+				unset($arrAllReached);
+				// ----------------------------------------
 				$award_counter ++;
 			}while($award_counter < $this->xAwardperRow);
 		}
