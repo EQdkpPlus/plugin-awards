@@ -101,10 +101,10 @@ class awards extends plugin_generic
 		
 		$this->add_pdh_write_module('awards_achievements');
 		$this->add_pdh_write_module('awards_assignments');
-		
+
 		// -- Routing -----------------------------------------
 		$this->routing->addRoute('Awards', 'awards', 'plugins/awards/pageobjects');
-		
+
 		// -- Hooks -------------------------------------------
 		$this->add_hook('portal', 'awards_portal_hook', 'portal');
   		$this->add_hook('userprofile_customtabs', 'awards_userprofile_customtabs_hook', 'userprofile_customtabs');
@@ -135,7 +135,23 @@ class awards extends plugin_generic
 	  * Define Post Installation
 	  */
 	public function post_install(){
+		// install ntfy and cron
 		$this->ntfy->addNotificationType('awards_new_award', 'notification_awards_new_award', 'awards', 0, 1, 0, NULL, 3, 'fa-gift');
+		
+		$this->timekeeper->add_cron(
+			'awards',
+			array(
+				'extern'		=> true,
+				'ajay'			=> false,
+				'delay'			=> false,
+				'repeat'		=> true,
+				'repeat_type'	=> 'daily',
+				'active'		=> true,
+				'path'			=> '/plugins/awards/cronjob/',
+				'editable'		=> true,
+				'description'	=> 'Plugin: Awards'
+			)
+		);
 	}
 
 
@@ -157,6 +173,7 @@ class awards extends plugin_generic
 		}
 		
 		$this->ntfy->deleteNotificationType(array('awards_new_award'));
+		$this->timekeeper->del_cron('awards');
 	}
 	
 
