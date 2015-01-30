@@ -142,7 +142,7 @@ class awards extends plugin_generic
 			'awards',
 			array(
 				'extern'		=> true,
-				'ajay'			=> false,
+				'ajax'			=> false,
 				'delay'			=> false,
 				'repeat'		=> true,
 				'repeat_type'	=> 'daily',

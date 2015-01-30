@@ -205,9 +205,6 @@ class awards_manage_assignments extends page_generic
 	  * display main page
 	  */
 	public function display(){
-		$test = $this->pdh->get('awards_assignments', 'ids_of_adj_group_key', array('3afebf188c74d62bf1a8c4a8d67de866'));
-		d($test);
-		
 		$view_list = $this->pdh->aget('awards_assignments', 'adj_group_key', 0, array($this->pdh->get('awards_assignments', 'id_list', array())));
 		$view_list = array_flip($view_list);
 		
