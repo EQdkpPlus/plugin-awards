@@ -42,39 +42,36 @@ $lang = array(
   'aw_upload_icon'				=> 'Icon hinzufügen',
   'aw_special'					=> 'Spezial',
   'aw_auto_assign'				=> 'Automatisch zuweisen',
+  'aw_value'					=> 'AP Wert',
   'aw_dkp_value'				=> 'DKP Wert',
   'aw_multidkp'					=> 'Multidkp-Konten',
   'aw_sortation'				=> 'Sortierung',
   'aw_points'					=> 'Punkte',
+  'aw_dkp'						=> 'DKP',
   'aw_icon_colors'				=> 'Icon Farben',
   'aw_module'					=> 'Modul',
-  'aw_dkp'						=> 'DKP',
   'aw_event_id'					=> 'Ereignis ID',
+  'aw_adj_id'					=> 'Korrektur ID',
+  'aw_adj_gk'					=> 'Korrektur Group Key',
   'aw_achievement'				=> 'Erfolg',
   'aw_achievements'				=> 'Erfolge',
-  'aw_search_searchby'			=> 'Suche nach',
-  'aw_char'						=> 'Charakter',
-  'aw_cat_all'					=> 'Alle Erfolge',
   'aw_show_all'					=> 'Zeige alle Erfolge',
-  'aw_cat_1'					=> 'Allgemein',
-  'aw_cat_2'					=> 'Aktivität',
-  'aw_cat_3'					=> 'Kategorie 3',
-  'aw_cat_4'					=> 'Kategorie 4',
-  'aw_show_yours'				=> 'Zeige deine Erfolge',
+  
+  'aw_name_help'				=> 'Name / Titel des Erfolgs',
+  'aw_desc_help'				=> 'Beschreibung des Erfolgs',
+  'aw_active_help'				=> 'Bestimmt, ob dieser Erfolg zugewiesen werden darf.',
+  'aw_special_help'				=> 'Besondere Erfolge sind erst sichtbar wenn diese errungen wurden.',
+  'aw_auto_assign_help'			=> '"Plugins: Awards" Cronjob muss aktiviert sein!<br />
+									Beispiel: [Ab X Raids] 100',
   
   'aw_customtab_title'			=> 'Meine Erfolge',
   'aw_listachiev_footcount'		=> '... %1\$d Erfolg(e) gefunden / %2\$d pro Seite',
   'aw_listassign_footcount'		=> '... %1\$d Zuweisung(en) gefunden / %2\$d pro Seite',
   
   
-  'aw_adj_id'					=> 'Korrektur ID',
-  'aw_adj_gk'					=> 'Korrektur Group Key',
-  
-  
   // Cronjob Modules
   'aw_cronmodule_disabled'		=> 'Kein Modul ausgewählt',
-  'aw_cronmodule_raids_25'		=> 'ab 25 Raids',
-  'aw_cronmodule_raids_100'		=> 'ab 100 Raids',
+  'aw_cronmodule_raids'			=> 'ab X Raids',
   
   
   // System Messages

@@ -66,20 +66,27 @@ class awards_manage_achievements extends page_generic
 		$blnAchActive		= $this->in->get('active_state', 1);
 		$blnAchSpecial		= $this->in->get('special_state', 1);
 		$intAchPoints		= $this->in->get('points', 10);
+		$fltAchDKP			= $this->in->get('dkp', 0);
+		$intMDKP			= $this->in->getArray('mdkp2event', 'int');
 		$strAchIcon			= $this->in->get('icon', 'default.svg');
 		$arrAchIconColors	= array();
 		$strAchModule		= $this->in->get('module');
-		$fltAchDKP			= $this->in->get('dkp', 0);
-		$intMDKP			= $this->in->getArray('mdkp2event', 'int');
+		$strAchModuleSet	= $this->in->get('module_set');
 		
 		$strDefLang			= $this->config->get('default_lang');
 		$strEventName		= unserialize($strAchName);
+		
+		// parse module settings
+		if(!empty($strAchModuleSet)){
+			$strAchModuleSet = str_replace(' ', '', $strAchModuleSet);
+			$strAchModuleSet = serialize( explode(',',$strAchModuleSet) );
+		}
 		
 		if ($id){ //update Achievement
 			$intEventID = $this->pdh->get('awards_achievements', 'event_id', array($id));
 			if($this->pdh->put('event', 'update_event', array($intEventID, $strEventName[$strDefLang], 0, ''))){
 				if($this->pdh->put('multidkp', 'add_multidkp2event', array($intEventID, $intMDKP))){
-					$blnResult = $this->pdh->put('awards_achievements', 'update', array($id, $strAchName, $strAchDescription, $intAchSortID, $blnAchActive, $blnAchSpecial, $intAchPoints, $strAchIcon, $arrAchIconColors, $strAchModule, $fltAchDKP, $intEventID));
+					$blnResult = $this->pdh->put('awards_achievements', 'update', array($id, $strAchName, $strAchDescription, $intAchSortID, $blnAchActive, $blnAchSpecial, $intAchPoints, $fltAchDKP, $strAchIcon, $arrAchIconColors, $strAchModule, $strAchModuleSet,$intEventID));
 				
 				} else { $blnResult = false; }
 			} else { $blnResult = false; }
@@ -88,7 +95,7 @@ class awards_manage_achievements extends page_generic
 			$intEventID = $this->pdh->put('event', 'add_event', array($strEventName[$strDefLang], 0, ''));
 			if($intEventID > 0){
 				if($this->pdh->put('multidkp', 'add_multidkp2event', array($intEventID, $intMDKP))){
-					$blnResult = $this->pdh->put('awards_achievements', 'add', array($strAchName, $strAchDescription, $blnAchActive, $blnAchSpecial, $intAchPoints, $strAchIcon, $arrAchIconColors, $strAchModule, $fltAchDKP, $intEventID));
+					$blnResult = $this->pdh->put('awards_achievements', 'add', array($strAchName, $strAchDescription, $blnAchActive, $blnAchSpecial, $intAchPoints, $fltAchDKP, $strAchIcon, $arrAchIconColors, $strAchModule, $strAchModuleSet, $intEventID));
 				
 				} else { $blnResult = false; $this->pdh->put('event', 'delete_event', array($intEventID)); }
 			} else { $blnResult = false; }
@@ -148,6 +155,11 @@ class awards_manage_achievements extends page_generic
 		}
 		$arrModuleDropdown = $modules;
 		
+		// parse module settings
+		$strModuleSet = $this->pdh->get('awards_achievements', 'module_set', array($id));
+		if(!empty($strModuleSet))
+			$strModuleSet = implode(',', unserialize($strModuleSet));
+		
 		
 		if ($id){
 			$this->tpl->assign_vars(array(
@@ -159,6 +171,7 @@ class awards_manage_achievements extends page_generic
 				'SPINNER_DKP'		=> new hspinner('dkp', array('value' =>  ($this->pdh->get('awards_achievements', 'dkp', array($id))), 'max'  => 99999, 'min'  => -99999, 'step' => 5)),
 				'DD_MODULE'			=> new hdropdown('module', array('options' => $arrModuleDropdown, 'value' => $this->pdh->get('awards_achievements', 'module', array($id)))),
 				'MDKP2EVENT'		=> $this->jquery->Multiselect('mdkp2event', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), $this->pdh->get('event', 'multidkppools', array($this->pdh->get('awards_achievements', 'special', array($id))))),
+				'MODULE_SET'		=> (!empty($strModuleSet))? $strModuleSet : '',
 			));
 		} else {
 			$this->tpl->assign_vars(array(
@@ -170,9 +183,10 @@ class awards_manage_achievements extends page_generic
 				'SPINNER_DKP'		=> new hspinner('dkp', array('value' =>  0, 'max'  => 99999, 'min'  => -99999, 'step' => 5)),
 				'DD_MODULE'			=> new hdropdown('module', array('options' => $arrModuleDropdown, 'value' => NULL)),
 				'MDKP2EVENT'		=> $this->jquery->Multiselect('mdkp2event', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), 0),
+				'MODULE_SET'		=> '',
 			));
 		}
-
+		
 		// Get Icons
 		$icon_folder = $this->root_path.'plugins/awards/images';
 		$files = scandir($icon_folder);
@@ -223,7 +237,7 @@ class awards_manage_achievements extends page_generic
 		
 		// -- EQDKP ---------------------------------------------------------------
 		$this->core->set_vars(array(
-			'page_title'		=> (($id) ? $this->user->lang('aw_add_achievement').': '.$this->pdh->get('awards_achievements', 'name', array($id)) : $this->user->lang('aw_add_achievement')),
+			'page_title'		=> (($id) ? $this->user->lang('aw_add_achievement').': '.$this->user->multilangValue($this->pdh->get('awards_achievements', 'name', array($id))) : $this->user->lang('aw_add_achievement')),
 			'template_path'		=> $this->pm->get_data('awards', 'template_path'),
 			'template_file'		=> 'admin/manage_achievements_edit.html',
 			'display'			=> true)
@@ -265,6 +279,7 @@ class awards_manage_achievements extends page_generic
 				array('name' => 'awards_achievements_points',  'sort' => true, 'th_add' => 'width="20"', 'td_add' => 'style="text-align:right"'),
 				array('name' => 'awards_achievements_dkp',  'sort' => true, 'th_add' => 'width="20"', 'td_add' => 'style="text-align:right"'),
 				array('name' => 'awards_achievements_module',  'sort' => true, 'th_add' => 'width="20"', 'td_add' => ''),
+				array('name' => 'awards_achievements_module_set',  'sort' => false, 'th_add' => 'width="20"', 'td_add' => ''),
 			),
 		);
 		$hptt = $this->get_hptt($hptt_page_settings, $view_list, $view_list, array('%link_url%' => $this->root_path.'plugins/awards/admin/manage_achievements.php', '%link_url_suffix%' => ''));

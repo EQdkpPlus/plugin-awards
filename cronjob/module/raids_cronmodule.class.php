@@ -26,15 +26,17 @@ if ( !defined('EQDKP_INC') ){
 /*+----------------------------------------------------------------------------
   | awards_cronmodule
   +--------------------------------------------------------------------------*/
-if (!class_exists("cron_module_1_cronmodule")) {
-	class cron_module_1_cronmodule extends gen_class {
-		public function __construct(){  }
+if (!class_exists("raids_cronmodule")) {
+	class raids_cronmodule extends gen_class {
+		public function __construct($intAchID){  }
 
 
-// needed raids for an assignment
-public $requiredRaids = 25;
+		public $requiredRaids = 25;	
+
 
 		public function run($intAchID){
+			$this->get_data($intAchID);
+			
 			$member_ids = $this->pdh->get('member', 'id_list');
 			foreach($member_ids as $intMemberID){
 				$arrRaidsOfMember = $this->pdh->get('raid', 'raidids4memberid', array($intMemberID));
@@ -45,7 +47,13 @@ public $requiredRaids = 25;
 			
 			if($arrMemberIDs) return $arrMemberIDs;
 			return false;
-		}	
+		}
+
+		public function get_data($intAchID){
+			$strModuleData = unserialize( $this->pdh->get('awards_achievements', 'module_set', array($intAchID)) );
+			if(!empty($strModuleData))
+				$this->requiredRaids = $strModuleData['0'];
+		}
 	}
 }
 ?>

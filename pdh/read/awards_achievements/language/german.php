@@ -29,8 +29,9 @@ $module_lang = array(
 	'name'					=> 'Name',
 	'description'			=> 'Beschreibung',
 	'points'				=> 'AP',
-	'module'				=> 'Modul',
 	'dkp'					=> 'DKP',
+	'module'				=> 'Modul',
+	'module_set'			=> '',
 );
 
 

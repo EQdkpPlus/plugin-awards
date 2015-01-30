@@ -37,10 +37,11 @@ if(!class_exists('pdh_w_awards_achievements')) {
 		'active'			=> "{L_ACTIVE}",
 		'special'			=> "{L_AW_SPECIAL}",
 		'points'			=> "{L_AW_POINTS}",
+		'dkp' 				=> "{L_AW_DKP}",
 		'icon'				=> "{L_ICON}",
 		'icon_colors'		=> "{L_AW_ICON_COLORS}",
 		'module'			=> "{L_AW_MODULE}",
-		'dkp' 				=> "{L_AW_DKP}",
+		'module_set'		=> "{L_AW_MODULE_SETTINGS}",
 		'event_id' 			=> "{L_AW_EVENT_ID}",
 	);
 
@@ -78,7 +79,7 @@ if(!class_exists('pdh_w_awards_achievements')) {
 	  * Add a Achievement
 	  */
 	public function add($strName, $strDescription, $blnActive, $blnSpecial,
-						$intPoints, $strIcon, $arrIconColors, $strModule, $fltDKP, $intEventID){
+						$intPoints, $fltDKP, $strIcon, $arrIconColors, $strModule, $strModuleSet,$intEventID){
 		$arrQuery  = array(
 			'name' 				=> $strName,
 			'description'		=> $strDescription,
@@ -86,10 +87,11 @@ if(!class_exists('pdh_w_awards_achievements')) {
 			'active'			=> $blnActive,
 			'special'			=> $blnSpecial,
 			'points'			=> $intPoints,
+			'dkp'				=> $fltDKP,
 			'icon' 				=> $strIcon,
 			'icon_colors'		=> serialize($arrIconColors),
 			'module' 			=> $strModule,
-			'dkp'				=> $fltDKP,
+			'module_set' 		=> $strModuleSet,
 			'event_id'			=> $intEventID,
 		);
 		
@@ -112,7 +114,7 @@ if(!class_exists('pdh_w_awards_achievements')) {
 	  * Update a Achievement
 	  */
 	public function update($id, $strName, $strDescription, $intSortID, $blnActive, $blnSpecial,
-							$intPoints, $strIcon, $arrIconColors, $strModule, $fltDKP, $intEventID){
+							$intPoints, $fltDKP, $strIcon, $arrIconColors, $strModule, $strModuleSet,$intEventID){
 		$arrQuery = array(
 			'name' 				=> $strName,
 			'description'		=> $strDescription,
@@ -120,10 +122,11 @@ if(!class_exists('pdh_w_awards_achievements')) {
 			'active'			=> $blnActive,
 			'special'			=> $blnSpecial,
 			'points'			=> $intPoints,
+			'dkp'				=> $fltDKP,
 			'icon' 				=> $strIcon,
 			'icon_colors'		=> serialize($arrIconColors),
 			'module' 			=> $strModule,
-			'dkp'				=> $fltDKP,
+			'module_set' 			=> $strModuleSet,
 			'event_id'			=> $intEventID,
 		);
 		

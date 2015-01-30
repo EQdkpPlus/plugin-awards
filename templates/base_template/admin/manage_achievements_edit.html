@@ -11,31 +11,31 @@
 <!-- ENDIF -->
 
 <form method="post" action="{ACTION}" name="post">
-<fieldset class="settings smallsettings">
+<fieldset class="settings mediumsettings">
 	<legend><!-- IF NAME == '' -->{L_aw_add_achievement}<!-- ELSE -->{L_aw_edit_achievement}<!-- ENDIF --></legend>
 	<dl>
-		<dt><label>{L_name}:</label></dt>
+		<dt><label>{L_name}:</label>
+		<br /><span>{L_aw_name_help}</span></dt>
 		<dd>{ML_NAME}</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_active}:</label></dt>
-		<dd>{R_ACTIVE_STATE}</dd>
-	</dl>
-	<dl>
-		<dt><label>{L_aw_special}:</label></dt>
-		<dd>{R_SPECIAL_STATE}</dd>
-	</dl>
-	<dl>
-		<dt><label>{L_description}:</label></dt>
+		<dt><label>{L_description}:</label>
+		<br /><span>{L_aw_desc_help}</span></dt>
 		<dd>{ML_DESCRIPTION}</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_value}:</label></dt>
-		<dd>{SPINNER_POINTS}</dd>
+		<dt><label>{L_active}:</label>
+		<br /><span>{L_aw_active_help}</span></dt>
+		<dd>{R_ACTIVE_STATE}</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_aw_auto_assign}:</label></dt>
-		<dd>{DD_MODULE}</dd>
+		<dt><label>{L_aw_special}:</label>
+		<br /><span>{L_aw_special_help}</span></dt>
+		<dd>{R_SPECIAL_STATE}</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_aw_value}:</label></dt>
+		<dd>{SPINNER_POINTS}</dd>
 	</dl>
 	<dl>
 		<dt><label>{L_aw_dkp_value}:</label></dt>
@@ -44,6 +44,11 @@
 	<dl>
 		<dt><label>{L_aw_multidkp}:</label></dt>
 		<dd>{MDKP2EVENT}</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_aw_auto_assign}:</label>
+		<br /><span>{L_aw_auto_assign_help}</span></dt>
+		<dd>{DD_MODULE} <input type="text" id="module_set" class="input" value="{MODULE_SET}" name="module_set" size='20' placeholder="param1,param2,..." /></dd>
 	</dl>
 	<dl>
 		<dt><label>{L_aw_icon_header}:</label></dt>
@@ -65,6 +70,7 @@
 		<!-- END files_row -->
 		<!-- ENDIF -->
 	</table>
+	<br />
 </fieldset>
 
 <div class="contentFooter">

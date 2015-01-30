@@ -48,10 +48,11 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		'awards_achievements_active' 			=> array('active', array('%intAchievementID%'), array()),
 		'awards_achievements_special' 			=> array('special', array('%intAchievementID%'), array()),
 		'awards_achievements_points' 			=> array('points', array('%intAchievementID%'), array()),
+		'awards_achievements_dkp'  				=> array('dkp', array('%intAchievementID%'), array()),
 		'awards_achievements_icon' 				=> array('icon', array('%intAchievementID%'), array()),
 		'awards_achievements_icon_colors'  		=> array('icon_colors', array('%intAchievementID%'), array()),
 		'awards_achievements_module' 			=> array('module', array('%intAchievementID%'), array()),
-		'awards_achievements_dkp'  				=> array('dkp', array('%intAchievementID%'), array()),
+		'awards_achievements_module_set' 		=> array('module_set', array('%intAchievementID%'), array()),
 		'awards_achievements_event_id'			=> array('event_id', array('%intAchievementID%'), array()),
 	);
 
@@ -80,10 +81,11 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 						'active'			=> (int)$drow['active'],
 						'special'			=> (int)$drow['special'],
 						'points'			=> (int)$drow['points'],
+						'dkp'				=> (float)$drow['dkp'],
 						'icon'				=> $drow['icon'],
 						'icon_colors'		=> $drow['icon_colors'],
 						'module'			=> $drow['module'],
-						'dkp'				=> (float)$drow['dkp'],
+						'module_set'		=> $drow['module_set'],
 						'event_id'			=> (int)$drow['event_id'],
 					);
 				}
@@ -246,6 +248,22 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		}
 
 		/**
+		 * Returns dkp for $intAchievementID
+		 * @param integer $intAchievementID
+		 * @return multitype dkp
+		 */
+		 public function get_dkp($intAchievementID){
+			if (isset($this->awards_achievements[$intAchievementID])){
+				return $this->awards_achievements[$intAchievementID]['dkp'];
+			}
+			return false;
+		}
+		
+		public function get_html_dkp($intAchievementID){
+			return $this->get_dkp($intAchievementID).' <span class="adminicon" />';
+		}
+
+		/**
 		 * Returns icon for $intAchievementID
 		 * @param integer $intAchievementID
 		 * @return multitype icon
@@ -256,16 +274,6 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 			}
 			return false;
 		}
-		
-		// hierfür bite in game.class.php nachschauen, abändern auf this->awards->decorate()
-		/*public function get_html_icon($intAchievementID, $width=30){
-			return $this->game->decorate('primary', $intAchievementID, array(), $width);
-		}*/
-		
-		/*public function get_icon($event_id, $withpath=false){
-			if($withpath) return $this->game->decorate('events', $event_id, array(), 0, true);
-			return $this->events[$event_id]['icon'];
-		}*/
 
 		/**
 		 * Returns icon_colors for $intAchievementID
@@ -290,23 +298,37 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 			}
 			return false;
 		}
+		
+		public function get_html_module($intAchievementID){
+			$module = $this->get_module($intAchievementID);
+			if(!empty($module))
+				return $this->user->lang('aw_cronmodule_'.$module);
+			
+			return NULL;
+		}
 
 		/**
-		 * Returns dkp for $intAchievementID
+		 * Returns module_set for $intAchievementID
 		 * @param integer $intAchievementID
-		 * @return multitype dkp
+		 * @return multitype module_set
 		 */
-		 public function get_dkp($intAchievementID){
+		 public function get_module_set($intAchievementID){
 			if (isset($this->awards_achievements[$intAchievementID])){
-				return $this->awards_achievements[$intAchievementID]['dkp'];
+				return $this->awards_achievements[$intAchievementID]['module_set'];
 			}
 			return false;
 		}
 		
-		public function get_html_dkp($intAchievementID){
-			return $this->get_dkp($intAchievementID).' <span class="adminicon" />';
+		public function get_html_module_set($intAchievementID){
+			$module_set = $this->get_module_set($intAchievementID);
+			if(!empty($module_set)){
+				$module_set = unserialize($module_set);
+				$module_set = implode(',', $module_set);
+				return $module_set;
+			}
+			return NULL;
 		}
-		
+
 		/**
 		 * Returns event_id for $intAchievementID
 		 * @param integer $intAchievementID
@@ -318,10 +340,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 			}
 			return false;
 		}
-		
-		
-		
-		// Glaube das ist ein überbleibsel und wird nichtmehr verwendet, bin mir aber nicht sicher
+
 		public function get_checkbox_check($intAchievementID){
 			return true;
 		}
