@@ -42,17 +42,25 @@ if ( !class_exists( "awards_crontask" ) ) {
 						require($this->root_path.'plugins/awards/cronjob/module/'.$strAchModule.'_cronmodule.class.php');
 						$module = registry::register($strAchModule.'_cronmodule');
 						
-						//do anything
-						$intMemberID = $module->run($intAchID);
-						if($intMemberID){
-							$this->addAward($intAchID, $intMemberID);
+						$arrMemberIDs = $module->run($intAchID);
+						if($arrMemberIDs){
+							$this->addAward($intAchID, $arrMemberIDs);
 						}
 					}
 				}
 			}
 		}
-		
-		public function addAward($intAchID, $intMemberID){
+
+
+		public function addAward($intAchID, $arrMemberIDs){
+			// check if member has already this award
+			$arrAdjIDs = $this->pdh->get('adjustment','adjsofeventid', array( $this->pdh->get('awards_achievements', 'event_id', array($intAchID)) ));
+			$arrAdjMemberIDs = array();
+			foreach($arrAdjIDs as $intAdjID)
+				$arrAdjMemberIDs[] = $this->pdh->get('adjustment', 'member', array($intAdjID));
+			
+			$arrMemberIDs = array_diff($arrMemberIDs, $arrAdjMemberIDs);
+			
 			// fetch Achievement Data
 			$intDate		= $this->time->fromformat($this->in->get('date', '1.1.1970'), 1);
 			$fltAchDKP		= $this->pdh->get('awards_achievements', 'dkp', array($intAchID));
@@ -61,16 +69,17 @@ if ( !class_exists( "awards_crontask" ) ) {
 			$intAchEventID	= $this->pdh->get('awards_achievements', 'event_id', array($intAchID));
 			
 			// add Award to Member
-			$arrAdjID = $this->pdh->put('adjustment', 'add_adjustment', array($fltAchDKP, $strAchName, $intMemberID, $intAchEventID, 0, $intDate));
-			
-			if($arrAdjID){
+			$arrAdjIDs = $this->pdh->put('adjustment', 'add_adjustment', array($fltAchDKP, $strAchName, $arrMemberIDs, $intAchEventID, 0, $intDate));
+			if($arrAdjIDs){
 				$this->pdh->process_hook_queue();
-				$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($arrAdjID['0']));
+				$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($arrAdjIDs['0']));
 				
-				$this->pdh->put('awards_assignments', 'add', array($intDate, $intAchID, $arrAdjID['0'], $strAdjGK));
+				foreach($arrAdjIDs as $intAdjID)
+					$this->pdh->put('awards_assignments', 'add', array($intDate, $intAchID, $intAdjID, $strAdjGK));
+				
 				$this->pdh->process_hook_queue();
 			}
-			
+				
 			
 		}
 	}

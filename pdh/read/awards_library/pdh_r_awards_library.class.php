@@ -295,7 +295,33 @@ if ( !class_exists( "pdh_r_awards_library" ) ) {
 			}
 			return false;
 		}
-		
+
+
+/*+----------------------------------------------------------------------------
+  | 	EXTENDED REQUESTS	--- UNDER CONSTRUCTION ---
+  +--------------------------------------------------------------------------*/
+
+		/**
+		 * Returns $arrLibIDs of achievement_id
+		 * @param integer $intLibraryID
+		 * @return multitype raid_id
+		 */
+		public function get_libsofachievement($achievement_id){
+			$lib_ids = array();
+			if(is_array($this->awards_library)) {
+				foreach($this->awards_library as $id => $lib) {
+					if($achievement_id == $lib['achievement_id']) $lib_ids[] = $id;
+				}
+			}
+			return $lib_ids;
+		}
+
+		public function get_lib($achievement_id){
+			return $this->awards_library;
+		}
+
+
+
 
 	}//end class
 }//end if

@@ -31,43 +31,21 @@ if (!class_exists("cron_module_1_cronmodule")) {
 		public function __construct(){  }
 
 
-// Benötigte Anzahl an Raids
-public $requiredRaids = 1;
+// needed raids for an assignment
+public $requiredRaids = 25;
 
 		public function run($intAchID){
-			/*  fetch all Raid Attendes
-				prüfe ob member_id mehrfach vorkommt
-				zähle wie häufig
-				wenn X mal dann gib dem Member den Award mit der AchID
-			*/
-			$arrMemberIDs = $this->pdh->get('member', 'id_list');
-			foreach($arrMemberIDs as $intMemberID){
+			$member_ids = $this->pdh->get('member', 'id_list');
+			foreach($member_ids as $intMemberID){
 				$arrRaidsOfMember = $this->pdh->get('raid', 'raidids4memberid', array($intMemberID));
 				
-				if(count($arrRaidsOfMember) >= $this->requiredRaids){
-					return $intMemberID;
-				}
+				if(count($arrRaidsOfMember) >= $this->requiredRaids)
+					$arrMemberIDs[] = $intMemberID;
 			}
 			
+			if($arrMemberIDs) return $arrMemberIDs;
 			return false;
-		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		}	
 	}
 }
 ?>
