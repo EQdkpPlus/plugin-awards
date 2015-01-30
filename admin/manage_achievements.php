@@ -137,12 +137,17 @@ class awards_manage_achievements extends page_generic
 	public function edit(){
 		$id = $this->in->get('aid', 0);
 		
-		// Adjustment Module für den Cron
-		$arrAdjDropdown = array(
-			NULL => $this->user->lang('aw_cron_module_0'),
-			'cron_module_1' => $this->user->lang('aw_cron_module_1'),
-			'cron_module_2' => $this->user->lang('aw_cron_module_2')
-		);
+		// fetch Cronjob Modules
+		$modules = array( NULL => $this->user->lang('aw_cronmodule_disabled') );
+		$module_folder = opendir($this->root_path.'plugins/awards/cronjob/module');
+		while (false !== ($module = readdir($module_folder))) {
+			if (substr($module, -21) == '_cronmodule.class.php'){
+				$module_name = substr($module, 0, -21);
+				$modules[$module_name] = $this->user->lang('aw_cronmodule_'.$module_name);
+			}
+		}
+		$arrModuleDropdown = $modules;
+		
 		
 		if ($id){
 			$this->tpl->assign_vars(array(
@@ -152,7 +157,7 @@ class awards_manage_achievements extends page_generic
 				'R_SPECIAL_STATE'	=> new hradio('special_state', array('options' => array(1 => $this->user->lang('published'), 0 => $this->user->lang('not_published')), 'value' => $this->pdh->get('awards_achievements', 'special', array($id)))),
 				'SPINNER_POINTS' 	=> new hspinner('points', array('value' => $this->pdh->get('awards_achievements', 'points', array($id)), 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),
 				'SPINNER_DKP'		=> new hspinner('dkp', array('value' =>  ($this->pdh->get('awards_achievements', 'dkp', array($id))), 'max'  => 99999, 'min'  => -99999, 'step' => 5)),
-				'DD_MODULE'			=> new hdropdown('module', array('options' => $arrAdjDropdown, 'value' => $this->pdh->get('awards_achievements', 'module', array($id)))),
+				'DD_MODULE'			=> new hdropdown('module', array('options' => $arrModuleDropdown, 'value' => $this->pdh->get('awards_achievements', 'module', array($id)))),
 				'MDKP2EVENT'		=> $this->jquery->Multiselect('mdkp2event', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), $this->pdh->get('event', 'multidkppools', array($this->pdh->get('awards_achievements', 'special', array($id))))),
 			));
 		} else {
@@ -163,7 +168,7 @@ class awards_manage_achievements extends page_generic
 				'R_SPECIAL_STATE'	=> new hradio('special_state', array('options' => array(1 => $this->user->lang('published'), 0 => $this->user->lang('not_published')), 'value' => 1)),
 				'SPINNER_POINTS'	=> new hspinner('points', array('value' =>  10, 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),	
 				'SPINNER_DKP'		=> new hspinner('dkp', array('value' =>  0, 'max'  => 99999, 'min'  => -99999, 'step' => 5)),
-				'DD_MODULE'			=> new hdropdown('module', array('options' => $arrAdjDropdown, 'value' => NULL)),
+				'DD_MODULE'			=> new hdropdown('module', array('options' => $arrModuleDropdown, 'value' => NULL)),
 				'MDKP2EVENT'		=> $this->jquery->Multiselect('mdkp2event', $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))), 0),
 			));
 		}

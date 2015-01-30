@@ -71,10 +71,11 @@ $lang = array(
   'aw_adj_gk'					=> 'Korrektur Group Key',
   
   
-  // Adjustment Modules
-  'aw_cron_module_0'			=> 'Kein Modul ausgewählt',
-  'aw_cron_module_1'			=> 'Modul 1 nicht verfügbar',
-  'aw_cron_module_2'			=> 'Modul 2 nicht verfügbar',
+  // Cronjob Modules
+  'aw_cronmodule_disabled'		=> 'Kein Modul ausgewählt',
+  'aw_cronmodule_raids_25'		=> 'ab 25 Raids',
+  'aw_cronmodule_raids_100'		=> 'ab 100 Raids',
+  
   
   // System Messages
   'action_achievement_deleted'	=> 'Erfolg gelöscht',
