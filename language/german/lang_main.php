@@ -65,8 +65,8 @@ $lang = array(
 									Beispiel: [Ab X Raids] 100',
   
   'aw_customtab_title'			=> 'Meine Erfolge',
-  'aw_listachiev_footcount'		=> '... %1\$d Erfolg(e) gefunden / %2\$d pro Seite',
-  'aw_listassign_footcount'		=> '... %1\$d Zuweisung(en) gefunden / %2\$d pro Seite',
+  'aw_listachiev_footcount'		=> '... %s Erfolg(e) gefunden / %s pro Seite',
+  'aw_listassign_footcount'		=> '... %s Zuweisung(en) gefunden / %s pro Seite',
   
   
   // Cronjob Modules
@@ -87,6 +87,7 @@ $lang = array(
   'aw_del_assign'				=> 'Zuweisung(en) entfernt',
   
   'aw_confirm_delete_achievement'	=> 'Bist du sicher, dass Du die Erfolge %s wirklich löschen willst? Alle erhaltenen DKP werden dabei auch gelöscht!',
+  'aw_confirm_delete_assignment'	=> 'Bist du sicher, dass Du die Zuweisungen %s wirklich löschen willst? Alle erhaltenen DKP werden dabei auch gelöscht!',
   
 
 );

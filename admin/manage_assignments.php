@@ -233,7 +233,7 @@ class awards_manage_assignments extends page_generic
 		
 		//footer
 		$item_count = count($view_list);
-		$strfootertext = sprintf($this->user->lang('listassign_footcount'), $item_count, $this->user->data['user_alimit']);
+		$strfootertext = sprintf($this->user->lang('aw_listassign_footcount'), $item_count, $this->user->data['user_alimit']);
 		
 		$this->confirm_delete($this->user->lang('aw_confirm_delete_assignment'));
 

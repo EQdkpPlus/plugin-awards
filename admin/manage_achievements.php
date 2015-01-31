@@ -287,7 +287,7 @@ class awards_manage_achievements extends page_generic
 		$sort_suffix = '?sort='.$this->in->get('sort');
 		
 		$item_count = count($view_list);
-		$strfootertext = sprintf($this->user->lang('listachiev_footcount'), $item_count, $this->user->data['user_alimit']);
+		$strfootertext = sprintf($this->user->lang('aw_listachiev_footcount'), $item_count, $this->user->data['user_alimit']);
 		
 		$this->confirm_delete($this->user->lang('aw_confirm_delete_achievement'));
 

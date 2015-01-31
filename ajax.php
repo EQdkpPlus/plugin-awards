@@ -56,10 +56,12 @@ class AjaxAwards extends page_generic
 			
 			if($this->pdh->put('awards_achievements', 'set_active', array($intAchID, $blnAchActive))){
 				$this->pdh->process_hook_queue();
-				return true;
+				echo($this->user->lang('success'));
+				exit;
 			}
 		}
-		return false;
+		echo($this->user->lang('success'));
+		exit;
 	}
 
 
@@ -73,10 +75,12 @@ class AjaxAwards extends page_generic
 			
 			if($this->pdh->put('awards_achievements', 'set_special', array($intAchID, $blnAchSpecial))){
 				$this->pdh->process_hook_queue();
-				return true;
+				echo($this->user->lang('success'));
+				exit;
 			}
 		}
-		return false;
+		echo($this->user->lang('success'));
+		exit;
 	}
 
 

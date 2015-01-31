@@ -70,7 +70,8 @@
 			$.post('{EQDKP_ROOT_PATH}plugins/awards/ajax.php{SID}&'+action, {
 					id: id,
 					value: value
-				}, function(){
+				}, function(data){
+					$('#notify_container').notify('create', 'success', {text: data,title: '',custom: true,},{expires: 3000, speed: 1000});
 			});
 		}
 	});
