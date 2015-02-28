@@ -118,7 +118,7 @@ class awards extends plugin_generic
 
 	/**
 	  * pre_install
-	  * Define Installation
+	  * Define Pre Installation
 	  */
 	public function pre_install(){
 		// include SQL and default configuration data for installation
@@ -139,8 +139,7 @@ class awards extends plugin_generic
 		$this->ntfy->addNotificationType('awards_new_award', 'notification_awards_new_award', 'awards', 0, 1, 0, NULL, 3, 'fa-gift');
 		
 		$this->timekeeper->add_cron(
-			'awards',
-			array(
+			'awards', array(
 				'extern'		=> true,
 				'ajax'			=> false,
 				'delay'			=> false,
@@ -157,15 +156,9 @@ class awards extends plugin_generic
 
 	/**
 	  * pre_uninstall
-	  * Define Post Uninstall
+	  * Define Pre Uninstall
 	  */
 	public function pre_uninstall(){
-		$arrAchievementIDs = $this->pdh->get('awards_achievements', 'id_list');
-		foreach($arrAchievementIDs as $intAchievementID){
-			$intAchievementEventID = $this->pdh->get('awards_achievements', 'event_id', array($intAchievementID));
-			$this->pdh->put('event', 'delete_event', array($intAchievementEventID));
-		}
-		
 		$arrAssignmentIDs = $this->pdh->get('awards_assignments', 'id_list');
 		foreach($arrAssignmentIDs as $intAssignmentID){
 			$strAssignmentGroupKey = $this->pdh->get('awards_assignments', 'adj_group_key');
@@ -175,7 +168,7 @@ class awards extends plugin_generic
 		$this->ntfy->deleteNotificationType(array('awards_new_award'));
 		$this->timekeeper->del_cron('awards');
 	}
-	
+
 
 	/**
 	  * post_uninstall
@@ -212,11 +205,11 @@ class awards extends plugin_generic
 				'icon'  => 'fa-list'
 			),
 		));
-
+		
 		return $admin_menu;
 	}
-	
-	
+
+
 	/**
 	  * gen_main_menu
 	  * Generate the Main Menu

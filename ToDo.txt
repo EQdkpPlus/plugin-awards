@@ -1,8 +1,7 @@
 
 - Edit/Add Achievements (erfolge für zuweisung)
 
-	- Prüfe ob die vor auswahl der MultiKonten korrekt stattfindet
-    - PDH Log Einträge überarbeiten
+	- PDH Log Einträge überarbeiten
 
 
 - Edit/Add Assignments (zuweisung an Char)
@@ -12,15 +11,16 @@
 
 - Show Achievements (Benutzerspezifisch und Alle Nutzer) -- als pageobject!
 
+    - Lagere evntl. die Verarbeitung in extra Class aus (wer hat welchen Erfolg, wieviele Erfolge etc)
     - ICON Anzeige verbessern für spätere SVG - CSS nutzung
     - Auf der Benutzerprofilseite über Hook einbinden
     - klick auf erfolg gibt mehr infos (wer alles diesen erfolg erhielt etc)
 
 
-- Automatisieren
+- Cron Module
 
-    - Module, z.B. "Hat an x Raids teilgenommen". Bei einem Award wählt man das Modul dann aus (muss aber nicht), und trägt die Zahl für x ein (als setting im Modul hinterlegt, wie z.B. bei den Cronjobs).
-    - Ein Cronjob arbeitet dann alle Awards ab, die ein Modul haben. Im Modul wir dann geschaut, ob die User x Raids erreicht haben, und erteilt ihnen dann das Awarding.
+    - Raidbeteiligung: Anzahl der Raids in dem entsprechenden ausgewählten MultiDKP (das könnten ja auch mehrere sein)
+	- Punktestände erreicht oder eine gewisse Anzahl an Items erhalten hat
 
 
 
