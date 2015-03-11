@@ -79,7 +79,13 @@ if ( !class_exists( "awards_crontask" ) ) {
 				
 				$this->pdh->process_hook_queue();
 			}
-				
+			
+			// add Notifications
+			$arrUserIDs = array();
+			foreach($arrMemberIDs as $intMemberID)
+				$arrUserIDs[] = $this->pdh->get('member', 'user', array($intAdjUserID));
+			
+			$this->ntfy->add('awards_new_award', $intAchID, "Plugin: ".$this->user->lang('awards'), $this->routing->build('Awards', false, false, true, true), array_unique($arrUserIDs));	
 			
 		}
 	}
