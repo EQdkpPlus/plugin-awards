@@ -37,24 +37,39 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 	  */
 	public function userprofile_customtabs($user_id){
 		if($this->user->check_auths(array('u_awards_view', 'a_awards_manage'), 'OR', false)){
-			$this->tpl->add_js("
-				$('.awToggleTrigger').on('click', function(event){
-					if ($(this).hasClass('member-view')){
-						$(this).children('.ac-user-list').css('display','none');
-						$(this).removeClass('member-view');
-					} else {
-						$(this).addClass('member-view');
-						$(this).children('.ac-user-list').css('display','inline-block');
-					}
-				});
-			", "docready");
 			
+			$content = '
+				<div id="awards">
+					<div id="progress-header">
+						<div class="progress-left floatLeft">Fortschritt:&nbsp;</div>
+						<div class="progress-right floatRight">
+							<span id="achievement-points">Loading...</span>&nbsp;<i class="fa fa-bookmark-o"></i>
+						</div>
+						<div id="my_aw_progress">
+							<div class="progress-label">Loading...</div>
+						</div>
+					</div>
+					<div class="aw-list">
+						<div class="reached">
+			';
 			
-			$content = '<div id="awards"><div class="aw-list"><div class="reached">';
+			$arrAllMemberIDs  = $this->pdh->get('member', 'connection_id', array($user_id['user_id']));
+			$arrAllAwards	  = $this->pdh->get('awards_achievements', 'id_list');
+			$arrLibAssIDs	  = array();
+			$arrReachedAwards = array();
+			$intReachedAP	  = 0;
 			
-			$arrAllMemberIDs = $this->pdh->get('member', 'connection_id', array($user_id['user_id']));
-			$arrLibAssIDs	 = $this->pdh->get('awards_library', 'id_list');
+			//fetch all assignments of each member and filter double entrys
+			$arrLibAssIDs = array();
+			foreach($arrAllMemberIDs as $intMemberID){
+				$ass_by_member = $this->pdh->get('awards_library', 'ids_where_member', array($intMemberID));
+				foreach($ass_by_member as $ass_id){
+					$arrLibAssIDs[] = $ass_id;
+				}
+			}
+			$arrLibAssIDs = array_unique($arrLibAssIDs);
 			
+			//fetch the achievements by assignments
 			foreach($arrLibAssIDs as $intLibAssID){
 				$arrLibAchIDs[$intLibAssID] = $this->pdh->get('awards_library', 'achievement_id', array($intLibAssID));
 			}
@@ -80,6 +95,8 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 				$blnAchSpecial = $this->pdh->get('awards_achievements', 'special', array($intAchID));
 				$intAchPoints  = $this->pdh->get('awards_achievements', 'points', array($intAchID));
 				$intAchDKP     = $this->pdh->get('awards_achievements', 'dkp', array($intAchID));
+				$intReachedAP += $intAchPoints;
+				$arrReachedAwards[] = $intAchID;
 				if($intAchDKP < 0){
 					$blnAchDKP = 1;
 				} elseif($intAchDKP > 0){
@@ -88,7 +105,7 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 					$blnAchDKP = 0;
 				}
 				
-				//------------------------------------------------------------------------------
+				//build the HTML structure for achievment display of fetched data
 				$content .= '
 					<div class="award ac-'.$intAchID.' awToggleTrigger">
 						<div class="ac-icon floatLeft">
@@ -123,12 +140,96 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 				';
 			}
 			
+			//---- BUILD UNREACHED Container -----------------------------------------
 			$content .= '</div><div class="unreached">';
-			###
-			$content .= 'Hier sieht man die nicht erreichten non-special awards.';
-			###
+			####################################
+			
+			$arrUnreachedAwards = array_diff($arrAllAwards, $arrReachedAwards);
+			foreach($arrUnreachedAwards as $intUnreachedAwardID){
+				$blnAchSpecial = $this->pdh->get('awards_achievements', 'special', array($intUnreachedAwardID));
+				if(!$blnAchSpecial)continue;
+				
+				$strAchName  = $this->user->multilangValue( $this->pdh->get('awards_achievements', 'name', array($intUnreachedAwardID)) );
+				$strAchDesc  = $this->user->multilangValue( $this->pdh->get('awards_achievements', 'description', array($intUnreachedAwardID)) );
+				$strAchIcon  = $this->pdh->get('awards_achievements', 'icon', array($intUnreachedAwardID));
+				$icon_folder = $this->pfh->FolderPath('images', 'awards');
+				if( file_exists($icon_folder.$strAchIcon) ){
+					$strAchIcon = $icon_folder.$strAchIcon;
+				} else {
+					$strAchIcon = 'plugins/awards/images/'.$strAchIcon;
+				}
+				
+				$blnAchActive  = $this->pdh->get('awards_achievements', 'active', array($intUnreachedAwardID));
+				$intAchPoints  = $this->pdh->get('awards_achievements', 'points', array($intUnreachedAwardID));
+				$intAchDKP     = $this->pdh->get('awards_achievements', 'dkp', array($intUnreachedAwardID));
+				if($intAchDKP < 0){
+					$blnAchDKP = 1;
+				} elseif($intAchDKP > 0){
+					$blnAchDKP = 2;
+				} else {
+					$blnAchDKP = 0;
+				}
+				
+				//build the HTML structure
+				$content .= '
+					<div class="award ac-'.$intAchID.' awToggleTrigger">
+						<div class="ac-icon floatLeft">
+							<img src="/'.$strAchIcon.'" />
+						</div>
+						<div class="ac-points floatRight">
+				';
+				
+				if($blnAchDKP != 0){
+					if($blnAchDKP == 1){
+						$content .= '<span class="ac-points-big" style="color: #C03D00;">';
+					} else {
+						$content .= '<span class="ac-points-big" style="color: #20C000;">';
+					}
+					$content .= $intAchDKP.'<span class="ac-points-small">'.$intAchPoints.'</span></span>';
+					
+				} else {
+					$content .= '<span class="ac-points-big">'.$intAchPoints.'</span>';
+				}
+				
+				$content .= '
+					</div>
+					<div class="ac-main">
+						<h2 class="ac-title">'.$strAchName.'</h2>
+						<p class="ac-desc">'.$strAchDesc.'</p>
+						<p class="ac-date"> </p>
+					</div>
+					<div class="ac-user-list" style="display:none;">
+						Dieser Erfolg wird noch erarbeitet...
+					</div>
+				</div>
+				';
+			}
+			
+			####################################
 			$content .= '</div></div></div>';
 			
+			
+			
+			$this->tpl->add_js('
+				$("#my_aw_progress").progressbar({
+					value: '.count($arrLibAchIDs).',
+					max: '.count($arrAllAwards).',
+				});
+				$(".progress-label").text("'.count($arrLibAchIDs).' / '.count($arrAllAwards).'");
+				$("#achievement-points").text("'.$intReachedAP.'");
+				
+				$(".awToggleTrigger").on("click", function(event){
+					if ($(this).hasClass("member-view")){
+						$(this).children(".ac-user-list").css("display","none");
+						$(this).removeClass("member-view");
+					} else {
+						$(this).addClass("member-view");
+						$(this).children(".ac-user-list").css("display","inline-block");
+					}
+				});
+			', 'docready');
+			
+			//------------------------------------------------------
 			$output = array(
 				'title'   => $this->user->lang('aw_customtab_title'),
 				'content' => $content,

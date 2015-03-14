@@ -2,6 +2,7 @@
 - Edit/Add Achievements (erfolge für zuweisung)
 
 	- PDH Log Einträge überarbeiten
+	- Einbau der Farbverwaltung
 
 
 - Edit/Add Assignments (zuweisung an Char)
@@ -9,11 +10,9 @@
 	- PDH Log Einträge überarbeiten
 
 
-- Show Achievements (Benutzerspezifisch und Alle Nutzer) -- als pageobject!
+- Show Achievements (Benutzerspezifisch und Alle Nutzer)
 
-    - Lagere evntl. die Verarbeitung in extra Class aus (wer hat welchen Erfolg, wieviele Erfolge etc)
-    - ICON Anzeige verbessern für spätere SVG - CSS nutzung
-    - Auf der Benutzerprofilseite über Hook einbinden
+    - ICON Anzeige verbessern für spätere SVG - für CSS nutzung
     - klick auf erfolg gibt mehr infos (wer alles diesen erfolg erhielt etc)
 
 
@@ -21,20 +20,3 @@
 
     - Raidbeteiligung: Anzahl der Raids in dem entsprechenden ausgewählten MultiDKP (das könnten ja auch mehrere sein)
 	- Punktestände erreicht oder eine gewisse Anzahl an Items erhalten hat
-
-
-
-DAS NEUE PDH MODUL: Query = (jenachdem wie wieviel wir brauchen) HINWEIS: im 2ten Query benötigt es die achievements id änderung
-
-SELECT *
-FROM assignments
-LEFT JOIN adjustments ON assignments.adj_id=adjustments.adjustment_id
-ORDER BY __awards_assignments.date DESC;
-;
-
-SELECT *
-FROM assignments
-LEFT JOIN adjustments ON assignments.adj_id=adjustments.adjustment_id
-LEFT JOIN achievements ON assignments.achievement_id=achievements.id
-ORDER BY __awards_assignments.date DESC;
-;

@@ -302,22 +302,20 @@ if ( !class_exists( "pdh_r_awards_library" ) ) {
   +--------------------------------------------------------------------------*/
 
 		/**
-		 * Returns $arrLibIDs of achievement_id
-		 * @param integer $intLibraryID
-		 * @return multitype raid_id
+		 * Returns assignment_ids for $member_id
+		 * @param integer $member_id
+		 * @return multitype assignment_id
 		 */
-		public function get_libsofachievement($achievement_id){
-			$lib_ids = array();
-			if(is_array($this->awards_library)) {
-				foreach($this->awards_library as $id => $lib) {
-					if($achievement_id == $lib['achievement_id']) $lib_ids[] = $id;
+		public function get_ids_where_member($member_id){
+			$assignment_ids = array();
+			if (is_array($this->awards_library)){
+				foreach($this->awards_library as $id => $details){
+					if($details['member_id'] == $member_id){
+						$assignment_ids[] = $id;
+					}
 				}
 			}
-			return $lib_ids;
-		}
-
-		public function get_lib($achievement_id){
-			return $this->awards_library;
+			return $assignment_ids;
 		}
 
 
