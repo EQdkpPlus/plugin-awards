@@ -14,9 +14,14 @@
 	$(document).ready(function() {
 		if({AID}){
 			icon_src = $('input[type="radio"][name="icon"][checked="checked"]').next('img').attr('src');
-			icon_src = icon_src.substring(icon_src.length - 4);
-			if(icon_src == '.svg'){
+			icon_ext = icon_src.substring(icon_src.length - 4);
+			if(icon_ext == '.svg'){
 				$('#colorchange').show();
+				$('#colorchange .icon_preview').load(icon_src, function() {
+					for(i=1; i<=5; i++){
+						$('#colorchange .icon_preview svg g:nth-child('+i+')').css('fill', $('#colorchange #icon_layer_'+i+'_input').val());
+					}
+				});
 			}else{
 				$('#colorchange').hide();
 			}
@@ -26,15 +31,32 @@
 		
 		$('input[type="radio"][name="icon"]').on('click', function(event){
 			icon_src = $(this).next('img').attr('src');
-			icon_src = icon_src.substring(icon_src.length - 4);
-			if(icon_src == '.svg'){
+			icon_ext = icon_src.substring(icon_src.length - 4);
+			if(icon_ext == '.svg'){
 				$('#colorchange').show(300);
+				$('#colorchange .icon_preview').empty();
+				$('#colorchange .icon_preview').load(icon_src, function() {
+					for(i=1; i<=5; i++){
+						$('#colorchange .icon_preview svg g:nth-child('+i+')').css('fill', $('#colorchange #icon_layer_'+i+'_input').val());
+					}
+				});
 			}else{
 				$('#colorchange').hide(300);
 			}
 		});
+		
+		$('.sp-picker-container button.sp-choose').on('click', function(){
+			for(i=1; i<=5; i++){
+				$('#colorchange .icon_preview svg g:nth-child('+i+')').css('fill', $('#colorchange #icon_layer_'+i+'_input').val());
+			}
+		});
 	});
 </script>
+<style>
+	#colorchange { position: absolute; display:inline-block; text-align: right; }
+	#colorchange .icon_preview svg { width: 128px; height: 128px; }
+	#colorchange .colorchange_container { position: relative; top: -15.5em; }
+</style>
 
 <form method="post" action="{ACTION}" name="post">
 <fieldset class="settings mediumsettings">
@@ -80,7 +102,7 @@
 		<dt><label>{L_aw_icon_header}:</label></dt>
 		<dd><button class="mainoption" type="button" id="iubuttonedit" onclick="elfinder_all();"><i class="fa fa-upload"></i> {L_aw_upload_icon}</button></dd>
 	</dl>
-	<table width="88%" border="0" cellspacing="1" cellpadding="2" class="scrollable-x floatLeft">
+	<table width="87%" border="0" cellspacing="1" cellpadding="2" class="scrollable-x floatLeft">
 		<!-- IF ICONS -->
 		<!-- BEGIN files_row -->
 		<tr class="colorswitch">
@@ -97,12 +119,15 @@
 		<!-- ENDIF -->
 	</table>
 	
-	<div id="colorchange" style="display:inline-block;">
-		Layer 1: {CP_ICON_LAYER_1}<br />
-		Layer 2: {CP_ICON_LAYER_2}<br />
-		Layer 3: {CP_ICON_LAYER_3}<br />
-		Layer 4: {CP_ICON_LAYER_4}<br />
-		Layer 5: {CP_ICON_LAYER_5}
+	<div id="colorchange">
+		<div class="colorchange_container">
+			<div class="icon_preview"></div>
+			Layer 1: {CP_ICON_LAYER_1}<br />
+			Layer 2: {CP_ICON_LAYER_2}<br />
+			Layer 3: {CP_ICON_LAYER_3}<br />
+			Layer 4: {CP_ICON_LAYER_4}<br />
+			Layer 5: {CP_ICON_LAYER_5}
+		</div>
 	</div>
 	<div class="clear" />
 	

@@ -12,9 +12,24 @@
 - Show Achievements (Benutzerspezifisch und Alle Nutzer)
 
     - klick auf erfolg gibt mehr infos (wer alles diesen erfolg erhielt etc)
+	- Alles auslagern per Class /sende AchID enpfange Array mit AchDaten
+	- Erstelle die Layout auswahl Funktion und Inkras Layout
+
+
+- CSS Adjustments
+
+    - Erstelle eine custom.css ähnliche Vorgabe für den allgemeinen SVG Background
 
 
 - Cron Module
 
     - Raidbeteiligung: Anzahl der Raids in dem entsprechenden ausgewählten MultiDKP (das könnten ja auch mehrere sein)
 	- Punktestände erreicht oder eine gewisse Anzahl an Items erhalten hat
+
+
+
+SVG Notiz:
+	Optimiere die SVG Dateien nachträglich mit dem SVG-Editor: https://petercollingridge.appspot.com/svg-editor/
+	Beschränke dich auf ein minimum an "Style" Optimierungen (keine anderen) und bearbeite nachträglich folgendes...
+	Fill & Stroke aus den <path> Tags rauslöschen und die übergeordneten <g id=""> ansprechen.
+			- Bsp.: <g id"Area01" fill="#FFF"><path ...></g>
