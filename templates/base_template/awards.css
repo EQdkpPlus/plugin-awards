@@ -104,13 +104,16 @@
 	opacity: 0.8;
 }
 
-#awards .ac-icon img {
+#awards .ac-icon img,
+#awards .ac-icon svg {
+	height: 50px;
 	width: 50px;
 	border: 2px solid #FFF;
 	border-radius: 4px;
 	box-shadow: 0px 1px 5px #000;
 }
-#awards .unreached .ac-icon img {
+#awards .unreached .ac-icon img,
+#awards .unreached .ac-icon svg {
 	opacity: 0.5;
 }
 

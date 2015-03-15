@@ -10,6 +10,32 @@
 </div>
 <!-- ENDIF -->
 
+<script type="text/javascript">
+	$(document).ready(function() {
+		if({AID}){
+			icon_src = $('input[type="radio"][name="icon"][checked="checked"]').next('img').attr('src');
+			icon_src = icon_src.substring(icon_src.length - 4);
+			if(icon_src == '.svg'){
+				$('#colorchange').show();
+			}else{
+				$('#colorchange').hide();
+			}
+		}else{
+			$('#colorchange').hide();
+		}
+		
+		$('input[type="radio"][name="icon"]').on('click', function(event){
+			icon_src = $(this).next('img').attr('src');
+			icon_src = icon_src.substring(icon_src.length - 4);
+			if(icon_src == '.svg'){
+				$('#colorchange').show(300);
+			}else{
+				$('#colorchange').hide(300);
+			}
+		});
+	});
+</script>
+
 <form method="post" action="{ACTION}" name="post">
 <fieldset class="settings mediumsettings">
 	<legend><!-- IF NAME == '' -->{L_aw_add_achievement}<!-- ELSE -->{L_aw_edit_achievement}<!-- ENDIF --></legend>
@@ -54,7 +80,7 @@
 		<dt><label>{L_aw_icon_header}:</label></dt>
 		<dd><button class="mainoption" type="button" id="iubuttonedit" onclick="elfinder_all();"><i class="fa fa-upload"></i> {L_aw_upload_icon}</button></dd>
 	</dl>
-	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="scrollable-x">
+	<table width="88%" border="0" cellspacing="1" cellpadding="2" class="scrollable-x floatLeft">
 		<!-- IF ICONS -->
 		<!-- BEGIN files_row -->
 		<tr class="colorswitch">
@@ -70,6 +96,16 @@
 		<!-- END files_row -->
 		<!-- ENDIF -->
 	</table>
+	
+	<div id="colorchange" style="display:inline-block;">
+		Layer 1: {CP_ICON_LAYER_1}<br />
+		Layer 2: {CP_ICON_LAYER_2}<br />
+		Layer 3: {CP_ICON_LAYER_3}<br />
+		Layer 4: {CP_ICON_LAYER_4}<br />
+		Layer 5: {CP_ICON_LAYER_5}
+	</div>
+	<div class="clear" />
+	
 	<br />
 </fieldset>
 

@@ -89,7 +89,7 @@ if(!class_exists('pdh_w_awards_achievements')) {
 			'points'			=> $intPoints,
 			'dkp'				=> $fltDKP,
 			'icon' 				=> $strIcon,
-			'icon_colors'		=> serialize($arrIconColors),
+			'icon_colors'		=> $arrIconColors,
 			'module' 			=> $strModule,
 			'module_set' 		=> $strModuleSet,
 			'event_id'			=> $intEventID,
@@ -124,9 +124,9 @@ if(!class_exists('pdh_w_awards_achievements')) {
 			'points'			=> $intPoints,
 			'dkp'				=> $fltDKP,
 			'icon' 				=> $strIcon,
-			'icon_colors'		=> serialize($arrIconColors),
+			'icon_colors'		=> $arrIconColors,
 			'module' 			=> $strModule,
-			'module_set' 			=> $strModuleSet,
+			'module_set' 		=> $strModuleSet,
 			'event_id'			=> $intEventID,
 		);
 		

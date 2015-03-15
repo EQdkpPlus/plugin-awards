@@ -95,12 +95,22 @@ public $xAwardperRow = 1; // Gibt an wieviele Erfolge pro Reihe angezeigt werden
 				} else {
 					$strAchIcon = 'plugins/awards/images/'.$strAchIcon;
 				}
-				/* // Please uncommit it later when the SVGs are fixed
+				
 				if( pathinfo($strAchIcon, PATHINFO_EXTENSION) == "svg"){
 					$strAchIcon = file_get_contents($strAchIcon);
+					
+					// build the CSS Code for each SVG
+					$arrAchIconColors = unserialize( $this->pdh->get('awards_achievements', 'icon_colors', array($intAchID)) );
+					$icon_color_step = 1;
+					$strAchIconCSS = '';
+					foreach($arrAchIconColors as $strAchIconColor){
+						$strAchIconCSS .= '.award.ac-'.$intAchID.' .ac-icon svg g:nth-child('.$icon_color_step.'){fill: '.$strAchIconColor.';}';
+						$icon_color_step++;
+					}
+					$this->tpl->add_css($strAchIconCSS);
 				} else {
 					$strAchIcon = '<img src="'.$strAchIcon.'" />';
-				}*/
+				}
 				
 				$blnAchActive  = $this->pdh->get('awards_achievements', 'active', array($intAchID));
 				$blnAchSpecial = $this->pdh->get('awards_achievements', 'special', array($intAchID));
@@ -120,7 +130,7 @@ public $xAwardperRow = 1; // Gibt an wieviele Erfolge pro Reihe angezeigt werden
 					'TITLE'		=> $strAchName,
 					'DESC'		=> $strAchDesc,
 					'DATE'		=> $strAchDate,
-					'ICON_URL'	=> $strAchIcon,
+					'ICON'	=> $strAchIcon,
 					'ACTIVE'	=> $blnAchActive,
 					'SPECIAL'	=> $blnAchSpecial,
 					'AP'		=> $intAchPoints,
@@ -184,6 +194,22 @@ public $xAwardperRow = 1; // Gibt an wieviele Erfolge pro Reihe angezeigt werden
 					$strAchIcon = 'plugins/awards/images/'.$strAchIcon;
 				}
 				
+				if( pathinfo($strAchIcon, PATHINFO_EXTENSION) == "svg"){
+					$strAchIcon = file_get_contents($strAchIcon);
+					
+					// build the CSS Code for each SVG
+					$arrAchIconColors = unserialize( $this->pdh->get('awards_achievements', 'icon_colors', array($intAchID)) );
+					$icon_color_step = 1;
+					$strAchIconCSS = '';
+					foreach($arrAchIconColors as $strAchIconColor){
+						$strAchIconCSS .= '.award.ac-'.$intAchID.' .ac-icon svg g:nth-child('.$icon_color_step.'){fill: '.$strAchIconColor.';}';
+						$icon_color_step++;
+					}
+					$this->tpl->add_css($strAchIconCSS);
+				} else {
+					$strAchIcon = '<img src="'.$strAchIcon.'" />';
+				}
+				
 				$blnAchActive  = $this->pdh->get('awards_achievements', 'active', array($arrAchIDs[$unreached_counter]));
 				$blnAchSpecial = $this->pdh->get('awards_achievements', 'special', array($arrAchIDs[$unreached_counter]));
 				$intAchPoints  = $this->pdh->get('awards_achievements', 'points', array($arrAchIDs[$unreached_counter]));
@@ -201,7 +227,7 @@ public $xAwardperRow = 1; // Gibt an wieviele Erfolge pro Reihe angezeigt werden
 					'ID'		=> $arrAchIDs[$unreached_counter],
 					'TITLE'		=> $strAchName,
 					'DESC'		=> $strAchDesc,
-					'ICON_URL'	=> $strAchIcon,
+					'ICON'	=> $strAchIcon,
 					'ACTIVE'	=> $blnAchActive,
 					'SPECIAL'	=> $blnAchSpecial,
 					'AP'		=> $intAchPoints,

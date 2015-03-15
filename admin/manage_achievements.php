@@ -73,6 +73,9 @@ class awards_manage_achievements extends page_generic
 		$strAchModule		= $this->in->get('module');
 		$strAchModuleSet	= $this->in->get('module_set');
 		
+		for($i=1; $i<=5; $i++) $arrAchIconColors[] = $this->in->get('icon_layer_'.$i);
+		$arrAchIconColors = serialize($arrAchIconColors);
+		
 		// parse module settings
 		if(!empty($strAchModuleSet)){
 			$strAchModuleSet = str_replace(' ', '', $strAchModuleSet);
@@ -149,6 +152,11 @@ class awards_manage_achievements extends page_generic
 			$arrEvents[$eid] = $this->pdh->get('event', 'name', array($eid));
 		}
 		
+		// fetch colorpicker settings
+		$arrAchIconColors = $this->pdh->get('awards_achievements', 'icon_colors', array($id));
+		$arrAchIconColors = unserialize($arrAchIconColors);
+		
+		
 		if ($id){
 			$this->tpl->assign_vars(array(
 				'ML_NAME'			=> new htextmultilang('name', array('value' => unserialize($this->pdh->get('awards_achievements', 'name', array($id))), 'size' => 30, 'required' => true)),
@@ -160,6 +168,11 @@ class awards_manage_achievements extends page_generic
 				'DD_MODULE'			=> new hdropdown('module', array('options' => $arrModuleDropdown, 'value' => $this->pdh->get('awards_achievements', 'module', array($id)))),
 				'DD_EVENT'			=> new hdropdown('event', array('options' => $arrEvents, 'value' => $this->pdh->get('awards_achievements', 'event_id', array($id)))),
 				'MODULE_SET'		=> (!empty($strModuleSet))? $strModuleSet : '',
+				'CP_ICON_LAYER_1'	=> $this->jquery->colorpicker('icon_layer_1', ($arrAchIconColors[0])?:'#000000'),
+				'CP_ICON_LAYER_2'	=> $this->jquery->colorpicker('icon_layer_2', ($arrAchIconColors[1])?:'#FFFFFF'),
+				'CP_ICON_LAYER_3'	=> $this->jquery->colorpicker('icon_layer_3', ($arrAchIconColors[2])?:'#FFFFFF'),
+				'CP_ICON_LAYER_4'	=> $this->jquery->colorpicker('icon_layer_4', ($arrAchIconColors[3])?:'#FFFFFF'),
+				'CP_ICON_LAYER_5'	=> $this->jquery->colorpicker('icon_layer_5', ($arrAchIconColors[4])?:'#FFFFFF'),
 			));
 		} else {
 			$this->tpl->assign_vars(array(
@@ -172,6 +185,11 @@ class awards_manage_achievements extends page_generic
 				'DD_MODULE'			=> new hdropdown('module', array('options' => $arrModuleDropdown, 'value' => NULL)),
 				'DD_EVENT'			=> new hdropdown('event', array('options' => $arrEvents, 'value' => '')),
 				'MODULE_SET'		=> '',
+				'CP_ICON_LAYER_1'	=> $this->jquery->colorpicker('icon_layer_1', '#000000'),
+				'CP_ICON_LAYER_2'	=> $this->jquery->colorpicker('icon_layer_2', '#FFFFFF'),
+				'CP_ICON_LAYER_3'	=> $this->jquery->colorpicker('icon_layer_3', '#FFFFFF'),
+				'CP_ICON_LAYER_4'	=> $this->jquery->colorpicker('icon_layer_4', '#FFFFFF'),
+				'CP_ICON_LAYER_5'	=> $this->jquery->colorpicker('icon_layer_5', '#FFFFFF'),
 			));
 		}
 		

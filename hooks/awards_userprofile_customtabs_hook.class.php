@@ -91,6 +91,22 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 					$strAchIcon = 'plugins/awards/images/'.$strAchIcon;
 				}
 				
+				if( pathinfo($strAchIcon, PATHINFO_EXTENSION) == "svg"){
+					$strAchIcon = file_get_contents($strAchIcon);
+					
+					// build the CSS Code for each SVG
+					$arrAchIconColors = unserialize( $this->pdh->get('awards_achievements', 'icon_colors', array($intAchID)) );
+					$icon_color_step = 1;
+					$strAchIconCSS = '';
+					foreach($arrAchIconColors as $strAchIconColor){
+						$strAchIconCSS .= '.award.ac-'.$intAchID.' .ac-icon svg g:nth-child('.$icon_color_step.'){fill: '.$strAchIconColor.';}';
+						$icon_color_step++;
+					}
+					$this->tpl->add_css($strAchIconCSS);
+				} else {
+					$strAchIcon = '<img src="'.$strAchIcon.'" />';
+				}
+				
 				$blnAchActive  = $this->pdh->get('awards_achievements', 'active', array($intAchID));
 				$blnAchSpecial = $this->pdh->get('awards_achievements', 'special', array($intAchID));
 				$intAchPoints  = $this->pdh->get('awards_achievements', 'points', array($intAchID));
@@ -109,7 +125,7 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 				$content .= '
 					<div class="award ac-'.$intAchID.' awToggleTrigger">
 						<div class="ac-icon floatLeft">
-							<img src="/'.$strAchIcon.'" />
+							'.$strAchIcon.'
 						</div>
 						<div class="ac-points floatRight">
 				';
@@ -159,6 +175,22 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 					$strAchIcon = 'plugins/awards/images/'.$strAchIcon;
 				}
 				
+				if( pathinfo($strAchIcon, PATHINFO_EXTENSION) == "svg"){
+					$strAchIcon = file_get_contents($strAchIcon);
+					
+					// build the CSS Code for each SVG
+					$arrAchIconColors = unserialize( $this->pdh->get('awards_achievements', 'icon_colors', array($intAchID)) );
+					$icon_color_step = 1;
+					$strAchIconCSS = '';
+					foreach($arrAchIconColors as $strAchIconColor){
+						$strAchIconCSS .= '.award.ac-'.$intAchID.' .ac-icon svg g:nth-child('.$icon_color_step.'){fill: '.$strAchIconColor.';}';
+						$icon_color_step++;
+					}
+					$this->tpl->add_css($strAchIconCSS);
+				} else {
+					$strAchIcon = '<img src="'.$strAchIcon.'" />';
+				}
+				
 				$blnAchActive  = $this->pdh->get('awards_achievements', 'active', array($intUnreachedAwardID));
 				$intAchPoints  = $this->pdh->get('awards_achievements', 'points', array($intUnreachedAwardID));
 				$intAchDKP     = $this->pdh->get('awards_achievements', 'dkp', array($intUnreachedAwardID));
@@ -174,7 +206,7 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 				$content .= '
 					<div class="award ac-'.$intAchID.' awToggleTrigger">
 						<div class="ac-icon floatLeft">
-							<img src="/'.$strAchIcon.'" />
+							'.$strAchIcon.'
 						</div>
 						<div class="ac-points floatRight">
 				';

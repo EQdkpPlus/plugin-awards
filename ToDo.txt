@@ -2,7 +2,6 @@
 - Edit/Add Achievements (erfolge für zuweisung)
 
 	- PDH Log Einträge überarbeiten
-	- Einbau der Farbverwaltung
 
 
 - Edit/Add Assignments (zuweisung an Char)
@@ -12,7 +11,6 @@
 
 - Show Achievements (Benutzerspezifisch und Alle Nutzer)
 
-    - ICON Anzeige verbessern für spätere SVG - für CSS nutzung
     - klick auf erfolg gibt mehr infos (wer alles diesen erfolg erhielt etc)
 
 
