@@ -306,7 +306,7 @@ if ( !class_exists( "pdh_r_awards_library" ) ) {
 		 * @param integer $member_id
 		 * @return multitype assignment_id
 		 */
-		public function get_ids_where_member($member_id){
+		public function get_ids_by_member($member_id){
 			$assignment_ids = array();
 			if (is_array($this->awards_library)){
 				foreach($this->awards_library as $id => $details){
@@ -319,6 +319,46 @@ if ( !class_exists( "pdh_r_awards_library" ) ) {
 		}
 
 
+		/**
+		 * Returns member_id for $achievement_id
+		 * @param integer $achievement_id
+		 * @return multitype member_id
+		 */
+		public function get_member_of_award($id){
+			$member_ids = array();
+			if (is_array($this->awards_library)){
+				foreach($this->awards_library as $key => $value){
+					if($value['achievement_id'] == $id){
+						$member_ids[] = $this->awards_library[$key]['member_id'];
+					}
+				}
+				$member_ids = array_unique($member_ids);
+			}
+			return $member_ids;
+		}
+
+
+		/**
+		 * Returns earliest_date for $achievement_id
+		 * @param integer $achievement_id
+		 * @return integer earliest_date
+		 */
+		public function get_earliest_date_of_award($id){
+			$dates = array();
+			$earliest_date = 9999999999999999999;
+			if (is_array($this->awards_library)){
+				foreach($this->awards_library as $key => $value){
+					if($value['achievement_id'] == $id){
+						$dates[] = (int)$this->awards_library[$key]['date'];
+					}
+				}
+				if($dates[0])
+					foreach($dates as $date){
+						$earliest_date = ($date < $earliest_date) ? $date : $earliest_date;
+					}
+			}
+			return $earliest_date;
+		}
 
 
 	}//end class

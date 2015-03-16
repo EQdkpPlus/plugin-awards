@@ -202,9 +202,17 @@
 
 
 
-
-
-
-
-
-
+/********************************************************
+ *         EXAMPLE CODE for the custom.css
+ ********************************************************/
+/*  These rules will overwrite all SVG icons.
+	On the g:nth-child() can you see which SVG Part will called.
+		e.g. g:nth-child(1) for background-color        */
+		
+/*
+#awards .award .ac-icon svg g:nth-child(1){ fill: #000; }
+#awards .award .ac-icon svg g:nth-child(2){ fill: #FFF; }
+#awards .award .ac-icon svg g:nth-child(3){ fill: #FFF; }
+#awards .award .ac-icon svg g:nth-child(4){ fill: #FFF; }
+#awards .award .ac-icon svg g:nth-child(5){ fill: #FFF; }
+*/

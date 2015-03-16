@@ -22,22 +22,40 @@
 if (!defined('EQDKP_INC')){
   header('HTTP/1.0 404 Not Found');exit;
 }
-
-
 /*+----------------------------------------------------------------------------
   | awards_userprofile_customtabs_hook
   +--------------------------------------------------------------------------*/
 if (!class_exists('awards_userprofile_customtabs_hook')){
   class awards_userprofile_customtabs_hook extends gen_class
   {
-	
+
 	/**
 	  * userprofile_customtabs
 	  * display the achievement tab
 	  */
-	public function userprofile_customtabs($user_id){
+	public function userprofile_customtabs($intUserID){
 		if($this->user->check_auths(array('u_awards_view', 'a_awards_manage'), 'OR', false)){
+			$arrAchIDs		= $this->pdh->get('awards_achievements', 'id_list');
+			$intUserID		= $intUserID['user_id'];
+			$list_order		= array();
+			$intAP			= 0;
+			$status_count	= 0;
+			$status_row		= '';
+			$content		= '';
 			
+			//sorting -- newest date = up, false = unreached, special awards = disabled
+			foreach($arrAchIDs as $intAchID){
+				$award = $this->awb->award($intAchID, $intUserID);
+				if(is_array($award['member_r'][$intUserID])){
+					$list_order[$award['id']] = $award['date'];
+				}else{
+					$list_order[$award['id']] = false;
+					if(!$award['special']) unset($list_order[$award['id']]);
+				}
+			}
+			arsort($list_order);
+			
+			//build the content
 			$content = '
 				<div id="awards">
 					<div id="progress-header">
@@ -50,205 +68,72 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 						</div>
 					</div>
 					<div class="aw-list">
-						<div class="reached">
 			';
 			
-			$arrAllMemberIDs  = $this->pdh->get('member', 'connection_id', array($user_id['user_id']));
-			$arrAllAwards	  = $this->pdh->get('awards_achievements', 'id_list');
-			$arrLibAssIDs	  = array();
-			$arrReachedAwards = array();
-			$intReachedAP	  = 0;
-			
-			//fetch all assignments of each member and filter double entrys
-			$arrLibAssIDs = array();
-			foreach($arrAllMemberIDs as $intMemberID){
-				$ass_by_member = $this->pdh->get('awards_library', 'ids_where_member', array($intMemberID));
-				foreach($ass_by_member as $ass_id){
-					$arrLibAssIDs[] = $ass_id;
+			foreach($list_order as $intAchID => $status){
+				$award = $this->awb->award($intAchID, $intUserID);
+				
+				if(	   $award['dkp'] < 0){ $blnAchDKP = 1; }
+				elseif($award['dkp'] > 0){ $blnAchDKP = 2; }
+				else{					   $blnAchDKP = 0; }
+				
+				//which status_row will we build/use
+				if($status > 0){
+					$status_count++; $intAP += $award['points'];
+					if( empty($status_row) ){ $content .= '<div class="reached">'; $status_row = 'reached'; }
 				}
-			}
-			$arrLibAssIDs = array_unique($arrLibAssIDs);
-			
-			//fetch the achievements by assignments
-			foreach($arrLibAssIDs as $intLibAssID){
-				$arrLibAchIDs[$intLibAssID] = $this->pdh->get('awards_library', 'achievement_id', array($intLibAssID));
-			}
-			
-			//merge & rewrite Awards
-			$arrLibAchIDs = array_unique($arrLibAchIDs);
-			$arrLibAssIDs = array_keys($arrLibAchIDs);
-			
-			foreach($arrLibAssIDs as $intAssID){
-				$strAchDate	 = $this->time->user_date( $this->pdh->get('awards_library', 'date', array($intAssID)) );
-				$intAchID	 = $this->pdh->get('awards_library', 'achievement_id', array($intAssID));
-				$strAchName  = $this->user->multilangValue( $this->pdh->get('awards_achievements', 'name', array($intAchID)) );
-				$strAchDesc  = $this->user->multilangValue( $this->pdh->get('awards_achievements', 'description', array($intAchID)) );
-				$strAchIcon  = $this->pdh->get('awards_achievements', 'icon', array($intAchID));
-				$icon_folder = $this->pfh->FolderPath('images', 'awards');
-				if( file_exists($icon_folder.$strAchIcon) ){
-					$strAchIcon = $icon_folder.$strAchIcon;
-				} else {
-					$strAchIcon = 'plugins/awards/images/'.$strAchIcon;
+				else{
+					if( empty($status_row) ){ $content .= '<div class="unreached">'; $status_row = 'unreached'; }
+					if($status_row == 'reached'){ $content .= '</div><div class="unreached">'; $status_row = 'unreached'; }
 				}
 				
-				if( pathinfo($strAchIcon, PATHINFO_EXTENSION) == "svg"){
-					$strAchIcon = file_get_contents($strAchIcon);
-					
-					// build the CSS Code for each SVG
-					$arrAchIconColors = unserialize( $this->pdh->get('awards_achievements', 'icon_colors', array($intAchID)) );
-					$icon_color_step = 1;
-					$strAchIconCSS = '';
-					foreach($arrAchIconColors as $strAchIconColor){
-						$strAchIconCSS .= '.award.ac-'.$intAchID.' .ac-icon svg g:nth-child('.$icon_color_step.'){fill: '.$strAchIconColor.';}';
-						$icon_color_step++;
-					}
-					$this->tpl->add_css($strAchIconCSS);
-				} else {
-					$strAchIcon = '<img src="'.$strAchIcon.'" />';
-				}
-				
-				$blnAchActive  = $this->pdh->get('awards_achievements', 'active', array($intAchID));
-				$blnAchSpecial = $this->pdh->get('awards_achievements', 'special', array($intAchID));
-				$intAchPoints  = $this->pdh->get('awards_achievements', 'points', array($intAchID));
-				$intAchDKP     = $this->pdh->get('awards_achievements', 'dkp', array($intAchID));
-				$intReachedAP += $intAchPoints;
-				$arrReachedAwards[] = $intAchID;
-				if($intAchDKP < 0){
-					$blnAchDKP = 1;
-				} elseif($intAchDKP > 0){
-					$blnAchDKP = 2;
-				} else {
-					$blnAchDKP = 0;
-				}
-				
-				//build the HTML structure for achievment display of fetched data
+				//now build the award
 				$content .= '
 					<div class="award ac-'.$intAchID.' awToggleTrigger">
 						<div class="ac-icon floatLeft">
-							'.$strAchIcon.'
+							'.$this->awb->build_icon_data($intAchID, $award['icon'], unserialize($award['icon_colors'])).'
 						</div>
 						<div class="ac-points floatRight">
 				';
 				
 				if($blnAchDKP != 0){
-					if($blnAchDKP == 1){
-						$content .= '<span class="ac-points-big" style="color: #C03D00;">';
-					} else {
-						$content .= '<span class="ac-points-big" style="color: #20C000;">';
-					}
-					$content .= $intAchDKP.'<span class="ac-points-small">'.$intAchPoints.'</span></span>';
+					if($blnAchDKP == 1){ $content .= '<span class="ac-points-big" style="color: #C03D00;">'; }
+					else { $content .= '<span class="ac-points-big" style="color: #20C000;">'; }
+					$content .= $award['dkp'].'<span class="ac-points-small">'.$award['points'].'</span></span>';
 					
-				} else {
-					$content .= '<span class="ac-points-big">'.$intAchPoints.'</span>';
-				}
+				} else { $content .= '<span class="ac-points-big">'.$intAchPoints.'</span>'; }
 				
 				$content .= '
 					</div>
 					<div class="ac-main">
-						<h2 class="ac-title">'.$strAchName.'</h2>
-						<p class="ac-desc">'.$strAchDesc.'</p>
-						<p class="ac-date">'.$strAchDate.'</p>
+						<h2 class="ac-title">'.$this->user->multilangValue($award['name']).'</h2>
+						<p class="ac-desc">'.$this->user->multilangValue($award['desc']).'</p>
+						<p class="ac-date">'.$this->time->user_date($award['date']).'</p>
 					</div>
 					<div class="ac-user-list" style="display:none;">
-						Bisher haben 73 deiner Charactere diesen Erfolg erreicht.
-					</div>
-				</div>
 				';
+				
+				if($award['member_r'][$intUserID])
+					foreach($award['member_r'][$intUserID] as $intMemberID => $intMemberDate){
+						$content .= '
+							<div class="ac-member-reached user-'.$intMemberID.'">
+								'.$this->pdh->get('member', 'html_name', array($intMemberID)).' - '.$this->time->user_date($intMemberDate).'
+							</div>
+						';
+					}
+					
+				$content .= '</div></div>';
 			}
 			
-			//---- BUILD UNREACHED Container -----------------------------------------
-			$content .= '</div><div class="unreached">';
-			####################################
-			
-			$arrUnreachedAwards = array_diff($arrAllAwards, $arrReachedAwards);
-			foreach($arrUnreachedAwards as $intUnreachedAwardID){
-				$blnAchSpecial = $this->pdh->get('awards_achievements', 'special', array($intUnreachedAwardID));
-				if(!$blnAchSpecial)continue;
-				
-				$strAchName  = $this->user->multilangValue( $this->pdh->get('awards_achievements', 'name', array($intUnreachedAwardID)) );
-				$strAchDesc  = $this->user->multilangValue( $this->pdh->get('awards_achievements', 'description', array($intUnreachedAwardID)) );
-				$strAchIcon  = $this->pdh->get('awards_achievements', 'icon', array($intUnreachedAwardID));
-				$icon_folder = $this->pfh->FolderPath('images', 'awards');
-				if( file_exists($icon_folder.$strAchIcon) ){
-					$strAchIcon = $icon_folder.$strAchIcon;
-				} else {
-					$strAchIcon = 'plugins/awards/images/'.$strAchIcon;
-				}
-				
-				if( pathinfo($strAchIcon, PATHINFO_EXTENSION) == "svg"){
-					$strAchIcon = file_get_contents($strAchIcon);
-					
-					// build the CSS Code for each SVG
-					$arrAchIconColors = unserialize( $this->pdh->get('awards_achievements', 'icon_colors', array($intAchID)) );
-					$icon_color_step = 1;
-					$strAchIconCSS = '';
-					foreach($arrAchIconColors as $strAchIconColor){
-						$strAchIconCSS .= '.award.ac-'.$intAchID.' .ac-icon svg g:nth-child('.$icon_color_step.'){fill: '.$strAchIconColor.';}';
-						$icon_color_step++;
-					}
-					$this->tpl->add_css($strAchIconCSS);
-				} else {
-					$strAchIcon = '<img src="'.$strAchIcon.'" />';
-				}
-				
-				$blnAchActive  = $this->pdh->get('awards_achievements', 'active', array($intUnreachedAwardID));
-				$intAchPoints  = $this->pdh->get('awards_achievements', 'points', array($intUnreachedAwardID));
-				$intAchDKP     = $this->pdh->get('awards_achievements', 'dkp', array($intUnreachedAwardID));
-				if($intAchDKP < 0){
-					$blnAchDKP = 1;
-				} elseif($intAchDKP > 0){
-					$blnAchDKP = 2;
-				} else {
-					$blnAchDKP = 0;
-				}
-				
-				//build the HTML structure
-				$content .= '
-					<div class="award ac-'.$intAchID.' awToggleTrigger">
-						<div class="ac-icon floatLeft">
-							'.$strAchIcon.'
-						</div>
-						<div class="ac-points floatRight">
-				';
-				
-				if($blnAchDKP != 0){
-					if($blnAchDKP == 1){
-						$content .= '<span class="ac-points-big" style="color: #C03D00;">';
-					} else {
-						$content .= '<span class="ac-points-big" style="color: #20C000;">';
-					}
-					$content .= $intAchDKP.'<span class="ac-points-small">'.$intAchPoints.'</span></span>';
-					
-				} else {
-					$content .= '<span class="ac-points-big">'.$intAchPoints.'</span>';
-				}
-				
-				$content .= '
-					</div>
-					<div class="ac-main">
-						<h2 class="ac-title">'.$strAchName.'</h2>
-						<p class="ac-desc">'.$strAchDesc.'</p>
-						<p class="ac-date"> </p>
-					</div>
-					<div class="ac-user-list" style="display:none;">
-						Dieser Erfolg wird noch erarbeitet...
-					</div>
-				</div>
-				';
-			}
-			
-			####################################
 			$content .= '</div></div></div>';
-			
-			
 			
 			$this->tpl->add_js('
 				$("#my_aw_progress").progressbar({
-					value: '.count($arrLibAchIDs).',
-					max: '.count($arrAllAwards).',
+					value: '.$status_count.',
+					max: '.count($list_order).',
 				});
-				$(".progress-label").text("'.count($arrLibAchIDs).' / '.count($arrAllAwards).'");
-				$("#achievement-points").text("'.$intReachedAP.'");
+				$(".progress-label").text("'.$status_count.' / '.count($list_order).'");
+				$("#achievement-points").text("'.$intAP.'");
 				
 				$(".awToggleTrigger").on("click", function(event){
 					if ($(this).hasClass("member-view")){
@@ -261,7 +146,7 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 				});
 			', 'docready');
 			
-			//------------------------------------------------------
+			//-----------------------------------------------------------------------------------
 			$output = array(
 				'title'   => $this->user->lang('aw_customtab_title'),
 				'content' => $content,
@@ -269,8 +154,8 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 			return $output;
 		}
 	}
-	
-	
+
+
   } //end class
 } //end if class not exists
 ?>

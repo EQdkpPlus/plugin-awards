@@ -2,7 +2,7 @@
 <div class="breadcrumb-container">
 	<ul class="breamcrumb">
 		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
-		<li class="current"><a href="">{L_awards}: {L_aw_achievements}</a></li>
+		<li class="current"><a href="">{L_awards}: {L_aw_all_guild_achievements}</a></li>
 	</ul>
 	<div class="clear"></div>
 </div>
@@ -19,16 +19,25 @@ $(document).ready(function() {
 			$(this).children('.ac-user-list').css('display','inline-block');
 		}
 	});
+	
+	$('.membertooltip').each(function() {
+		$(this).qtip({
+			content: $(this).children('.membertooltip-data'),
+			position: { at: 'bottom center', my: 'top center' },
+			style: { tip: { corner: true }, width: 150, widget: true },
+			show: { solo: true, effect: function(offset){ $(this).slideDown(100); } },
+			hide: {when: {event:'mouseout unfocus'}, fixed: true, delay: 500}
+		});
+	});
 });
 </script>
 
 <div id="awards">
-	<div class="contentHeader">
-		<h1 class="contentTitle">{L_aw_achievements}</h1>
-	</div>
+	<div class="contentHeader"></div>
 	
 	<div class="contentBody">
 		<!-- IF User_logged_in -->
+		<span class="aw-points floatLeft">{AP}&nbsp;<i class="fa fa-bookmark-o"></i></span>
 		<div class="aw-tabs">
 			<ul>
 				<a href=""><li class="aw-tab-user">Show User Awards Tab</li></a>
@@ -39,27 +48,15 @@ $(document).ready(function() {
 		<div class="clear"></div>
 		<!-- ENDIF -->
 		
-		<!--<div class="aw-cat">
-			<ul>
-				<li><a href="">{L_aw_cat_all}</a></li>
-				<li><a href="">{L_aw_cat_1}</a></li>
-				<li><a href="">{L_aw_cat_2}</a></li>
-				<li><a href="">{L_aw_cat_3}</a></li>
-				<li><a href="">{L_aw_cat_4}</a></li>
-			</ul>
-		</div>-->
-		
 		<div class="aw-list">
 			<div class="aw-divider-tab"></div>
-			<div aria-valuenow="{PROGRESS_MIN}" aria-valuemax="{PROGRESS_MAX}" aria-valuemin="{PROGRESS_MIN}" role="progressbar" class="ui-progressbar ui-widget ui-widget-content ui-corner-all" id="nl_progressbar">
-				<div style="width: {PROGRESS_VALUE}%;" class="ui-progressbar-value ui-widget-header ui-corner-left"></div>
+			<div id="aw_progress">
+				<div class="progress-label">Loading...</div>
 			</div>
 			<div class="aw-divider"></div>
-			
-			<div class="reached">
-				<!-- BEGIN awards_row -->
+			<!-- BEGIN awards_row -->
 				<!-- BEGIN award -->
-				<div class="award ac-{awards_row.award.ID} awToggleTrigger">
+				<div class="award {awards_row.award.REACHED} ac-{awards_row.award.ID} awToggleTrigger">
 					<div class="ac-icon floatLeft">
 						{awards_row.award.ICON}
 					</div>
@@ -84,69 +81,27 @@ $(document).ready(function() {
 					</div>
 					
 					<div class="ac-user-list" style="display:none;">
-						<!-- BEGIN members -->
-							<!-- IF awards_row.award.members.MEMBER_REACHED -->
-							<div class="ac-member-reached">{awards_row.award.members.MEMBER_REACHED}</div>
-							<!-- ENDIF -->
-							<!-- IF awards_row.award.members.MEMBER_UNREACHED -->
-							<div class="ac-member-unreached">{awards_row.award.members.MEMBER_UNREACHED}</div>
-							<!-- ENDIF -->
-						<!-- END members -->
+						<!-- BEGIN users -->
+							<div class="ac-member-{awards_row.award.users.REACHED} user-{awards_row.award.users.ID} membertooltip">
+								{awards_row.award.users.USER}
+								<div class="membertooltip-data" style="display:none;">
+									<!-- IF awards_row.award.users.REACHED == "reached" -->
+									<!-- BEGIN members -->
+										{awards_row.award.users.members.MEMBER} - {awards_row.award.users.members.DATE}
+										<br />
+									<!-- END members -->
+									<!-- ELSE -->
+										Hat diesen Erfolg noch nicht erreicht.
+									<!-- ENDIF -->
+								</div>
+							</div>
+						<!-- END users -->
 					</div>
 				</div>
 				<!-- END award -->
-				<!-- END awards_row -->
-			</div>
-			
-			
-			
-			<!-- Hier folgt der nicht erhaltene (ausgegraute) Errfolg -->
-			<div class="unreached">
-				<!-- BEGIN unreached_row -->
-				<!-- BEGIN award -->
-				<div class="award ac-{unreached_row.award.ID} awToggleTrigger">
-					<div class="ac-icon floatLeft">
-						{unreached_row.award.ICON}
-					</div>
-					
-					<div class="ac-points floatRight">
-						<!-- IF unreached_row.award.DKP_ACTIVE != "0" -->
-						<span class="ac-points-big" style="<!-- IF unreached_row.award.DKP_ACTIVE == "1" -->color: #C03D00;<!-- ELSE -->color: #20C000;<!-- ENDIF -->">
-							{awards_row.award.DKP}
-							<span class="ac-points-small">{unreached_row.award.AP}</span>
-						</span>
-						<!-- ELSE -->
-						<span class="ac-points-big">
-							{unreached_row.award.AP}
-						</span>
-						<!-- ENDIF -->
-					</div>
-					
-					<div class="ac-main">
-						<h2 class="ac-title">{unreached_row.award.TITLE}</h2>
-						<p class="ac-desc">{unreached_row.award.DESC}</p>
-						<p class="ac-date"> </p>
-					</div>
-					
-					<div class="ac-user-list" style="display:none;">
-						Dieser Erfolg wird noch erarbeitet...
-					</div>
-				</div>
-				<!-- END award -->
-				<!-- END unreached_row -->
-			</div>
-			
-			
+			<!-- END awards_row -->
 		</div>
 	</div>
 	
 	<div class="contentFooter"></div>
 </div>
-
-
-
-
-
-
-
-<div class="clear"></div>

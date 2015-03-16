@@ -1,0 +1,116 @@
+<?php
+/*	Project:	EQdkp-Plus
+ *	Package:	Awards  Plugin
+ *	Link:		http://eqdkp-plus.eu
+ *
+ *	Copyright (C) 2006-2015 EQdkp-Plus Developer Team
+ *
+ *	This program is free software: you can redistribute it and/or modify
+ *	it under the terms of the GNU Affero General Public License as published
+ *	by the Free Software Foundation, either version 3 of the License, or
+ *	(at your option) any later version.
+ *
+ *	This program is distributed in the hope that it will be useful,
+ *	but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *	GNU Affero General Public License for more details.
+ *
+ *	You should have received a copy of the GNU Affero General Public License
+ *	along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+if( !defined( 'EQDKP_INC' ) ) {
+	die('Do not access this file directly.');
+}
+/*+----------------------------------------------------------------------------
+  | awards_builder
+  +--------------------------------------------------------------------------*/
+if(!class_exists('awards_builder')){
+	class awards_builder extends gen_class {
+		
+		public function __construct(){ }
+
+
+		/**
+		 * Get all datas of an Award by ID
+		 *
+		 * @param integer $intAchID - the Award ID
+		 * @param integer $show_member - the User ID to show only members of User
+		 * @return multitype: Array with all data. Otherwise false if award not found.
+		 */
+		public function award($intAchID, $show_member=false){
+			if(!(int)$intAchID) return false;
+			if(!$arrAch = $this->pdh->get('awards_achievements', 'data', array($intAchID))) return false;
+			$intAchDate = $this->pdh->get('awards_library', 'earliest_date_of_award', array($intAchID));
+			$award = array();
+			
+			if($show_member){
+				if($show_member > 0 && $show_member !== true){ $all_member = $this->pdh->get('member', 'connection_id', array($show_member)); }
+				else{ $all_member = $this->pdh->get('member', 'id_list'); }
+			
+				$member_of_award = $this->pdh->get('awards_library', 'member_of_award', array($intAchID));
+				
+				foreach($all_member as $member){
+					$intUserID = $this->pdh->get('member', 'userid', array($member));
+					if(in_array($member, $member_of_award)){
+						$award['member_r'][$intUserID][$member] = $intAchDate;
+					}else{
+						$award['member_u'][$intUserID][$member] = $intAchDate;
+					}
+				}
+			}
+			
+			//------------------------------------------
+			$award = array_merge(array(
+				'id'		 => $intAchID,
+				'name'		 => $arrAch['name'],
+				'desc'		 => $arrAch['description'],
+				'date'		 => ((int)$intAchDate)? $intAchDate : NULL,
+				'icon'		 => $arrAch['icon'],
+				'icon_colors'=> $arrAch['icon_colors'],
+				'active'	 => $arrAch['active'],
+				'special'	 => $arrAch['special'],
+				'points'	 => $arrAch['points'],
+				'dkp'		 => $arrAch['dkp'],
+			), $award);
+			
+			return $award;
+		}
+
+
+		/**
+		 * Build the Award Icon with CSS
+		 *
+		 * @param integer $intAchID - the Award ID
+		 * @param string $strAchIcon - the IconName
+		 * @param array $arrAchIconColors - the IconColors
+		 * @return string: SVG Code _or_ IMG HTML Code.
+		 */
+		public function build_icon_data($intAchID, $strAchIcon, $arrAchIconColors){
+			$icon_folder = $this->pfh->FolderPath('images', 'awards');
+			if( file_exists($icon_folder.$strAchIcon) ){
+				$strAchIcon = $icon_folder.$strAchIcon;
+			} else {
+				$strAchIcon = 'plugins/awards/images/'.$strAchIcon;
+			}
+			
+			if( pathinfo($strAchIcon, PATHINFO_EXTENSION) == "svg"){
+				$strAchIcon = file_get_contents($strAchIcon);
+				
+				// build the CSS Code for each SVG
+				$icon_color_step = 1;
+				foreach($arrAchIconColors as $strAchIconColor){
+					$strAchIconCSS .= '.award.ac-'.$intAchID.' .ac-icon svg g:nth-child('.$icon_color_step.'){fill: '.$strAchIconColor.';}';
+					$icon_color_step++;
+				}
+				$this->tpl->add_css($strAchIconCSS);
+			} else {
+				$strAchIcon = '<img src="'.$strAchIcon.'" />';
+			}
+			
+			return $strAchIcon;
+		}
+
+	} //end class
+} //end if class not exists
+?>

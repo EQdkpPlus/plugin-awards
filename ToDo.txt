@@ -9,16 +9,9 @@
 	- PDH Log Einträge überarbeiten
 
 
-- Show Achievements (Benutzerspezifisch und Alle Nutzer)
+- PO Template
 
-    - klick auf erfolg gibt mehr infos (wer alles diesen erfolg erhielt etc)
-	- Alles auslagern per Class /sende AchID enpfange Array mit AchDaten
-	- Erstelle die Layout auswahl Funktion und Inkras Layout
-
-
-- CSS Adjustments
-
-    - Erstelle eine custom.css ähnliche Vorgabe für den allgemeinen SVG Background
+	- Erstelle Inkras Layout
 
 
 - Cron Module

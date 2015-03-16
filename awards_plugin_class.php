@@ -102,6 +102,9 @@ class awards extends plugin_generic
 		$this->add_pdh_write_module('awards_achievements');
 		$this->add_pdh_write_module('awards_assignments');
 
+		// -- Classes -----------------------------------------
+		registry::add_class('awards_builder', 'plugins/awards/classes/', 'awb');
+
 		// -- Routing -----------------------------------------
 		$this->routing->addRoute('Awards', 'awards', 'plugins/awards/pageobjects');
 
@@ -112,6 +115,7 @@ class awards extends plugin_generic
 		// -- Menu --------------------------------------------
 		$this->add_menu('admin', $this->gen_admin_menu());
 		$this->add_menu('main', $this->gen_main_menu());
+		$this->add_menu('settings', $this->usersettings());
 
 	}
 
@@ -224,6 +228,26 @@ class awards extends plugin_generic
     	);
 		
 		return $main_menu;
+	}
+
+
+	private function usersettings(){
+		if (!$this->user->check_auth('u_awards_view', false)) return array();
+		$settings = array(
+			'awards' => array(
+				'awards' => array(
+					'aw_layout'	=> array(
+						'type'	  => 'dropdown',
+						'options' => array(
+							'1'	=> 'Default',
+							'6'	=> 'Inkraja',
+							'3'	=> 'Test',
+						),
+					),
+				)
+			),
+		);
+		return $settings;
 	}
 
 }
