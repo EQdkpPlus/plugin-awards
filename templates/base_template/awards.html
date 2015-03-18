@@ -11,20 +11,24 @@
 <script type="text/javascript">
 $(document).ready(function() {
 	$('.awToggleTrigger').on('click', function(event){
-		if ($(this).hasClass('member-view')){
-			$(this).children('.ac-user-list').css('display','none');
-			$(this).removeClass('member-view');
-		} else {
-			$(this).addClass('member-view');
-			$(this).children('.ac-user-list').css('display','inline-block');
+		if ($(this).hasClass('show-member')){
+			$(this).removeClass('show-member');
+			$(this).children('.ac-user-list').hide(50);
+		}else{
+			$('.awToggleTrigger').each(function(){
+				$(this).removeClass('show-member');
+				$(this).children('.ac-user-list').hide(50);
+			});
+			$(this).addClass('show-member');
+			$(this).children('.ac-user-list').show(200);
 		}
 	});
-	
+
 	$('.membertooltip').each(function() {
 		$(this).qtip({
 			content: $(this).children('.membertooltip-data'),
 			position: { at: 'bottom center', my: 'top center' },
-			style: { tip: { corner: true }, width: 150, widget: true },
+			style: { tip: { corner: true }, widget: true },
 			show: { solo: true, effect: function(offset){ $(this).slideDown(100); } },
 			hide: {when: {event:'mouseout unfocus'}, fixed: true, delay: 500}
 		});
@@ -37,12 +41,12 @@ $(document).ready(function() {
 	
 	<div class="contentBody">
 		<!-- IF User_logged_in -->
-		<span class="aw-points floatLeft">{AP}&nbsp;<i class="fa fa-bookmark-o"></i></span>
+		<span class="aw-points floatLeft" title="{L_aw_ap}">{AP}&nbsp;<i class="fa fa-bookmark-o"></i></span>
 		<div class="aw-tabs">
 			<ul>
-				<a href=""><li class="aw-tab-user">Show User Awards Tab</li></a>
-				<!-- IF S_ADMIN --><a href=""><li class="aw-tab-assign">Manage Assignment Tab</li></a><!-- ENDIF -->
-				<!-- IF S_ADMIN --><a href=""><li class="aw-tab-achiev">Manage Achievement Tab</li></a><!-- ENDIF -->
+				<!-- IF S_AW_ADD --><a href="{EQDKP_ROOT_PATH}plugins/awards/admin/manage_achievements.php{SID}"><li class="aw-tab-achiev">{L_aw_tab_achieve}</li></a><!-- ENDIF -->
+				<!-- IF S_AW_MANAGE --><a href="{EQDKP_ROOT_PATH}plugins/awards/admin/manage_assignments.php{SID}"><li class="aw-tab-assign">{L_aw_tab_assign}</li></a><!-- ENDIF -->
+				<a href=""><li class="aw-tab-user">{L_aw_tab_user}</li></a>
 			</ul>
 		</div>
 		<div class="clear"></div>
@@ -56,6 +60,7 @@ $(document).ready(function() {
 			<div class="aw-divider"></div>
 			<!-- BEGIN awards_row -->
 				<!-- BEGIN award -->
+				<!-- IF NOT awards_row.award.SPECIAL OR awards_row.award.USER_R OR S_ADMIN -->
 				<div class="award {awards_row.award.REACHED} ac-{awards_row.award.ID} awToggleTrigger">
 					<div class="ac-icon floatLeft">
 						{awards_row.award.ICON}
@@ -87,17 +92,18 @@ $(document).ready(function() {
 								<div class="membertooltip-data" style="display:none;">
 									<!-- IF awards_row.award.users.REACHED == "reached" -->
 									<!-- BEGIN members -->
-										{awards_row.award.users.members.MEMBER} - {awards_row.award.users.members.DATE}
+										{awards_row.award.users.members.MEMBER} {awards_row.award.users.members.DATE}
 										<br />
 									<!-- END members -->
 									<!-- ELSE -->
-										Hat diesen Erfolg noch nicht erreicht.
+										{L_aw_user_unreached}
 									<!-- ENDIF -->
 								</div>
 							</div>
 						<!-- END users -->
 					</div>
 				</div>
+				<!-- ENDIF -->
 				<!-- END award -->
 			<!-- END awards_row -->
 		</div>

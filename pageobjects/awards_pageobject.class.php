@@ -49,7 +49,8 @@ class awards_pageobject extends pageobject
 		$intUserID		= $this->user->id;
 		$intAwardRows	= 1; // Gibt an wieviele Erfolge pro Reihe angezeigt werden sollen
 		
-		$intAP		= $award_counter = $awReachedCounter = 0;
+		//define defaults for dynamic vars
+		$intAP		= $award_counter = $awReachedCounter = $blnUserReached = 0;
 		$list_order = $allAwards = array();
 		$awReached	= 'reached';
 		
@@ -86,6 +87,9 @@ class awards_pageobject extends pageobject
 				if(!is_array($award['member_r'])){ $awReached = 'unreached'; }
 				else{ $awReachedCounter++; $intAP += $award['points']; }
 				
+				if(is_array($award['member_r'][$intUserID])){ $blnUserReached = true; }
+				else{ $blnUserReached = false; }
+				
 				$this->tpl->assign_block_vars('awards_row.award', array(
 					'ID'		=> $intAchID,
 					'TITLE'		=> $this->user->multilangValue($award['name']),
@@ -98,6 +102,7 @@ class awards_pageobject extends pageobject
 					'DKP'		=> $award['dkp'],
 					'DKP_ACTIVE'=> $blnAchDKP,
 					'REACHED'	=> $awReached,
+					'USER_R'	=> $blnUserReached,
 				));
 				
 				//build the members
@@ -105,13 +110,13 @@ class awards_pageobject extends pageobject
 					foreach($award['member_r'] as $intUserID => $arrMembers){
 						$this->tpl->assign_block_vars('awards_row.award.users', array(
 							'ID'		=> $intUserID,
-							'USER'		=> $this->pdh->get('user', 'name', array($intUserID)),
+							'USER'		=> $this->pdh->geth('user', 'name', array($intUserID, '', '', true)),
 							'REACHED'	=> 'reached',
 						));
 						foreach($arrMembers as $intMemberID => $intMemberDate){
 							$this->tpl->assign_block_vars('awards_row.award.users.members', array(
-								'MEMBER'	=> $this->pdh->get('member', 'html_name', array($intMemberID)),
-								'DATE'		=> $this->time->user_date($intMemberDate),
+								'MEMBER'	=> $this->pdh->get('member', 'name_decorated', array($intMemberID, 15)),
+								'DATE'		=> '- '.$this->time->user_date($intMemberDate),
 							));
 						}
 					}
@@ -119,13 +124,13 @@ class awards_pageobject extends pageobject
 					foreach($award['member_u'] as $intUserID => $arrMembers){
 						$this->tpl->assign_block_vars('awards_row.award.users', array(
 							'ID'		=> $intUserID,
-							'USER'		=> $this->pdh->get('user', 'name', array($intUserID)),
+							'USER'		=> $this->pdh->geth('user', 'name', array($intUserID, '', '', true)),
 							'REACHED'	=> 'unreached',
 						));
 						foreach($arrMembers as $intMemberID => $intMemberDate){
 							$this->tpl->assign_block_vars('awards_row.award.users.members', array(
-								'MEMBER'	=> $this->pdh->get('member', 'html_name', array($intMemberID)),
-								'DATE'		=> $this->time->user_date($intMemberDate),
+								'MEMBER'	=> $this->pdh->get('member', 'name_decorated', array($intMemberID, 15)),
+								'DATE'		=> $this->user->lang('aw_member_unreached'),
 							));
 						}
 					}
@@ -134,7 +139,11 @@ class awards_pageobject extends pageobject
 			}while($award_counter < $intAwardRows);
 		}
 		
-		$this->tpl->assign_var('AP', $intAP);
+		$this->tpl->assign_vars(array(
+			'AP' => $intAP,
+			'S_AW_MANAGE' => $this->user->check_auth('a_awards_manage'),
+			'S_AW_ADD' => $this->user->check_auth('a_awards_add'),
+		));
 		$this->tpl->add_js('
 			$("#aw_progress").progressbar({
 				value: '.$awReachedCounter.',

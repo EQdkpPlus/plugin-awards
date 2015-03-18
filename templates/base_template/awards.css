@@ -44,9 +44,24 @@
 /***************************************
  *    CONTENT  
  ***************************************/
-#nl_progressbar {
+#awards .aw-points {
+	margin-left: 3em;
+	font-size: 15px;
+	font-weight: 700;
+	font-family: "Times New Roman", Times, serif;
+	cursor: help;
+}
+
+#aw_progress {
     margin: 5px;
 	font-size: 0.7em !important;
+}
+#aw_progress .ui-progressbar-value { margin-top: -1.7em; }
+#aw_progress .progress-label {
+    text-align: center;
+    font-weight: 700;
+    margin-top: 0.2em;
+    font-size: 12px;
 }
 
 .aw-divider {

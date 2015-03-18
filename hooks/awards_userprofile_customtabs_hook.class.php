@@ -81,8 +81,7 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 				if($status > 0){
 					$status_count++; $intAP += $award['points'];
 					if( empty($status_row) ){ $content .= '<div class="reached">'; $status_row = 'reached'; }
-				}
-				else{
+				}else{
 					if( empty($status_row) ){ $content .= '<div class="unreached">'; $status_row = 'unreached'; }
 					if($status_row == 'reached'){ $content .= '</div><div class="unreached">'; $status_row = 'unreached'; }
 				}
@@ -136,12 +135,16 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 				$("#achievement-points").text("'.$intAP.'");
 				
 				$(".awToggleTrigger").on("click", function(event){
-					if ($(this).hasClass("member-view")){
-						$(this).children(".ac-user-list").css("display","none");
-						$(this).removeClass("member-view");
-					} else {
-						$(this).addClass("member-view");
-						$(this).children(".ac-user-list").css("display","inline-block");
+					if ($(this).hasClass("show-member")){
+						$(this).removeClass("show-member");
+						$(this).children(".ac-user-list").hide(50);
+					}else{
+						$(".awToggleTrigger").each(function(){
+							$(this).removeClass("show-member");
+							$(this).children(".ac-user-list").hide(50);
+						});
+						$(this).addClass("show-member");
+						$(this).children(".ac-user-list").show(200);
 					}
 				});
 			', 'docready');
