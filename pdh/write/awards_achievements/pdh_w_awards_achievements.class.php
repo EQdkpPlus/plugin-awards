@@ -42,7 +42,7 @@ if(!class_exists('pdh_w_awards_achievements')) {
 		'icon_colors'		=> "{L_AW_ICON_COLORS}",
 		'module'			=> "{L_AW_MODULE}",
 		'module_set'		=> "{L_AW_MODULE_SETTINGS}",
-		'event_id' 			=> "{L_AW_EVENT_ID}",
+		'event_id' 			=> "{L_EVENT}",
 	);
 
 
@@ -79,7 +79,7 @@ if(!class_exists('pdh_w_awards_achievements')) {
 	  * Add a Achievement
 	  */
 	public function add($strName, $strDescription, $blnActive, $blnSpecial,
-						$intPoints, $fltDKP, $strIcon, $arrIconColors, $strModule, $strModuleSet,$intEventID){
+						$intPoints, $fltDKP, $strIcon, $arrIconColors, $strModule, $strModuleSet, $intEventID){
 		$arrQuery  = array(
 			'name' 				=> $strName,
 			'description'		=> $strDescription,
@@ -99,8 +99,16 @@ if(!class_exists('pdh_w_awards_achievements')) {
 		
 		if ($objQuery){
 			$id = $objQuery->insertId;
+			
 			$log_action = $this->logs->diff(false, $arrQuery, $this->arrLogLang);
-			$this->log_insert("action_achievement_added", $log_action, $id, $arrQuery["name"], 1, 'awards');
+			
+			$log_action['{L_NAME}']				  = $this->parse4log($log_action['{L_NAME}']);
+			$log_action['{L_DESCRIPTION}']		  = $this->parse4log($log_action['{L_DESCRIPTION}']);
+			$log_action['{L_AW_ICON_COLORS}']	  = $this->parse4log($log_action['{L_AW_ICON_COLORS}']);
+			$log_action['{L_AW_MODULE_SETTINGS}'] = $this->parse4log($log_action['{L_AW_MODULE_SETTINGS}']);
+			$log_action['{L_EVENT}']			  = $this->pdh->get('event', 'name', array($log_action['{L_EVENT}']));
+			
+			$this->log_insert("action_achievement_added", $log_action, $id, $log_action['{L_NAME}'], 1, 'awards');
 			
 			$this->pdh->enqueue_hook('awards_achievements_update');
 			return $id;
@@ -114,7 +122,7 @@ if(!class_exists('pdh_w_awards_achievements')) {
 	  * Update a Achievement
 	  */
 	public function update($id, $strName, $strDescription, $intSortID, $blnActive, $blnSpecial,
-							$intPoints, $fltDKP, $strIcon, $arrIconColors, $strModule, $strModuleSet,$intEventID){
+							$intPoints, $fltDKP, $strIcon, $arrIconColors, $strModule, $strModuleSet, $intEventID){
 		$arrQuery = array(
 			'name' 				=> $strName,
 			'description'		=> $strDescription,
@@ -135,11 +143,22 @@ if(!class_exists('pdh_w_awards_achievements')) {
 		$objQuery = $this->db->prepare("UPDATE __awards_achievements :p WHERE id=?")->set($arrQuery)->execute($id);
 		
 		if ($objQuery){
-			$this->pdh->enqueue_hook('awards_achievements_update');
+			$arrOldData['name']		   = $this->parse4log($arrOldData['name']);
+			$arrOldData['description'] = $this->parse4log($arrOldData['description']);
+			$arrOldData['icon_colors'] = $this->parse4log($arrOldData['icon_colors']);
+			$arrOldData['module_set']  = $this->parse4log($arrOldData['module_set']);
+			$arrOldData['event_id']	   = $this->pdh->get('event', 'name', array($arrOldData['event_id']));
+			
+			$arrQuery['name']		 = $this->parse4log($arrQuery['name']);
+			$arrQuery['description'] = $this->parse4log($arrQuery['description']);
+			$arrQuery['icon_colors'] = $this->parse4log($arrQuery['icon_colors']);
+			$arrQuery['module_set']	 = $this->parse4log($arrQuery['module_set']);
+			$arrQuery['event_id']	 = $this->pdh->get('event', 'name', array($arrQuery['event_id']));
 			
 			$log_action = $this->logs->diff($arrOldData, $arrQuery, $this->arrLogLang, array('description' => 1), true);
-			$this->log_insert("action_achievement_updated", $log_action, $id, $arrOldData["name"], 1, 'awards');
+			$this->log_insert("action_achievement_updated", $log_action, $id, $arrOldData['name'], 1, 'awards');
 			
+			$this->pdh->enqueue_hook('awards_achievements_update');
 			return $id;
 		}
 		
@@ -170,6 +189,20 @@ if(!class_exists('pdh_w_awards_achievements')) {
 		
 		if ($objQuery) return true;
 		return false;
+	}
+
+
+	/* Parse serialized arrays for the log insertion */
+	private function parse4log($var){
+		$var = unserialize($var);
+		if(!is_array($var)) return $var;
+		
+		$retu = '';
+		foreach($var as $key => $value){
+			$retu .= $key.' => '.$value.'<br />';
+		}
+		
+		return $retu;
 	}
 
 

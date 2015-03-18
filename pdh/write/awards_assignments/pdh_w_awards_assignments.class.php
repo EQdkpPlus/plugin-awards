@@ -73,6 +73,7 @@ if(!class_exists('pdh_w_awards_assignments')) {
 	public function add($intAchID, $arrAdjIDs, $strAdjGK, $intDate=false){
 		if(!empty($arrAdjIDs) && !is_array($arrAdjIDs)) $arrAdjIDs = array($arrAdjIDs);
 		$intDate = ($intDate) ? $intDate : $this->time->time;
+		$strMembers = '';
 		$ids = array();
 		
 		foreach($arrAdjIDs as $intAdjID){
@@ -87,18 +88,19 @@ if(!class_exists('pdh_w_awards_assignments')) {
 			
 			if(!$objQuery){ return false; }
 			$ids[] = $objQuery->insertId;
+			$strMembers .= $this->pdh->get('adjustment', 'member_name', array($intAdjID)).', ';
 		}
 		
+		$strAchName	= $this->parse4log($this->pdh->get('awards_achievements', 'name', array($intAchID)));
 		$log_action = array(
-			'{L_ADJUSTMENT}'	=> $adjustment_value,
-			'{L_REASON}'		=> $adjustment_reason,
-			'{L_MEMBERS}'		=> implode(', ', $member_names),
-			'{L_EVENT}'			=> $this->pdh->get('event', 'name', $event_id),
-			'{L_RAID}'			=> $raid_id,
+			'{L_AW_ACHIEVEMENT}' => $strAchName,
+			'{L_DATE}'			 => $this->time->date('Y-m-d H:i', $intDate),
+			'{L_MEMBER}'		 => $strMembers,
 		);
-		$this->log_insert('action_assignment_added', $log_action, $id, $intAchID, 1, 'awards');
+		
+		$this->log_insert('action_assignment_added', $log_action, $intAchID, $strAchName, 1, 'awards');
+		
 		$this->pdh->enqueue_hook('awards_assignments_update', $ids);
-			
 		return $ids;
 	}
 
@@ -129,6 +131,20 @@ if(!class_exists('pdh_w_awards_assignments')) {
 		}
 		
 		return false;
+	}
+
+
+	/* Parse serialized arrays for the log insertion */
+	private function parse4log($var){
+		$var = unserialize($var);
+		if(!is_array($var)) return $var;
+		
+		$retu = '';
+		foreach($var as $key => $value){
+			$retu .= $key.' => '.$value.'<br />';
+		}
+		
+		return $retu;
 	}
 
 

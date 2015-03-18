@@ -2,11 +2,17 @@
 - Edit/Add Achievements (erfolge für zuweisung)
 
 	- PDH Log Einträge überarbeiten
+		-- add = fixed
+		-- upd = fixed
+		-- del = fehlt (benötigt vollständige überarbeitung)
 
 
 - Edit/Add Assignments (zuweisung an Char)
 
 	- PDH Log Einträge überarbeiten
+		-- add = fixed
+		-- upd = fehlt (benötigt vollständige überarbeitung)
+		-- del = fehlt (benötigt vollständige überarbeitung)
 
 
 - PO Template
@@ -16,8 +22,21 @@
 
 - Cron Module
 
+	- den include verbessern //falls nicht vorhanden break anstatt ein fatal error zu provozieren
     - Raidbeteiligung: Anzahl der Raids in dem entsprechenden ausgewählten MultiDKP (das könnten ja auch mehrere sein)
 	- Punktestände erreicht oder eine gewisse Anzahl an Items erhalten hat
+
+
+--------------------------------------------
+spontan einfälle...
+	- Pageobject Pagination
+	- mehrere Cron Module an einem Award mit zugehöriger Abhängigkeits möglichkeit
+	- eigene Pagination auswahl für Admin sites unter usersettings
+	- sicherheitscheck bei der ajax.php maybe csrf token
+	- evntl. über usersettings on/off portal hook anzeige wv Awards erhalten + AP
+	- jQuery erkennen lassen bei award erstellung ob svg oder nicht und d/enable die colorpicker
+	- bei add/edit award quick info tooltips
+--------------------------------------------
 
 
 
