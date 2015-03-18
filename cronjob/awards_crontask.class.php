@@ -44,7 +44,7 @@ if ( !class_exists( "awards_crontask" ) ) {
 						
 						$arrMemberIDs = $module->run($intAchID);
 						if($arrMemberIDs){
-							$this->addAward($intAchID, $arrMemberIDs);
+							$this->awb->add_assignment($intAchID, $arrMemberIDs);
 						}
 					}
 				}
@@ -52,42 +52,7 @@ if ( !class_exists( "awards_crontask" ) ) {
 		}
 
 
-		public function addAward($intAchID, $arrMemberIDs){
-			// check if member has already this award
-			$arrAdjIDs = $this->pdh->get('adjustment','adjsofeventid', array( $this->pdh->get('awards_achievements', 'event_id', array($intAchID)) ));
-			$arrAdjMemberIDs = array();
-			foreach($arrAdjIDs as $intAdjID)
-				$arrAdjMemberIDs[] = $this->pdh->get('adjustment', 'member', array($intAdjID));
-			
-			$arrMemberIDs = array_diff($arrMemberIDs, $arrAdjMemberIDs);
-			
-			// fetch Achievement Data
-			$intDate		= $this->time->fromformat($this->in->get('date', '1.1.1970'), 1);
-			$fltAchDKP		= $this->pdh->get('awards_achievements', 'dkp', array($intAchID));
-			$arrAchName		= unserialize( $this->pdh->get('awards_achievements', 'name', array($intAchID)) );
-			$strAchName		= $this->user->lang('aw_achievement').': '.$arrAchName[$this->config->get('default_lang')];
-			$intAchEventID	= $this->pdh->get('awards_achievements', 'event_id', array($intAchID));
-			
-			// add Award to Member
-			$arrAdjIDs = $this->pdh->put('adjustment', 'add_adjustment', array($fltAchDKP, $strAchName, $arrMemberIDs, $intAchEventID, 0, $intDate));
-			if($arrAdjIDs){
-				$this->pdh->process_hook_queue();
-				$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($arrAdjIDs['0']));
-				
-				foreach($arrAdjIDs as $intAdjID)
-					$this->pdh->put('awards_assignments', 'add', array($intDate, $intAchID, $intAdjID, $strAdjGK));
-				
-				$this->pdh->process_hook_queue();
-			}
-			
-			// add Notifications
-			$arrUserIDs = array();
-			foreach($arrMemberIDs as $intMemberID)
-				$arrUserIDs[] = $this->pdh->get('member', 'user', array($intAdjUserID));
-			
-			$this->ntfy->add('awards_new_award', $intAchID, "Plugin: ".$this->user->lang('awards'), $this->routing->build('Awards', false, false, true, true), array_unique($arrUserIDs));	
-			
-		}
+
 	}
 }
 ?>

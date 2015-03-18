@@ -72,49 +72,14 @@ class awards_manage_assignments extends page_generic
 		if(empty($arrAdjUserIDs)) $missing[] = $this->user->lang('members');
 		if(!empty($missing)) return;
 		
-		if($blnAchActive == 1 ){
-			if ($intAssID){ //update Assignment
-				/*$strAdjGK  = $this->pdh->get('awards_assignments', 'adj_group_key', array($intAssID));
-				$arrAdjIDs = $this->pdh->get('adjustment', 'ids_of_group_key', array($strAdjGK));
-				
-				$arrAdjIDs = $this->pdh->put('adjustment', 'update_adjustment', array($strAdjGK, $fltAchDKP, $strAchName, $arrAdjUserIDs, $intAchEventID, 0, $intAssDate));
-				if($arrAdjIDs){
-					$this->pdh->process_hook_queue();
-					$strNewAdjGK  = $this->pdh->get('adjustment', 'group_key', array($arrAdjIDs[0]));
-					$arrNewAdjIDs = $this->pdh->get('adjustment', 'ids_of_group_key', array($strNewAdjGK));
-					
-					$arrAssIDs = $this->pdh->put('awards_assignments', 'update', array($strAdjGK, $intAchID, $arrNewAdjIDs, $strNewAdjGK, $intAssDate));
-					
-					### Here we need the notify integration
-				
-					$blnResult = true;
-				}*/
-				$blnResult = false;
+		if($intAssID){ //update Assignment
+			$blnResult = false;
 			
-			} else { //add Assignment
-				$arrAdjID = $this->pdh->put('adjustment', 'add_adjustment', array($fltAchDKP, $strAchName, $arrAdjUserIDs, $intAchEventID, 0, $intAssDate));
-				
-				if($arrAdjID > 0){
-					$this->pdh->process_hook_queue();
-					$strAdjGK = $this->pdh->get('adjustment', 'group_key', array($arrAdjID[0]));
-					
-					foreach($arrAdjID as $intAdjID){
-						if ($this->pdh->put('awards_assignments', 'add', array($intAssDate, $intAchID, $intAdjID, $strAdjGK))){
-							$blnResult = true;
-							
-						} else { $this->pdh->put('adjustment', 'delete_adjustment', array($intAdjID)); }
-					}
-					if($blnResult){
-						$arrUserIDs = array();
-						foreach($arrAdjUserIDs as $intAdjUserID)
-							$arrUserIDs[] = $this->pdh->get('member', 'user', array($intAdjUserID));
-						
-						$this->ntfy->add('awards_new_award', $intAchID, "Plugin: ".$this->user->lang('awards'), $this->routing->build('Awards', false, false, true, true), array_unique($arrUserIDs));
-					}
-					
-				} else { $blnResult = false; }
-			}
-		} else { $blnResult = false; }
+		}else{ //add Assignment
+			$arrAssIDs = $this->awb->add_assignment($intAchID, $arrAdjUserIDs, $intAssDate);
+			if($arrAssIDs){ $blnResult = true; }
+			else{ $blnResult = false; }
+		}
 		
 		//output Message
 		if ($blnResult){

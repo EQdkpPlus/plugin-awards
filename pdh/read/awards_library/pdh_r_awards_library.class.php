@@ -339,6 +339,24 @@ if ( !class_exists( "pdh_r_awards_library" ) ) {
 
 
 		/**
+		 * Returns if the member has already this award
+		 * @param integer $intAchID
+		 * @param integer $intMemberID
+		 * @return boolean: true OR false
+		 */
+		public function get_member_has_award($intAchID, $intMemberID){
+			if (is_array($this->awards_library)){
+				foreach($this->awards_library as $key => $value){
+					if($value['achievement_id'] == $intAchID && $value['member_id'] == $intMemberID){
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+
+		/**
 		 * Returns earliest_date for $achievement_id
 		 * @param integer $achievement_id
 		 * @return integer earliest_date

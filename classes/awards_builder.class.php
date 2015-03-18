@@ -111,6 +111,54 @@ if(!class_exists('awards_builder')){
 			return $strAchIcon;
 		}
 
+
+		/**
+		 * Assign an Award
+		 * 
+		 * @param integer $intAchID - the Award ID
+		 * @param array $arrMemberIDs - the Members
+		 * @param integer $intDate - the Date
+		 * @return array: $arrAssIDs OR false if anything failed
+		 */
+		public function add_assignment($intAchID, $arrMemberIDs, $intDate=false){
+			$intDate		= ($intDate) ? $intDate : $this->time->time;
+			$arrAch			= $this->pdh->get('awards_achievements', 'data', array($intAchID));
+			$arrAch['name'] = unserialize($arrAch['name']);
+			$arrAch['name'] = $this->user->lang('aw_achievement').': '.$arrAch['name'][$this->config->get('default_lang')];
+			
+			//check the conditions
+			if(!$arrAch['active']) return false;
+			
+			foreach($arrMemberIDs as $key => $intMemberID)
+				if( $this->pdh->get('awards_library', 'member_has_award', array($intAchID, $intMemberID)) )
+					unset($arrMemberIDs[$key]);
+			
+			//add Award
+			if($arrMemberIDs){
+				$arrAdjIDs = $this->pdh->put('adjustment', 'add_adjustment', array($arrAch['dkp'], $arrAch['name'], $arrMemberIDs, $arrAch['event_id'], 0, $intDate));
+				if($arrAdjIDs){
+					$this->pdh->process_hook_queue();
+					$strAdjGK	= $this->pdh->get('adjustment', 'group_key', array($arrAdjIDs['0']));
+					$arrAssIDs	= $this->pdh->put('awards_assignments', 'add', array($intAchID, $arrAdjIDs, $strAdjGK, $intDate));
+				}else{ return false; }
+			}else{ return false; }
+			
+			// add Notifications
+			if($arrAssIDs){
+				$this->pdh->process_hook_queue();
+				
+				$arrUserIDs = array();
+				foreach($arrMemberIDs as $intMemberID)
+					$arrUserIDs[] = $this->pdh->get('member', 'user', array($intMemberID));
+				
+				$this->ntfy->add('awards_new_award', $intAchID, "Plugin: ".$this->user->lang('awards'), $this->routing->build('Awards', false, false, true, true), array_unique($arrUserIDs));
+				
+				return $arrAssIDs;
+			}else{ return false; }
+		}
+
+
+
 	} //end class
 } //end if class not exists
 ?>

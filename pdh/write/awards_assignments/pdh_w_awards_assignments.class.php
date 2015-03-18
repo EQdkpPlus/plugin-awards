@@ -36,7 +36,7 @@ if(!class_exists('pdh_w_awards_assignments')) {
 			'adj_id'			=> '{L_AW_ADJ_ID}',
 			'adj_group_key'		=> '{L_AW_ADJ_GK}',
 	);
-	
+
 
 	/**
 	  * Delete all selected Assignments
@@ -55,7 +55,7 @@ if(!class_exists('pdh_w_awards_assignments')) {
 		$this->pdh->enqueue_hook('awards_assignments_update');
 		return true;
 	}
-		
+	
 	private function delete_recursiv($intAssignmentID){
 		$arrOldData = $this->pdh->get('awards_assignments', 'data', array($intAssignmentID));
 		$this->db->prepare("DELETE FROM __awards_assignments WHERE id =?")->execute($intAssignmentID);
@@ -65,34 +65,44 @@ if(!class_exists('pdh_w_awards_assignments')) {
 		
 		return true;
 	}
-	
-	
+
+
 	/**
-	  * Add a Assignment
+	  * Add Assignments
 	  */
-	public function add($intAssDate=false, $intAchID, $arrAdjID, $strAdjGK){
-		$intAssDate = ($intAssDate) ? $intAssDate : $this->time->time;
-		$arrQuery  = array(
-			'date' 				=> $intAssDate,
-			'achievement_id'	=> $intAchID,
-			'adj_id'			=> $arrAdjID,
-			'adj_group_key'		=> $strAdjGK,
-		);
+	public function add($intAchID, $arrAdjIDs, $strAdjGK, $intDate=false){
+		if(!empty($arrAdjIDs) && !is_array($arrAdjIDs)) $arrAdjIDs = array($arrAdjIDs);
+		$intDate = ($intDate) ? $intDate : $this->time->time;
+		$ids = array();
 		
-		$objQuery = $this->db->prepare("INSERT INTO __awards_assignments :p")->set($arrQuery)->execute();
-		
-		if ($objQuery){
-			$id = $objQuery->insertId;
-			$log_action = $this->logs->diff(false, $arrQuery, $this->arrLogLang);
-			$this->log_insert("action_assignment_added", $log_action, $id, $arrQuery["achievement_id"], 1, 'awards');
+		foreach($arrAdjIDs as $intAdjID){
+			$arrQuery  = array(
+				'date' 				=> $intDate,
+				'achievement_id'	=> $intAchID,
+				'adj_id'			=> $intAdjID,
+				'adj_group_key'		=> $strAdjGK,
+			);
 			
-			$this->pdh->enqueue_hook('awards_assignments_update');
-			return $id;
+			$objQuery = $this->db->prepare("INSERT INTO __awards_assignments :p")->set($arrQuery)->execute();
+			
+			if(!$objQuery){ return false; }
+			$ids[] = $objQuery->insertId;
 		}
-		return false;
+		
+		$log_action = array(
+			'{L_ADJUSTMENT}'	=> $adjustment_value,
+			'{L_REASON}'		=> $adjustment_reason,
+			'{L_MEMBERS}'		=> implode(', ', $member_names),
+			'{L_EVENT}'			=> $this->pdh->get('event', 'name', $event_id),
+			'{L_RAID}'			=> $raid_id,
+		);
+		$this->log_insert('action_assignment_added', $log_action, $id, $intAchID, 1, 'awards');
+		$this->pdh->enqueue_hook('awards_assignments_update', $ids);
+			
+		return $ids;
 	}
-	
-	
+
+
 	/**
 	  * Update a Assignment
 	  */
