@@ -45,7 +45,7 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 			
 			//sorting -- newest date = up, false = unreached, special awards = disabled
 			foreach($arrAchIDs as $intAchID){
-				$award = $this->awb->award($intAchID, $intUserID);
+				$award = $this->awards->award($intAchID, $intUserID);
 				if(is_array($award['member_r'][$intUserID])){
 					$list_order[$award['id']] = $award['date'];
 				}else{
@@ -71,7 +71,7 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 			';
 			
 			foreach($list_order as $intAchID => $status){
-				$award = $this->awb->award($intAchID, $intUserID);
+				$award = $this->awards->award($intAchID, $intUserID);
 				
 				if(	   $award['dkp'] < 0){ $blnAchDKP = 1; }
 				elseif($award['dkp'] > 0){ $blnAchDKP = 2; }
@@ -90,7 +90,7 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 				$content .= '
 					<div class="award ac-'.$intAchID.' awToggleTrigger">
 						<div class="ac-icon floatLeft">
-							'.$this->awb->build_icon_data($intAchID, $award['icon'], unserialize($award['icon_colors'])).'
+							'.$this->awards->build_icon($intAchID, $award['icon'], unserialize($award['icon_colors'])).'
 						</div>
 						<div class="ac-points floatRight">
 				';

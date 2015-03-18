@@ -44,7 +44,7 @@ if ( !class_exists( "awards_crontask" ) ) {
 						
 						$arrMemberIDs = $module->run($intAchID);
 						if($arrMemberIDs){
-							$this->awb->add_assignment($intAchID, $arrMemberIDs);
+							$this->awards->add_assignment($intAchID, $arrMemberIDs);
 						}
 					}
 				}

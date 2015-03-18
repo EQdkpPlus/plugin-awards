@@ -60,7 +60,7 @@ class awards_pageobject extends pageobject
 		
 		//sorting -- award by latest date -- rebuild array to read in multiple loops
 		foreach($arrAchIDs as $intAchID){
-			$award = $this->awb->award($intAchID);
+			$award = $this->awards->award($intAchID);
 			if(is_array($award['member_r'][$intUserID])){
 				$list_order[$award['id']] = $award['date'];
 			}else{
@@ -76,9 +76,9 @@ class awards_pageobject extends pageobject
 			
 			do{
 				if(!$intAchID = $allAwards[$award_counter]) break;
-				$award = $this->awb->award($intAchID, true);
+				$award = $this->awards->award($intAchID, true);
 				
-				$strAchIcon = $this->awb->build_icon_data($intAchID, $award['icon'], unserialize($award['icon_colors']));
+				$strAchIcon = $this->awards->build_icon($intAchID, $award['icon'], unserialize($award['icon_colors']));
 				
 				if(	   $award['dkp'] < 0){ $blnAchDKP = 1; }
 				elseif($award['dkp'] > 0){ $blnAchDKP = 2; }

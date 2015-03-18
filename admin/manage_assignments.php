@@ -76,7 +76,7 @@ class awards_manage_assignments extends page_generic
 			$blnResult = false;
 			
 		}else{ //add Assignment
-			$arrAssIDs = $this->awb->add_assignment($intAchID, $arrAdjUserIDs, $intAssDate);
+			$arrAssIDs = $this->awards->add_assignment($intAchID, $arrAdjUserIDs, $intAssDate);
 			if($arrAssIDs){ $blnResult = true; }
 			else{ $blnResult = false; }
 		}

@@ -23,10 +23,10 @@ if( !defined( 'EQDKP_INC' ) ) {
 	die('Do not access this file directly.');
 }
 /*+----------------------------------------------------------------------------
-  | awards_builder
+  | awards_plugin
   +--------------------------------------------------------------------------*/
-if(!class_exists('awards_builder')){
-	class awards_builder extends gen_class {
+if(!class_exists('awards_plugin')){
+	class awards_plugin extends gen_class {
 		
 		public function __construct(){ }
 
@@ -86,7 +86,7 @@ if(!class_exists('awards_builder')){
 		 * @param array $arrAchIconColors - the IconColors
 		 * @return string: SVG Code _or_ IMG HTML Code.
 		 */
-		public function build_icon_data($intAchID, $strAchIcon, $arrAchIconColors){
+		public function build_icon($intAchID, $strAchIcon, $arrAchIconColors){
 			$icon_folder = $this->pfh->FolderPath('images', 'awards');
 			if( file_exists($icon_folder.$strAchIcon) ){
 				$strAchIcon = $icon_folder.$strAchIcon;

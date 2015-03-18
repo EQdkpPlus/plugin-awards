@@ -103,7 +103,7 @@ class awards extends plugin_generic
 		$this->add_pdh_write_module('awards_assignments');
 
 		// -- Classes -----------------------------------------
-		registry::add_class('awards_builder', 'plugins/awards/classes/', 'awb');
+		registry::add_class('awards_plugin', 'plugins/awards/classes/', 'awards');
 
 		// -- Routing -----------------------------------------
 		$this->routing->addRoute('Awards', 'awards', 'plugins/awards/pageobjects');
