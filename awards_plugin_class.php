@@ -236,14 +236,31 @@ class awards extends plugin_generic
 		$settings = array(
 			'awards' => array(
 				'awards' => array(
+					/*'aw_show_hook'	=> array(
+						'type'		=> 'radio',
+					),*/
 					'aw_layout'	=> array(
-						'type'	  => 'dropdown',
-						'options' => array(
-							'1'	=> 'Default',
-							'6'	=> 'Inkraja',
-							'3'	=> 'Test',
-						),
+						'type'	  => 'spinner',
+						'min'	  => 1,
+						'step'	  => 1,
+						'default' => 1
 					),
+					/*'aw_pagination' => array(
+						'type'	  => 'spinner',
+						'check'	  => 'u_awards_view',
+						'size'	  => 5,
+						'min'	  => 10,
+						'step'	  => 10,
+						'default' => 100
+					),
+					'aw_admin_pagination' => array(
+						'type'	  => 'spinner',
+						'check'	  => 'a_awards_manage',
+						'size'	  => 5,
+						'min'	  => 10,
+						'step'	  => 10,
+						'default' => 100
+					),*/
 				)
 			),
 		);

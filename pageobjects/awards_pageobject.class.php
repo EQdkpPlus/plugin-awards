@@ -94,7 +94,7 @@ class awards_pageobject extends pageobject
 					'ID'		=> $intAchID,
 					'TITLE'		=> $this->user->multilangValue($award['name']),
 					'DESC'		=> $this->user->multilangValue($award['desc']),
-					'DATE'		=> $this->time->user_date($award['date']),
+					'DATE'		=> (isset($award['date']))? $this->time->user_date($award['date']) : '',
 					'ICON'		=> $strAchIcon,
 					'ACTIVE'	=> $award['active'],
 					'SPECIAL'	=> $award['special'],
@@ -140,9 +140,10 @@ class awards_pageobject extends pageobject
 		}
 		
 		$this->tpl->assign_vars(array(
-			'AP' => $intAP,
-			'S_AW_MANAGE' => $this->user->check_auth('a_awards_manage'),
-			'S_AW_ADD' => $this->user->check_auth('a_awards_add'),
+			'AP'			=> $intAP,
+			'AWARD_IN_ROW'	=> $intAwardRows,
+			'S_AW_MANAGE'	=> $this->user->check_auth('a_awards_manage'),
+			'S_AW_ADD'		=> $this->user->check_auth('a_awards_add'),
 		));
 		$this->tpl->add_js('
 			$("#aw_progress").progressbar({

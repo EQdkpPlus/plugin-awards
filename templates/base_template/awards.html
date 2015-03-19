@@ -10,6 +10,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+<!-- IF AWARD_IN_ROW == 1 -->
 	$('.awToggleTrigger').on('click', function(event){
 		if ($(this).hasClass('show-member')){
 			$(this).removeClass('show-member');
@@ -33,6 +34,41 @@ $(document).ready(function() {
 			hide: {when: {event:'mouseout unfocus'}, fixed: true, delay: 500}
 		});
 	});
+<!-- ELSE -->
+	$('.awToggleTrigger').on('click', function(event){
+		if ($(this).hasClass('show-more')){
+			$(this).removeClass('show-more');
+			$(this).children('.aw-extended').hide(50);
+		}else{
+			$('.awToggleTrigger').each(function(){
+				$(this).removeClass('show-more');
+				$(this).children('.aw-extended').hide(50);
+			});
+			$(this).addClass('show-more');
+			$(this).children('.aw-extended').show(200);
+		}
+	});
+	
+	$('.awardtooltip').each(function() {
+		$(this).qtip({
+			content: $(this).data('name') + ' - ' + $(this).data('date'),
+			position: { at: 'bottom center', my: 'top center', },
+			style: { tip: { corner: true }, widget: true },
+			show: { solo: true, },
+			hide: { fixed: true, }
+		});
+	});
+	
+	$('.membertooltip').each(function() {
+		$(this).qtip({
+			content: $(this).children('.membertooltip-data'),
+			position: { at: 'bottom center', my: 'top center' },
+			style: { tip: { corner: true }, widget: true },
+			show: { solo: true, effect: function(offset){ $(this).slideDown(100); } },
+			hide: {when: {event:'mouseout unfocus'}, fixed: true, delay: 500}
+		});
+	});
+<!-- ENDIF -->
 });
 </script>
 
@@ -59,34 +95,37 @@ $(document).ready(function() {
 			</div>
 			<div class="aw-divider"></div>
 			<!-- BEGIN awards_row -->
+				<!-- IF AWARD_IN_ROW != 1 --><div class="awards_row"><!-- ENDIF -->
+				
 				<!-- BEGIN award -->
 				<!-- IF NOT awards_row.award.SPECIAL OR awards_row.award.USER_R OR S_ADMIN -->
-				<div class="award {awards_row.award.REACHED} ac-{awards_row.award.ID} awToggleTrigger">
-					<div class="ac-icon floatLeft">
-						{awards_row.award.ICON}
-					</div>
-					
-					<div class="ac-points floatRight">
-						<!-- IF awards_row.award.DKP_ACTIVE != "0" -->
-						<span class="ac-points-big" style="<!-- IF awards_row.award.DKP_ACTIVE == "1" -->color: #C03D00;<!-- ELSE -->color: #20C000;<!-- ENDIF -->">
-							{awards_row.award.DKP}
-							<span class="ac-points-small">{awards_row.award.AP}</span>
-						</span>
-						<!-- ELSE -->
-						<span class="ac-points-big">
-							{awards_row.award.AP}
-						</span>
-						<!-- ENDIF -->
-					</div>
-					
-					<div class="ac-main">
-						<h2 class="ac-title">{awards_row.award.TITLE}</h2>
-						<p class="ac-desc">{awards_row.award.DESC}</p>
-						<p class="ac-date">{awards_row.award.DATE}</p>
-					</div>
-					
-					<div class="ac-user-list" style="display:none;">
-						<!-- BEGIN users -->
+					<!-- IF AWARD_IN_ROW == 1 -->
+					<div class="award {awards_row.award.REACHED} ac-{awards_row.award.ID} awToggleTrigger">
+						<div class="ac-icon floatLeft">
+							{awards_row.award.ICON}
+						</div>
+						
+						<div class="ac-points floatRight">
+							<!-- IF awards_row.award.DKP_ACTIVE != "0" -->
+							<span class="ac-points-big" style="<!-- IF awards_row.award.DKP_ACTIVE == "1" -->color: #C03D00;<!-- ELSE -->color: #20C000;<!-- ENDIF -->">
+								{awards_row.award.DKP}
+								<span class="ac-points-small">{awards_row.award.AP}</span>
+							</span>
+							<!-- ELSE -->
+							<span class="ac-points-big">
+								{awards_row.award.AP}
+							</span>
+							<!-- ENDIF -->
+						</div>
+						
+						<div class="ac-main">
+							<h2 class="ac-title">{awards_row.award.TITLE}</h2>
+							<p class="ac-desc">{awards_row.award.DESC}</p>
+							<p class="ac-date">{awards_row.award.DATE}</p>
+						</div>
+						
+						<div class="ac-user-list" style="display:none;">
+							<!-- BEGIN users -->
 							<div class="ac-member-{awards_row.award.users.REACHED} user-{awards_row.award.users.ID} membertooltip">
 								{awards_row.award.users.USER}
 								<div class="membertooltip-data" style="display:none;">
@@ -100,11 +139,47 @@ $(document).ready(function() {
 									<!-- ENDIF -->
 								</div>
 							</div>
-						<!-- END users -->
+							<!-- END users -->
+						</div>
 					</div>
-				</div>
+					
+					<!-- ELSE -->
+					
+					<div class="award {awards_row.award.REACHED} ac-{awards_row.award.ID} awToggleTrigger">
+						<div class="ac-icon floatLeft awardtooltip" data-name="{awards_row.award.TITLE}" data-date="{awards_row.award.DATE}">
+							{awards_row.award.ICON}
+						</div>
+						
+						<div class="aw-extended floatRight membertooltip" style="display:none;">
+							<h2 class="ac-title">{awards_row.award.TITLE}</h2>
+							{awards_row.award.DESC}<br />
+							{awards_row.award.DATE}<br />
+							
+							DKP: {awards_row.award.DKP}<br />
+							AP: {awards_row.award.AP}
+							
+							<div class="membertooltip-data" style="display:none;">
+							<!-- BEGIN users -->
+								<div class="ac-member-{awards_row.award.users.REACHED} user-{awards_row.award.users.ID}">
+									{awards_row.award.users.USER}
+									<!-- IF awards_row.award.users.REACHED == "reached" -->
+									<!-- BEGIN members -->
+										{awards_row.award.users.members.MEMBER} {awards_row.award.users.members.DATE}
+										<br />
+									<!-- END members -->
+									<!-- ELSE -->
+										{L_aw_user_unreached}
+									<!-- ENDIF -->
+								</div>
+							<!-- END users -->
+						</div>
+						</div>
+					</div>
+					<!-- ENDIF -->
 				<!-- ENDIF -->
 				<!-- END award -->
+				
+			<!-- IF AWARD_IN_ROW != 1 --></div><!-- ENDIF -->
 			<!-- END awards_row -->
 		</div>
 	</div>

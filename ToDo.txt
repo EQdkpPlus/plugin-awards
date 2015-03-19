@@ -7,11 +7,6 @@
 		-- del = fixed
 
 
-- PO Template
-
-	- Erstelle Inkras Layout
-
-
 - Cron Module
 
 	- den include verbessern //falls nicht vorhanden break anstatt ein fatal error zu provozieren

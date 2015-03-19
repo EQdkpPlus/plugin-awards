@@ -19,7 +19,7 @@
  */
 
 /***************************************
- *    TABS  
+ *               TABS  
  ***************************************/
 #awards .aw-tabs,
 #awards .aw-tabs ul {
@@ -42,7 +42,7 @@
 }
 
 /***************************************
- *    CONTENT  
+ *              CONTENT  
  ***************************************/
 #awards .aw-points {
 	margin-left: 3em;
@@ -191,6 +191,20 @@
 #awards .ac-member-unreached > span {
 	color: #666 !important;
 }
+
+
+/***************************************
+ *          IF AWARDS_ROW
+ ***************************************/
+#awards .awards_row .award {
+	display: inline-block;
+}
+
+#awards .awards_row .ac-icon img, #awards .awards_row .ac-icon svg { height: 75px; width: 75px; }
+
+#awards .awards_row .award .ac-title { margin-bottom: 1px; }
+#awards .awards_row .award .aw-extended { padding-left: 5px; }
+
 
 /***************************************
  *    USERPROFILE adjustments 
