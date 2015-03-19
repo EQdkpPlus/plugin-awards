@@ -27,35 +27,42 @@ $lang = array(
   'awards'						=> 'Awards',
 
   // Description
-  'awards_short_desc'			=> 'Dieses Plugin ermöglicht es Erfolge zu erhalten',
+  'awards_short_desc'			=> 'Erhalte Erfolge, Ruhm und Ehre.',
   'awards_long_desc'			=> 'Dieses Plugin ermöglicht es Erfolge zu erhalten.',
   
   // General
+  'aw_achievement'				=> 'Erfolg',
+  'aw_achievements'				=> 'Erfolge',
+  'aw_ap'						=> 'Award Punkte',
+  'aw_points'					=> 'Award Punkte',
+  'aw_dkp'						=> 'DKP',
+  'aw_all_guild_achievements'	=> 'Alle Gildenerfolge',
+  'aw_customtab_title'			=> 'Meine Erfolge',
+  'aw_tab_user'					=> 'Meine Erfolge',
+  'aw_user_unreached'			=> 'Hat diesen Erfolg noch nicht errungen',
+  'aw_member_unreached'			=> 'nicht errungen',
+  
+  'user_sett_tab_awards'		=> 'Awards Plugin',
+  'user_sett_fs_awards'			=> 'Awards Haupteinstellungen',
+  'user_sett_f_aw_layout'		=> 'Zeige x Erfolge pro Reihe:',
+  
+  // Admin
   'aw_manage_achievements'		=> 'Erfolge verwalten',
   'aw_manage_assignments'		=> 'Zuweisungen verwalten',
+  'aw_tab_assign'				=> 'Alle Erfolge (a)',
+  'aw_tab_achieve'				=> 'Alle Zuweisungen (a)',
   
   'aw_add_achievement'			=> 'Erfolg hinzufügen',
   'aw_edit_achievement'			=> 'Erfolg editieren',
   'aw_add_assignment'			=> 'Erfolg zuweisen',
   'aw_edit_assignment'			=> 'Zuweisung editieren',
-  'aw_icon_header'				=> 'Icon auswählen',
-  'aw_upload_icon'				=> 'Icon hinzufügen',
+  
   'aw_special'					=> 'Spezial',
-  'aw_auto_assign'				=> 'Automatisch zuweisen',
   'aw_value'					=> 'AP Wert',
   'aw_dkp_value'				=> 'DKP Wert',
-  'aw_multidkp'					=> 'Multidkp-Konten',
-  'aw_sortation'				=> 'Sortierung',
-  'aw_points'					=> 'Punkte',
-  'aw_dkp'						=> 'DKP',
-  'aw_icon_colors'				=> 'Icon Farben',
-  'aw_module'					=> 'Modul',
-  'aw_event_id'					=> 'Ereignis ID',
-  'aw_adj_id'					=> 'Korrektur ID',
-  'aw_adj_gk'					=> 'Korrektur Group Key',
-  'aw_achievement'				=> 'Erfolg',
-  'aw_achievements'				=> 'Erfolge',
-  'aw_show_all'					=> 'Zeige alle Erfolge',
+  'aw_auto_assign'				=> 'Automatisch zuweisen',
+  'aw_icon_header'				=> 'Icon auswählen',
+  'aw_upload_icon'				=> 'Icon hinzufügen',
   
   'aw_name_help'				=> 'Name / Titel des Erfolgs',
   'aw_desc_help'				=> 'Beschreibung des Erfolgs',
@@ -64,10 +71,13 @@ $lang = array(
   'aw_auto_assign_help'			=> '"Plugins: Awards" Cronjob muss aktiviert sein!<br />
 									Beispiel: [Ab X Raids] 100',
   
-  'aw_customtab_title'			=> 'Meine Erfolge',
+  'aw_sortation'				=> 'Sortierung',
+  'aw_icon_colors'				=> 'Icon Farben',
+  'aw_module'					=> 'Cronjob Modul',
+  'aw_module_settings'			=> 'Cronjob Modul Einstellungen',
+  
   'aw_listachiev_footcount'		=> '... %s Erfolg(e) gefunden / %s pro Seite',
   'aw_listassign_footcount'		=> '... %s Zuweisung(en) gefunden / %s pro Seite',
-  
   
   // Cronjob Modules
   'aw_cronmodule_disabled'		=> 'Kein Modul ausgewählt',
@@ -75,9 +85,12 @@ $lang = array(
   
   
   // System Messages
-  'action_achievement_deleted'	=> 'Erfolg gelöscht',
   'action_achievement_added'	=> 'Erfolg erstellt',
+  'action_achievement_deleted'	=> 'Erfolg gelöscht',
   'action_achievement_updated'	=> 'Erfolg aktualisiert',
+  'action_assignment_added'		=> 'Erfolg zugewiesen',
+  'action_assignment_deleted'	=> 'Erfolgszuweisung geändert',
+  'action_assignment_deleted'	=> 'Erfolgszuweisung gelöscht',
   
   'aw_plugin_not_installed'		=> 'Das Awards-Plugin ist nicht installiert.',
   'aw_add_success'				=> '%s wurde hinzugefügt',
