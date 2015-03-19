@@ -44,14 +44,29 @@
 /***************************************
  *              CONTENT  
  ***************************************/
-#awards .aw-points {
-	margin-left: 3em;
-	font-size: 15px;
-	font-weight: 700;
-	font-family: "Times New Roman", Times, serif;
-	cursor: help;
+#awards .award {
+	height: auto;
+	padding: 5px;
+	margin: 1px 0;
+	border: 2px solid #CCC;
+	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5) inset;
+}
+#awards .award:hover {
+	border-color: rgba(162, 143, 0, 0.5);
+	box-shadow: none;
 }
 
+#awards .unreached .award {
+	height: auto;
+	border: 2px solid #777;
+	box-shadow: 0px 30px 60px rgba(0, 0, 0, 0.8) inset;
+}
+#awards .unreached .award:hover {
+	border-color: #CCC;
+	box-shadow: 0px 0px 60px rgba(0, 0, 0, 0.5) inset;
+}
+#awards .unreached .award * { opacity: 0.5; }
+#awards .unreached .award:hover * { opacity: 0.8; }
 #aw_progress {
     margin: 5px;
 	font-size: 0.7em !important;
@@ -62,6 +77,14 @@
     font-weight: 700;
     margin-top: 0.2em;
     font-size: 12px;
+}
+
+.aw-points {
+	margin-left: 3em;
+	font-size: 15px;
+	font-weight: 700;
+	font-family: "Times New Roman", Times, serif;
+	cursor: help;
 }
 
 .aw-divider {
@@ -90,59 +113,24 @@
 	)repeat scroll 0% 0% transparent;
 }
 
-#awards .award {
-	/*height: 75px;*/
-	height: auto;
-	padding: 5px;
-	margin: 1px 0;
-	border: 2px solid #CCC;
-	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5) inset;
-}
-#awards .award:hover {
-	border-color: rgba(162, 143, 0, 0.5);
-	box-shadow: none;
-}
-
-#awards .unreached .award {
-	height: auto;
-	border: 2px solid #777;
-	box-shadow: 0px 30px 60px rgba(0, 0, 0, 0.8) inset;
-}
-#awards .unreached .award:hover {
-	border-color: #CCC;
-	box-shadow: 0px 0px 60px rgba(0, 0, 0, 0.5) inset;
-}
-#awards .unreached .award * {
-	opacity: 0.5;
-}
-#awards .unreached .award:hover * {
-	opacity: 0.8;
-}
-
-#awards .ac-icon img,
-#awards .ac-icon svg {
+.ac-icon img, .ac-icon svg {
 	height: 50px;
 	width: 50px;
 	border: 2px solid #FFF;
 	border-radius: 4px;
 	box-shadow: 0px 1px 5px #000;
 }
-#awards .unreached .ac-icon img,
-#awards .unreached .ac-icon svg {
-	opacity: 0.5;
-}
+.unreached .ac-icon img, .unreached .ac-icon svg { opacity: 0.5; }
 
-#awards .ac-points {
-	width: 50px;
-}
-#awards .ac-points-big {
+.ac-points { width: 50px; }
+.ac-points-big {
 	font-size: 2em;
 	font-weight: 400;
 	position: relative;
 	top: 20px;
 	z-index: 1;
 }
-#awards .ac-points-small {
+.ac-points-small {
 	position: absolute;
 	top: -18px;
 	left: 2px;
@@ -153,52 +141,46 @@
 	color: #000;
 }
 
-#awards .ac-main {
+.ac-main {
 	margin-left: 65px;
 	margin-right: 65px;
 	text-align: center;
 }
-#awards .ac-main .ac-title {
+.ac-main .ac-title {
 	margin-bottom: 5px;
 }
-#awards .ac-main .ac-desc {
+.ac-main .ac-desc {
 	margin-left: 20%;
 	margin-right: 20%;
 }
-#awards .ac-main .ac-date {
+.ac-main .ac-date {
 	margin-top: 10px;
 	font-weight: 700;
 	font-size: 12px;
 }
 
-/* Member List */
-#awards .ac-user-list {
+.ac-user-list {
 	padding: 5px 20px;
 }
 
-#awards .ac-member-reached {
+.ac-member-reached {
 	padding: 5px 5px;
 	display: inline-block;
 	font-weight: bold;
 }
-
-#awards .ac-member-unreached {
+.ac-member-unreached {
 	padding: 5px 5px;
 	display: inline-block;
 	font-weight: bold;
 	opacity: 0.7;
 }
-#awards .ac-member-unreached > span {
-	color: #666 !important;
-}
+.ac-member-unreached > span { color: #666 !important; }
 
 
 /***************************************
  *          IF AWARDS_ROW
  ***************************************/
-#awards .awards_row .award {
-	display: inline-block;
-}
+#awards .awards_row .award { display: inline-block; }
 
 #awards .awards_row .ac-icon img, #awards .awards_row .ac-icon svg { height: 75px; width: 75px; }
 
@@ -209,13 +191,8 @@
 /***************************************
  *    USERPROFILE adjustments 
  ***************************************/
-#progress-header {
-	width: 100%;
-	margin: 0 auto;
-}
-.progress-left, .progress-right {
-	width: 10%;
-}
+#progress-header { width: 100%; margin: 0 auto; }
+.progress-left, .progress-right { width: 10%; }
 .progress-right { text-align: right; }
 
 #my_aw_progress {
