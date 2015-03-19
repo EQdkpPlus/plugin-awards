@@ -1,18 +1,10 @@
 
-- Edit/Add Achievements (erfolge für zuweisung)
-
-	- PDH Log Einträge überarbeiten
-		-- add = fixed
-		-- upd = fixed
-		-- del = fehlt (benötigt vollständige überarbeitung)
-
-
 - Edit/Add Assignments (zuweisung an Char)
 
 	- PDH Log Einträge überarbeiten
 		-- add = fixed
 		-- upd = fehlt (benötigt vollständige überarbeitung)
-		-- del = fehlt (benötigt vollständige überarbeitung)
+		-- del = fixed
 
 
 - PO Template
@@ -34,7 +26,6 @@ spontan einfälle...
 	- eigene Pagination auswahl für Admin sites unter usersettings
 	- sicherheitscheck bei der ajax.php maybe csrf token
 	- evntl. über usersettings on/off portal hook anzeige wv Awards erhalten + AP
-	- jQuery erkennen lassen bei award erstellung ob svg oder nicht und d/enable die colorpicker
 	- bei add/edit award quick info tooltips
 --------------------------------------------
 

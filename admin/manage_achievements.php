@@ -112,7 +112,7 @@ class awards_manage_achievements extends page_generic
 				$retu[$id] = $this->pdh->put('awards_achievements', 'delete', array($id));
 			}
 		}
-
+		
 		if(!empty($pos)) {
 			$messages[] = array('title' => $this->user->lang('del_suc'), 'text' => implode(', ', $pos), 'color' => 'green');
 			$this->core->messages($messages);
@@ -179,7 +179,7 @@ class awards_manage_achievements extends page_generic
 				'ML_NAME'			=> new htextmultilang('name', array('size' => 30, 'required' => true)),
 				'ML_DESCRIPTION'	=> new htextareamultilang('description', array('rows' => '3', 'cols' => '50')),
 				'R_ACTIVE_STATE'	=> new hradio('active_state', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => 1)),
-				'R_SPECIAL_STATE'	=> new hradio('special_state', array('options' => array(0 => $this->user->lang('published'), 1 => $this->user->lang('not_published')), 'value' => 1)),
+				'R_SPECIAL_STATE'	=> new hradio('special_state', array('options' => array(0 => $this->user->lang('published'), 1 => $this->user->lang('not_published')), 'value' => 0)),
 				'SPINNER_POINTS'	=> new hspinner('points', array('value' =>  10, 'max'  => 99999, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),	
 				'SPINNER_DKP'		=> new hspinner('dkp', array('value' =>  0, 'max'  => 99999, 'min'  => -99999, 'step' => 5)),
 				'DD_MODULE'			=> new hdropdown('module', array('options' => $arrModuleDropdown, 'value' => NULL)),

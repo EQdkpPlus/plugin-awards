@@ -4,7 +4,7 @@
 		<li><a href="{EQDKP_CONTROLLER_PATH}{SID}" title="{L_home}"><i class="fa fa-home"></i></a></li>
 		<li><a href="{EQDKP_ROOT_PATH}admin/{SID}">{L_menu_admin_panel}</a>
 		<li><a href="{EQDKP_ROOT_PATH}plugins/awards/admin/manage_achievements.php{SID}">{L_awards}: {L_aw_manage_achievements}</a></li>
-		<li class="current"><a href=""><!-- IF NAME == '' -->{L_aw_add_achievement}<!-- ELSE -->{L_aw_edit_achievement}<!-- ENDIF --></a></li>
+		<li class="current"><a href=""><!-- IF AID -->{L_aw_edit_achievement}<!-- ELSE -->{L_aw_add_achievement}<!-- ENDIF --></a></li>
 	</ul>
 	<div class="clear"></div>
 </div>
@@ -12,55 +12,71 @@
 
 <script type="text/javascript">
 	$(document).ready(function() {
+		//check if the pre-defined icon an svg
 		if({AID}){
 			icon_src = $('input[type="radio"][name="icon"][checked="checked"]').next('img').attr('src');
 			icon_ext = icon_src.substring(icon_src.length - 4);
 			if(icon_ext == '.svg'){
-				$('#colorchange').show();
+				$('#colorchange').css('visibility', 'visible');
 				$('#colorchange .icon_preview').load(icon_src, function() {
+					icon_areas = $('#colorchange .icon_preview svg').children('g').length;
 					for(i=1; i<=5; i++){
-						$('#colorchange .icon_preview svg g:nth-child('+i+')').css('fill', $('#colorchange #icon_layer_'+i+'_input').val());
+						if(i <= icon_areas){
+							$('#colorchange #icon_layer_'+i+'_input').spectrum('enable');
+							$('#colorchange .icon_preview svg g:nth-child('+i+')').css('fill', $('#colorchange #icon_layer_'+i+'_input').val());
+						}else{
+							$('#colorchange #icon_layer_'+i+'_input').spectrum('disable');
+						}
 					}
 				});
 			}else{
-				$('#colorchange').hide();
+				$('#colorchange').css('visibility', 'hidden');
 			}
 		}else{
-			$('#colorchange').hide();
+			$('#colorchange').css('visibility', 'hidden');
 		}
 		
+		//check if the selected icon an svg
 		$('input[type="radio"][name="icon"]').on('click', function(event){
 			icon_src = $(this).next('img').attr('src');
 			icon_ext = icon_src.substring(icon_src.length - 4);
 			if(icon_ext == '.svg'){
-				$('#colorchange').show(300);
+				$('#colorchange').css('visibility', 'visible');
 				$('#colorchange .icon_preview').empty();
 				$('#colorchange .icon_preview').load(icon_src, function() {
+					icon_areas = $('#colorchange .icon_preview svg').children('g').length;
 					for(i=1; i<=5; i++){
-						$('#colorchange .icon_preview svg g:nth-child('+i+')').css('fill', $('#colorchange #icon_layer_'+i+'_input').val());
+						if(i <= icon_areas){
+							$('#colorchange #icon_layer_'+i+'_input').spectrum('enable');
+							$('#colorchange .icon_preview svg g:nth-child('+i+')').css('fill', $('#colorchange #icon_layer_'+i+'_input').val());
+						}else{
+							$('#colorchange #icon_layer_'+i+'_input').spectrum('disable');
+						}
 					}
 				});
 			}else{
-				$('#colorchange').hide(300);
+				$('#colorchange').css('visibility', 'hidden');
 			}
 		});
 		
+		//change dynamicly icon with new colors
 		$('.sp-picker-container button.sp-choose').on('click', function(){
-			for(i=1; i<=5; i++){
+			icon_areas = $('#colorchange .icon_preview svg').children('g').length;
+			for(i=1; i<=icon_areas; i++){
 				$('#colorchange .icon_preview svg g:nth-child('+i+')').css('fill', $('#colorchange #icon_layer_'+i+'_input').val());
 			}
 		});
 	});
 </script>
 <style>
-	#colorchange { position: absolute; display:inline-block; text-align: right; }
+	#colorchange { position: absolute; display: inline-block; text-align: right; visibility: hidden; }
 	#colorchange .icon_preview svg { width: 128px; height: 128px; }
 	#colorchange .colorchange_container { position: relative; top: -15.5em; }
 </style>
 
 <form method="post" action="{ACTION}" name="post">
 <fieldset class="settings mediumsettings">
-	<legend><!-- IF NAME == '' -->{L_aw_add_achievement}<!-- ELSE -->{L_aw_edit_achievement}<!-- ENDIF --></legend>
+	<legend><!-- IF AID -->{L_aw_edit_achievement}<!-- ELSE -->{L_aw_add_achievement}<!-- ENDIF --></legend>
 	<dl>
 		<dt><label>{L_name}:</label>
 		<br /><span>{L_aw_name_help}</span></dt>
@@ -122,11 +138,11 @@
 	<div id="colorchange">
 		<div class="colorchange_container">
 			<div class="icon_preview"></div>
-			Layer 1: {CP_ICON_LAYER_1}<br />
-			Layer 2: {CP_ICON_LAYER_2}<br />
-			Layer 3: {CP_ICON_LAYER_3}<br />
-			Layer 4: {CP_ICON_LAYER_4}<br />
-			Layer 5: {CP_ICON_LAYER_5}
+			Background: {CP_ICON_LAYER_1}<br />
+			Layer 1: {CP_ICON_LAYER_2}<br />
+			Layer 2: {CP_ICON_LAYER_3}<br />
+			Layer 3: {CP_ICON_LAYER_4}<br />
+			Layer 4: {CP_ICON_LAYER_5}
 		</div>
 	</div>
 	<div class="clear" />

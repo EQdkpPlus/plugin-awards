@@ -110,7 +110,7 @@ class awards_manage_assignments extends page_generic
 						$retu = $this->pdh->put('awards_assignments', 'delete', array($intAssignID));
 			}
 		}
-
+		
 		if(!empty($retu)) {
 			$messages[] = array('title' => $this->user->lang('del_suc'), 'text' => $this->user->lang('aw_del_assign'), 'color' => 'green');
 			$this->core->messages($messages);

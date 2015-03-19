@@ -47,35 +47,6 @@ if(!class_exists('pdh_w_awards_achievements')) {
 
 
 	/**
-	  * Delete all selected Achievements
-	  */
-	public function delete($id) {
-		$arrAchievements = $this->pdh->get('awards_achievements', 'id_list_for_category', array($id));
-		if (isset($arrMedia[0]) && count($arrAchievements)){
-			foreach($arrAchievements[0] as $intAchievementID){
-				$this->pdh->put('awards_achievements', 'delete', array($intAchievementID));
-			}
-		}
-		
-		$this->delete_recursiv(intval($id));
-		
-		$this->pdh->enqueue_hook('articles_update');
-		$this->pdh->enqueue_hook('awards_achievements_update');
-		return true;
-	}
-	
-	private function delete_recursiv($intAchievementID){
-		$arrOldData = $this->pdh->get('awards_achievements', 'data', array($intAchievementID));
-		$this->db->prepare("DELETE FROM __awards_achievements WHERE id =?")->execute($intAchievementID);
-		
-		$log_action = $this->logs->diff(false, $arrOldData, $this->arrLogLang);
-		$this->log_insert("action_achievement_deleted", $log_action, $intAchievementID, $arrOldData["name"],  1, 'awards');
-		
-		return true;
-	}
-
-
-	/**
 	  * Add a Achievement
 	  */
 	public function add($strName, $strDescription, $blnActive, $blnSpecial,
@@ -162,6 +133,30 @@ if(!class_exists('pdh_w_awards_achievements')) {
 			return $id;
 		}
 		
+		return false;
+	}
+
+
+	/**
+	 * Delete Achievements
+	 */
+	public function delete($id){
+		$arrOldData = $this->pdh->get('awards_achievements', 'data', array($id));
+		
+		if($this->db->prepare("DELETE FROM __awards_achievements WHERE id = ?;")->execute($id)){
+			
+			$arrOldData['name']		   = $this->parse4log($arrOldData['name']);
+			$arrOldData['description'] = $this->parse4log($arrOldData['description']);
+			$arrOldData['icon_colors'] = $this->parse4log($arrOldData['icon_colors']);
+			$arrOldData['module_set']  = $this->parse4log($arrOldData['module_set']);
+			$arrOldData['event_id']	   = $this->pdh->get('event', 'name', array($arrOldData['event_id']));
+			
+			$log_action = $this->logs->diff(false, $arrOldData, $this->arrLogLang);
+			$this->log_insert('action_achievement_deleted', $log_action, $id, $arrOldData['name'], 1, 'awards');
+			
+			$this->pdh->enqueue_hook('awards_achievements_update', $id);
+			return true;
+		}
 		return false;
 	}
 

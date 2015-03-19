@@ -39,35 +39,6 @@ if(!class_exists('pdh_w_awards_assignments')) {
 
 
 	/**
-	  * Delete all selected Assignments
-	  */
-	public function delete($id) {
-		$arrAssignments = $this->pdh->get('awards_assignments', 'id_list_for_category', array($id));
-		if (isset($arrMedia[0]) && count($arrAssignments)){
-			foreach($arrAssignments[0] as $intAssignmentID){
-				$this->pdh->put('awards_assignments', 'delete', array($intAssignmentID));
-			}
-		}
-		
-		$this->delete_recursiv(intval($id));
-		
-		$this->pdh->enqueue_hook('articles_update');
-		$this->pdh->enqueue_hook('awards_assignments_update');
-		return true;
-	}
-	
-	private function delete_recursiv($intAssignmentID){
-		$arrOldData = $this->pdh->get('awards_assignments', 'data', array($intAssignmentID));
-		$this->db->prepare("DELETE FROM __awards_assignments WHERE id =?")->execute($intAssignmentID);
-		
-		$log_action = $this->logs->diff(false, $arrOldData, $this->arrLogLang);
-		$this->log_insert("action_assignment_deleted", $log_action, $intAssignmentID, $arrOldData["name"],  1, 'awards');
-		
-		return true;
-	}
-
-
-	/**
 	  * Add Assignments
 	  */
 	public function add($intAchID, $arrAdjIDs, $strAdjGK, $intDate=false){
@@ -130,6 +101,29 @@ if(!class_exists('pdh_w_awards_assignments')) {
 			return $id;
 		}
 		
+		return false;
+	}
+
+
+	/**
+	 * Delete Assignments
+	 */
+	public function delete($id){
+		if($this->db->prepare("DELETE FROM __awards_assignments WHERE id = ?;")->execute($id)){
+			
+			$strAchName = $this->pdh->get('awards_achievements', 'name', array($id));
+			
+			$log_action = array(
+				'{L_AW_ACHIEVEMENT}' => $strAchName,
+				'{L_DATE}'			 => $this->time->date('Y-m-d H:i', $this->pdh->get('awards_assignments', 'date', array($id))),
+				'{L_MEMBER}'		 => $this->pdh->get('adjustment', 'member_name', array($id)),
+			);
+			
+			$this->log_insert('action_assignment_deleted', $log_action, $id, $strAchName, 1, 'awards');
+			
+			$this->pdh->enqueue_hook('action_assignment_updated', $id);
+			return true;
+		}
 		return false;
 	}
 

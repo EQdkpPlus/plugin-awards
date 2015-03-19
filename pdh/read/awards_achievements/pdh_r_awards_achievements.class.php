@@ -219,12 +219,12 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		public function get_html_special($intAchievementID){
 			if ($this->get_special($intAchievementID)){
 				$strImage = '<div>
-								<div class="eye eyeToggleTrigger"></div>
+								<div class="eye-gray eyeToggleTrigger"></div>
 								<input type="hidden" class="special_cb" name="'.$intAchievementID.'" value="1"/>
 							</div>';
 			} else {
 				$strImage = '<div>
-								<div class="eye-gray eyeToggleTrigger"></div>
+								<div class="eye eyeToggleTrigger"></div>
 								<input type="hidden" class="special_cb" name="'.$intAchievementID.'" value="0"/>
 							</div>';
 			}
