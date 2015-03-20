@@ -67,13 +67,21 @@ class awards_manage_assignments extends page_generic
 		
 		//check form correct filled
 		foreach($this->in->getArray('members','int') as $member) {
-			$arrAdjUserIDs[] = (int) $member;
+			$arrAdjUserIDs[] = (int)$member;
 		}
 		if(empty($arrAdjUserIDs)) $missing[] = $this->user->lang('members');
 		if(!empty($missing)) return;
 		
 		if($intAssID){ //update Assignment
-			$blnResult = false;
+			$strAdjGK = $this->pdh->get('awards_assignments', 'adj_group_key', array($intAssID));
+			
+			$arrAdjIDs = $this->pdh->put('adjustment', 'update_adjustment', array($strAdjGK, $fltAchDKP, $strAchName, $arrAdjUserIDs, $intAchEventID, 0, $intAssDate, false, false));
+			if($arrAdjIDs){
+				$arrAssIDs = $this->pdh->put('awards_assignments', 'update', array($arrAdjIDs, $intAchID, $strAdjGK, $intAssDate));
+				if($arrAssIDs){ $this->pdh->process_hook_queue(); $blnResult = true; }
+				else{ $this->pdh->put('adjustment', 'delete_adjustments_by_group_key', array($strAdjGK)); }
+				
+			}else{ $blnResult = false; }
 			
 		}else{ //add Assignment
 			$arrAssIDs = $this->awards->add_assignment($intAchID, $arrAdjUserIDs, $intAssDate);
@@ -83,8 +91,6 @@ class awards_manage_assignments extends page_generic
 		
 		//output Message
 		if ($blnResult){
-			$this->pdh->process_hook_queue();
-			
 			foreach($arrAdjUserIDs as $userid) $arrusernames[] = $this->pdh->get('member', 'name', array($userid));
 			$this->core->message(sprintf( $this->user->lang('aw_assign_success'), $strAchName, implode(', ',$arrusernames) ), $this->user->lang('success'), 'green');
 		} else {

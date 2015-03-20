@@ -102,7 +102,9 @@ $lang = array(
   'aw_confirm_delete_achievement'	=> 'Bist du sicher, dass Du die Erfolge %s wirklich löschen willst? Alle erhaltenen DKP werden dabei auch gelöscht!',
   'aw_confirm_delete_assignment'	=> 'Bist du sicher, dass Du die Zuweisungen %s wirklich löschen willst? Alle erhaltenen DKP werden dabei auch gelöscht!',
   
-
+  'aw_upd_assignment_warning'	=> '<h3>Das nachträgliche editieren einer Zuweisung geschieht auf eigenem Risiko!</h3>
+  									Es werden keine Benachrichtigungen an die Spieler verschickt und beim ändern der Zuweisung können unwiederrufliche Fehler auftreten.<br />
+									Nutze daher diese Funktion bitte mit bedacht.',
 );
 
 ?>

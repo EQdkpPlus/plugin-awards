@@ -152,7 +152,16 @@
 .ac-main .ac-desc {
 	margin-left: 20%;
 	margin-right: 20%;
+	height: 15px;
+	overflow: hidden;
 }
+.award.show-member .ac-main .ac-desc {
+	margin-left: 20%;
+	margin-right: 20%;
+	height: auto;
+	overflow: hidden;
+}
+
 .ac-main .ac-date {
 	margin-top: 10px;
 	font-weight: 700;

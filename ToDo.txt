@@ -1,12 +1,4 @@
 
-- Edit/Add Assignments (zuweisung an Char)
-
-	- PDH Log Einträge überarbeiten
-		-- add = fixed
-		-- upd = fehlt (benötigt vollständige überarbeitung)
-		-- del = fixed
-
-
 - Cron Module
 
 	- den include verbessern //falls nicht vorhanden break anstatt ein fatal error zu provozieren
@@ -22,6 +14,8 @@ spontan einfälle...
 	- sicherheitscheck bei der ajax.php maybe csrf token
 	- evntl. über usersettings on/off portal hook anzeige wv Awards erhalten + AP
 	- bei add/edit award quick info tooltips
+	- Die Style änderung fürs PO dynamischer gestalten mit Template erkennung und einfügung ins Dropdown (so kann man sagen Style: Inkraja und nicht AwPerReihe XY)
+	- vllt. die Zuweisungen editieren/updaten Funktion etwas erweitern mit Notify und korrektem Log eintrag
 --------------------------------------------
 
 
@@ -29,5 +23,5 @@ spontan einfälle...
 SVG Notiz:
 	Optimiere die SVG Dateien nachträglich mit dem SVG-Editor: https://petercollingridge.appspot.com/svg-editor/
 	Beschränke dich auf ein minimum an "Style" Optimierungen (keine anderen) und bearbeite nachträglich folgendes...
-	Fill & Stroke aus den <path> Tags rauslöschen und die übergeordneten <g id=""> ansprechen.
+	Fill & Stroke aus den <path> Tags rauslöschen und im übergeordneten <g id=""> ansprechen.
 			- Bsp.: <g id"Area01" fill="#FFF"><path ...></g>

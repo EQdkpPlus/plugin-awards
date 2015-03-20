@@ -77,9 +77,63 @@ if(!class_exists('pdh_w_awards_assignments')) {
 
 
 	/**
-	  * Update a Assignment
+	  * Update Assignments by $arrAdjID
 	  */
-	public function update($id, $intAssDate=false, $intAchID, $arrAdjID, $strAdjGK){
+	public function update($arrAdjIDs, $intAchID, $strAdjGK, $intDate=false){
+		if(!is_array($arrAdjIDs)) $arrAdjIDs = array($arrAdjIDs);
+		$intDate = ($intDate) ? $intDate : $this->time->time;
+		$arrIDs		= array();
+		$arrQuery	= array(
+			'date' 				=> $intDate,
+			'achievement_id'	=> $intAchID,
+			'adj_id'			=> 0,
+			'adj_group_key'		=> $strAdjGK,
+		);
+		
+		foreach($arrAdjIDs as $key => $intAdjID){
+			if($key == 0 || $intAdjID == 0) continue;
+			$arrQuery['adj_id'] = $intAdjID;
+			
+			//check if we have to add a new assignment
+			$intAssID = $this->pdh->get('awards_assignments', 'id_of_aid', array($intAdjID));
+			if($intAssID){
+				$adj_exist = $this->pdh->get('adjustment', 'reason', array($intAdjID));
+				if(!$adj_exist){
+					$objQuery = $this->db->prepare("DELETE FROM __awards_assignments WHERE id = ?;")->execute($intAssID);
+					$handle2return = false;
+				}else{
+					unset($adj_exist);
+					$objQuery = $this->db->prepare("UPDATE __awards_assignments :p WHERE id=?")->set($arrQuery)->execute($intAssID);
+					$handle2return = true;
+				}
+			}else{
+				$objQuery = $this->db->prepare("INSERT INTO __awards_assignments :p")->set($arrQuery)->execute();
+				$handle2return = true;
+			}
+			
+			if($objQuery){
+				if($handle2return) $arrIDs[] = ($intAssID)? $intAssID : $objQuery->insertId;
+				
+				$strAchName	= $this->parse4log($this->pdh->get('awards_achievements', 'name', array($intAchID)));
+				$log_action = array(
+					'{L_AW_ACHIEVEMENT}' => $strAchName,
+					'{L_DATE}'			 => $this->time->date('Y-m-d H:i', $intDate),
+					#'{L_MEMBER}'		 => $strMembers,
+				);
+				
+				$this->log_insert('action_assignment_updated', $log_action, $intAchID, $strAchName, 1, 'awards');
+			}else{ return false; }
+		}
+		
+		if($arrIDs){
+			$this->pdh->enqueue_hook('awards_assignments_update', $arrIDs);
+			return $arrIDs;
+		}
+		return false;
+	}
+
+
+	/*public function update($id, $intAssDate=false, $intAchID, $arrAdjID, $strAdjGK){
 		$intAssDate = ($intAssDate) ? $intAssDate : $this->time->time;
 		$arrQuery = array(
 			'date' 				=> $intAssDate,
@@ -102,7 +156,7 @@ if(!class_exists('pdh_w_awards_assignments')) {
 		}
 		
 		return false;
-	}
+	}*/
 
 
 	/**

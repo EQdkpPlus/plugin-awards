@@ -174,6 +174,21 @@ if ( !class_exists( "pdh_r_awards_assignments" ) ) {
 		}
 
 		/**
+		 * Request which assignment is binded by $intAdjustmentID
+		 * @param integer $intAdjustmentID
+		 * @return integer id
+		 */
+		public function get_id_of_aid($intAdjID){
+			$arrAssIDs = $this->get_id_list();
+			foreach($arrAssIDs as $intAssID){
+				if($this->awards_assignments[$intAssID]['adj_id'] == $intAdjID)
+					return $intAssID;
+			}
+			
+			return false;
+		}
+
+		/**
 		 * Returns all member with the group key of $intAssignmentID
 		 * @param integer $intAssignmentID
 		 * @return array( ID => Member )
