@@ -12,7 +12,6 @@ spontan einfälle...
 	- mehrere Cron Module an einem Award mit zugehöriger Abhängigkeits möglichkeit
 	- eigene Pagination auswahl für Admin sites unter usersettings
 	- sicherheitscheck bei der ajax.php maybe csrf token
-	- evntl. über usersettings on/off portal hook anzeige wv Awards erhalten + AP
 	- bei add/edit award quick info tooltips
 	- Die Style änderung fürs PO dynamischer gestalten mit Template erkennung und einfügung ins Dropdown (so kann man sagen Style: Inkraja und nicht AwPerReihe XY)
 	- vllt. die Zuweisungen editieren/updaten Funktion etwas erweitern mit Notify und korrektem Log eintrag

@@ -302,11 +302,11 @@ if ( !class_exists( "pdh_r_awards_library" ) ) {
   +--------------------------------------------------------------------------*/
 
 		/**
-		 * Returns assignment_ids for $member_id
+		 * Get assignment_ids of $member_id
 		 * @param integer $member_id
 		 * @return multitype assignment_ids
 		 */
-		public function get_ids_by_member($member_id){
+		public function get_ids_of_member($member_id){
 			$assignment_ids = array();
 			if (is_array($this->awards_library)){
 				foreach($this->awards_library as $id => $details){

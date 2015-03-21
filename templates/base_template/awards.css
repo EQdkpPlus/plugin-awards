@@ -197,6 +197,8 @@
 #awards .awards_row .award .aw-extended { padding-left: 5px; }
 
 
+
+
 /***************************************
  *    USERPROFILE adjustments 
  ***************************************/
@@ -212,10 +214,23 @@
 #my_aw_progress .progress-label { text-align: center; }
 #my_aw_progress .ui-progressbar-value { margin-top: -14px; }
 
+/***************************************
+ *           AWARDS-TOOLTIP 
+ ***************************************/
+.awards-tooltip-container { display: inline; position: relative; }
+#awards-tooltip { padding: 3px; min-width: 300px; display: none; }
 
+.aw-tt-action-bar .floatLeft { font-weight: 700; }
+.aw-tt-action-bar .floatLeft i:nth-child(1) { padding: 0 3px; font-size: 14px; }
+.aw-tt-action-bar .floatLeft i:nth-child(2) { padding-right: 3px; font-size: 14px;color: #FFD700; }
 
+#awards-tooltip li ul li { position: relative; margin: 0 !important; min-height: 22px; }
 
+.aw-tt-title { position: absolute; top: 1px; font-weight: 700; font-size: 14px; }
+.aw-tt-date { position: absolute; top: -4px; right: 4px; font-size: 9px; }
+.aw-tt-member { position: absolute; right: 4px; bottom: 0; }
 
+.aw-tt-action-bar-btm { text-align: center; }
 
 /********************************************************
  *         EXAMPLE CODE for the custom.css
