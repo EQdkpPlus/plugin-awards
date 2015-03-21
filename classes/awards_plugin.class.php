@@ -52,7 +52,7 @@ if(!class_exists('awards_plugin')){
 				
 				foreach($all_member as $member){
 					$intUserID = $this->pdh->get('member', 'userid', array($member));
-					if(in_array($member, $member_of_award)){
+					if( in_array($member, $member_of_award) || is_array($award['member_r'][$intUserID]) ){
 						$award['member_r'][$intUserID][$member] = $this->pdh->get('awards_library', 'member_date_by_award', array($intAchID, $member));
 					}else{
 						$award['member_u'][$intUserID][$member] = NULL;

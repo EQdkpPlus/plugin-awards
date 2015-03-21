@@ -370,7 +370,7 @@ if ( !class_exists( "pdh_r_awards_library" ) ) {
 					}
 				}
 			}
-			return false;
+			return NULL;
 		}
 
 

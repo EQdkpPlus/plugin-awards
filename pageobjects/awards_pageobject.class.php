@@ -116,7 +116,7 @@ class awards_pageobject extends pageobject
 						foreach($arrMembers as $intMemberID => $intMemberDate){
 							$this->tpl->assign_block_vars('awards_row.award.users.members', array(
 								'MEMBER'	=> $this->pdh->get('member', 'name_decorated', array($intMemberID, 15)),
-								'DATE'		=> '- '.$this->time->user_date($intMemberDate),
+								'DATE'		=> ($intMemberDate)? '- '.$this->time->user_date($intMemberDate) : $this->user->lang('aw_member_unreached'),
 							));
 						}
 					}
