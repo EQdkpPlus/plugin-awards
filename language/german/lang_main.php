@@ -44,6 +44,7 @@ $lang = array(
   
   'user_sett_tab_awards'		=> 'Awards Plugin',
   'user_sett_fs_awards'			=> 'Awards Haupteinstellungen',
+  'user_sett_f_aw_show_hook'	=> 'Awards Quick Info anzeigen:',
   'user_sett_f_aw_layout'		=> 'Zeige x Erfolge pro Reihe:',
   
   // Admin
@@ -78,6 +79,13 @@ $lang = array(
   
   'aw_listachiev_footcount'		=> '... %s Erfolg(e) gefunden / %s pro Seite',
   'aw_listassign_footcount'		=> '... %s Zuweisung(en) gefunden / %s pro Seite',
+  
+  // Awards Quick Info
+  'aw_tt_reached_ap'			=> 'Erhaltene Awardpunkte',
+  'aw_tt_reached_dkp'			=> 'Erhaltene DKP',
+  'aw_tt_my_awards'				=> 'Alle meine Erfolge',
+  'aw_tt_all_awards'			=> 'Alle Gildenerfolge',
+  
   
   // Cronjob Modules
   'aw_cronmodule_disabled'		=> 'Kein Modul ausgewählt',

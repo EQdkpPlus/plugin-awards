@@ -195,7 +195,7 @@ class awards extends plugin_generic
 	private function gen_admin_menu(){
 		$admin_menu = array (array(
 			'name' => $this->user->lang('awards'),
-			'icon' => 'fa fa-mortar-board ',
+			'icon' => 'fa fa-mortar-board',
 			1 => array (
 				'link'  => 'plugins/awards/admin/manage_achievements.php'.$this->SID,
 				'text'  => $this->user->lang('aw_manage_achievements'),
@@ -236,9 +236,9 @@ class awards extends plugin_generic
 		$settings = array(
 			'awards' => array(
 				'awards' => array(
-					/*'aw_show_hook'	=> array(
+					'aw_show_hook'	=> array(
 						'type'		=> 'radio',
-					),*/
+					),
 					'aw_layout'	=> array(
 						'type'	  => 'spinner',
 						'min'	  => 1,
