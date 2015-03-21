@@ -304,7 +304,7 @@ if ( !class_exists( "pdh_r_awards_library" ) ) {
 		/**
 		 * Returns assignment_ids for $member_id
 		 * @param integer $member_id
-		 * @return multitype assignment_id
+		 * @return multitype assignment_ids
 		 */
 		public function get_ids_by_member($member_id){
 			$assignment_ids = array();
@@ -320,9 +320,9 @@ if ( !class_exists( "pdh_r_awards_library" ) ) {
 
 
 		/**
-		 * Returns member_id for $achievement_id
+		 * Return the member_ids for $achievement_id
 		 * @param integer $achievement_id
-		 * @return multitype member_id
+		 * @return multitype member_ids
 		 */
 		public function get_member_of_award($id){
 			$member_ids = array();
@@ -339,15 +339,15 @@ if ( !class_exists( "pdh_r_awards_library" ) ) {
 
 
 		/**
-		 * Returns if the member has already this award
+		 * Check if the member has already this award
 		 * @param integer $intAchID
 		 * @param integer $intMemberID
-		 * @return boolean: true OR false
+		 * @return boolean
 		 */
 		public function get_member_has_award($intAchID, $intMemberID){
 			if (is_array($this->awards_library)){
-				foreach($this->awards_library as $key => $value){
-					if($value['achievement_id'] == $intAchID && $value['member_id'] == $intMemberID){
+				foreach($this->awards_library as $awards){
+					if($awards['achievement_id'] == $intAchID && $awards['member_id'] == $intMemberID){
 						return true;
 					}
 				}
@@ -357,9 +357,27 @@ if ( !class_exists( "pdh_r_awards_library" ) ) {
 
 
 		/**
-		 * Returns earliest_date for $achievement_id
+		 * Get the date of member by award
+		 * @param integer $intAchID
+		 * @param integer $intMemberID
+		 * @return integer: date
+		 */
+		public function get_member_date_by_award($intAchID, $intMemberID){
+			if (is_array($this->awards_library)){
+				foreach($this->awards_library as $awards){
+					if($awards['achievement_id'] == $intAchID && $awards['member_id'] == $intMemberID){
+						return $awards['date'];
+					}
+				}
+			}
+			return false;
+		}
+
+
+		/**
+		 * Get the earliest date for $achievement_id
 		 * @param integer $achievement_id
-		 * @return integer earliest_date
+		 * @return integer: earliest date
 		 */
 		public function get_earliest_date_of_award($id){
 			$dates = array();

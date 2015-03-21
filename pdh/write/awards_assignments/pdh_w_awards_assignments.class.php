@@ -72,6 +72,7 @@ if(!class_exists('pdh_w_awards_assignments')) {
 		$this->log_insert('action_assignment_added', $log_action, $intAchID, $strAchName, 1, 'awards');
 		
 		$this->pdh->enqueue_hook('awards_assignments_update', $ids);
+		$this->pdh->enqueue_hook('awards_library_update');
 		return $ids;
 	}
 
@@ -127,6 +128,7 @@ if(!class_exists('pdh_w_awards_assignments')) {
 		
 		if($arrIDs){
 			$this->pdh->enqueue_hook('awards_assignments_update', $arrIDs);
+			$this->pdh->enqueue_hook('awards_library_update');
 			return $arrIDs;
 		}
 		return false;
@@ -176,6 +178,7 @@ if(!class_exists('pdh_w_awards_assignments')) {
 			$this->log_insert('action_assignment_deleted', $log_action, $id, $strAchName, 1, 'awards');
 			
 			$this->pdh->enqueue_hook('action_assignment_updated', $id);
+			$this->pdh->enqueue_hook('awards_library_update');
 			return true;
 		}
 		return false;

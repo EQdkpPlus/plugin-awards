@@ -94,7 +94,7 @@ class awards_pageobject extends pageobject
 					'ID'		=> $intAchID,
 					'TITLE'		=> $this->user->multilangValue($award['name']),
 					'DESC'		=> $this->user->multilangValue($award['desc']),
-					'DATE'		=> (isset($award['date']))? $this->time->user_date($award['date']) : '',
+					'DATE'		=> ($award['date'])? $this->time->user_date($award['date']) : '',
 					'ICON'		=> $strAchIcon,
 					'ACTIVE'	=> $award['active'],
 					'SPECIAL'	=> $award['special'],
