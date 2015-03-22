@@ -256,6 +256,9 @@ class awards_manage_achievements extends page_generic
 	  * display all achievements
 	  */
 	public function display() {
+		$arrUserSettings = $this->pdh->get('user', 'plugin_settings', array($intUserID));
+		$arrUserSettings['aw_admin_pagination'] = (isset($arrUserSettings['aw_admin_pagination']))?: 100;
+		
 		$this->tpl->add_js("
 			$(\"#article_categories-table tbody\").sortable({
 				cancel: '.not-sortable, input, tr th.footer, th',
@@ -293,13 +296,13 @@ class awards_manage_achievements extends page_generic
 		$sort_suffix = '?sort='.$this->in->get('sort');
 		
 		$item_count = count($view_list);
-		$strfootertext = sprintf($this->user->lang('aw_listachiev_footcount'), $item_count, $this->user->data['user_alimit']);
+		$strfootertext = sprintf($this->user->lang('aw_listachiev_footcount'), $item_count, $arrUserSettings['aw_admin_pagination']);
 		
 		$this->confirm_delete($this->user->lang('aw_confirm_delete_achievement'));
 
 		$this->tpl->assign_vars(array(
-			'ACHIEVEMENTS_LIST'	=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_alimit'], $strfootertext),
-			'PAGINATION'		=> generate_pagination('manage_achievements.php'.$sort_suffix, $item_count, $this->user->data['user_alimit'], $this->in->get('start', 0)),
+			'ACHIEVEMENTS_LIST'	=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $arrUserSettings['aw_admin_pagination'], $strfootertext),
+			'PAGINATION'		=> generate_pagination('manage_achievements.php'.$sort_suffix, $item_count, $arrUserSettings['aw_admin_pagination'], $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count()
 		));
 

@@ -34,7 +34,9 @@ class awards_pageobject extends pageobject
 
 		$this->user->check_auth('u_awards_view');
 
-		$handler = array();
+		$handler = array(
+			'page' => array('process' => 'display'),
+		);
 		parent::__construct(false, $handler);
 		$this->process();
 	}
@@ -70,8 +72,15 @@ class awards_pageobject extends pageobject
 		arsort($list_order);
 		foreach($list_order as $key => $value) $allAwards[] = $key;
 		
+		//split $allAwards for pagination
+		$intPage = $this->in->get('page', 0);
+		$arrUserSettings['aw_pagination'] = (isset($arrUserSettings['aw_pagination']))?: 25;
+		$allAwardsCount = count($allAwards);
+		$allAwards = array_slice($allAwards, $intPage * $arrUserSettings['aw_pagination'], $arrUserSettings['aw_pagination']);
+		
+		
 		//start the loops
-		while($award_counter < count($arrAchIDs)){
+		while($award_counter < count($allAwards)){
 			$this->tpl->assign_block_vars('awards_row', array());
 			
 			do{
@@ -144,6 +153,7 @@ class awards_pageobject extends pageobject
 			'AWARD_IN_ROW'	=> $intAwardRows,
 			'S_AW_MANAGE'	=> $this->user->check_auth('a_awards_manage'),
 			'S_AW_ADD'		=> $this->user->check_auth('a_awards_add'),
+			'PAGINATION'	=> generate_pagination($this->strPath.$this->SID, $allAwardsCount, $arrUserSettings['aw_pagination'], $intPage, 'page'),
 		));
 		$this->tpl->add_js('
 			$("#aw_progress").progressbar({

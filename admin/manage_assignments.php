@@ -175,6 +175,9 @@ class awards_manage_assignments extends page_generic
 	  * display main page
 	  */
 	public function display(){
+		$arrUserSettings = $this->pdh->get('user', 'plugin_settings', array($intUserID));
+		$arrUserSettings['aw_admin_pagination'] = (isset($arrUserSettings['aw_admin_pagination']))?: 100;
+		
 		$view_list = $this->pdh->aget('awards_assignments', 'adj_group_key', 0, array($this->pdh->get('awards_assignments', 'id_list', array())));
 		$view_list = array_flip($view_list);
 		
@@ -203,13 +206,13 @@ class awards_manage_assignments extends page_generic
 		
 		//footer
 		$item_count = count($view_list);
-		$strfootertext = sprintf($this->user->lang('aw_listassign_footcount'), $item_count, $this->user->data['user_alimit']);
+		$strfootertext = sprintf($this->user->lang('aw_listassign_footcount'), $item_count, $arrUserSettings['aw_admin_pagination']);
 		
 		$this->confirm_delete($this->user->lang('aw_confirm_delete_assignment'));
 
 		$this->tpl->assign_vars(array(
-			'ASSIGNMENTS_LIST'	=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $this->user->data['user_alimit'], $strfootertext),
-			'PAGINATION'		=> generate_pagination('manage_assignments.php'.$sort_suffix, $item_count, $this->user->data['user_alimit'], $this->in->get('start', 0)),
+			'ASSIGNMENTS_LIST'	=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $arrUserSettings['aw_admin_pagination'], $strfootertext),
+			'PAGINATION'		=> generate_pagination('manage_assignments.php'.$sort_suffix, $item_count, $arrUserSettings['aw_admin_pagination'], $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count())
 		);
 	

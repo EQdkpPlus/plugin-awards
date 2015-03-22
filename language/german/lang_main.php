@@ -25,7 +25,7 @@ if (!defined('EQDKP_INC')){
 
 $lang = array(
   'awards'						=> 'Awards',
-
+  
   // Description
   'awards_short_desc'			=> 'Erhalte Erfolge, Ruhm und Ehre.',
   'awards_long_desc'			=> 'Dieses Plugin ermöglicht es Erfolge zu erhalten.',
@@ -44,8 +44,10 @@ $lang = array(
   
   'user_sett_tab_awards'		=> 'Awards Plugin',
   'user_sett_fs_awards'			=> 'Awards Haupteinstellungen',
-  'user_sett_f_aw_show_hook'	=> 'Awards Quick Info anzeigen:',
-  'user_sett_f_aw_layout'		=> 'Zeige x Erfolge pro Reihe:',
+  'user_sett_f_aw_show_hook'	=> 'Awards Quick Info anzeigen',
+  'user_sett_f_aw_layout'		=> 'Zeige x Erfolge pro Reihe',
+  'user_sett_f_aw_pagination'	=> 'Erfolge pro Seite',
+  'user_sett_f_aw_admin_pagination' => 'Zuweisungen pro Seite',
   
   // Admin
   'aw_manage_achievements'		=> 'Erfolge verwalten',

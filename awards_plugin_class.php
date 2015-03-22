@@ -245,13 +245,13 @@ class awards extends plugin_generic
 						'step'	  => 1,
 						'default' => 1
 					),
-					/*'aw_pagination' => array(
+					'aw_pagination' => array(
 						'type'	  => 'spinner',
 						'check'	  => 'u_awards_view',
 						'size'	  => 5,
-						'min'	  => 10,
-						'step'	  => 10,
-						'default' => 100
+						'min'	  => 5,
+						'step'	  => 5,
+						'default' => 25
 					),
 					'aw_admin_pagination' => array(
 						'type'	  => 'spinner',
@@ -260,7 +260,7 @@ class awards extends plugin_generic
 						'min'	  => 10,
 						'step'	  => 10,
 						'default' => 100
-					),*/
+					),
 				)
 			),
 		);
