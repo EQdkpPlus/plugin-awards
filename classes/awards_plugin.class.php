@@ -89,13 +89,14 @@ if(!class_exists('awards_plugin')){
 		public function build_icon($intAchID, $strAchIcon, $arrAchIconColors){
 			$icon_folder = $this->pfh->FolderPath('images', 'awards');
 			if( file_exists($icon_folder.$strAchIcon) ){
-				$strAchIcon = $icon_folder.$strAchIcon;
+				$strAchIcon = $this->pfh->FolderPath('images', 'awards', 'absolute').$strAchIcon;
 			} else {
 				$strAchIcon = 'plugins/awards/images/'.$strAchIcon;
 			}
 			
 			if( pathinfo($strAchIcon, PATHINFO_EXTENSION) == "svg"){
-				$strAchIcon = file_get_contents($strAchIcon);
+				$strAchIcon		= file_get_contents($strAchIcon);
+				$strAchIconCSS	= '';
 				
 				// build the CSS Code for each SVG
 				$icon_color_step = 1;
