@@ -37,23 +37,31 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 		if($this->user->check_auths(array('u_awards_view', 'a_awards_manage'), 'OR', false)){
 			$arrAchIDs		= $this->pdh->get('awards_achievements', 'id_list');
 			$intUserID		= $intUserID['user_id'];
-			$list_order		= array();
+			$intViewerID	= $this->user->id;
+			$allAwards		= array();
 			$intAP			= 0;
 			$status_count	= 0;
 			$status_row		= '';
 			$content		= '';
 			
-			//sorting -- newest date = up, false = unreached, special awards = disabled
+			//sorting -- newest date = up, false = unreached
 			foreach($arrAchIDs as $intAchID){
 				$award = $this->awards->award($intAchID, $intUserID);
 				if(is_array($award['member_r'][$intUserID])){
-					$list_order[$award['id']] = $award['date'];
+					$allAwards[$award['id']] = $award['date'];
 				}else{
-					$list_order[$award['id']] = false;
-					if(!$award['special']) unset($list_order[$award['id']]);
+					$allAwards[$award['id']] = false;
 				}
 			}
-			arsort($list_order);
+			arsort($allAwards);
+			
+			//split $allAwards for pagination
+			$intPage = $this->in->get('page', 0);
+			$arrUserSettings = $this->pdh->get('user', 'plugin_settings', array($intUserID));
+			$arrUserSettings['aw_pagination'] = (isset($arrUserSettings['aw_pagination']))?: 25;
+			$allAwardsCount = count($allAwards);
+			$allAwards = array_slice($allAwards, $intPage * $arrUserSettings['aw_pagination'], $arrUserSettings['aw_pagination'], true);
+			
 			
 			//build the content
 			$content = '
@@ -70,14 +78,20 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 					<div class="aw-list">
 			';
 			
-			foreach($list_order as $intAchID => $status){
+			//now build each award
+			foreach($allAwards as $intAchID => $status){
 				$award = $this->awards->award($intAchID, $intUserID);
+				
+				//check persmission to see
+				$perm_admin = $this->user->check_auth('a_', false);
+				$perm_user  = $this->pdh->get('awards_library', 'member_of_award', array($intAchID));
+				$perm_user  = in_array($intUserID, $perm_user);
+				if($award['special'] && !($perm_user || $perm_admin)) continue;
 				
 				if(	   $award['dkp'] < 0){ $blnAchDKP = 1; }
 				elseif($award['dkp'] > 0){ $blnAchDKP = 2; }
 				else{					   $blnAchDKP = 0; }
 				
-				//which status_row will we build/use
 				if($status > 0){
 					$status_count++; $intAP += $award['points'];
 					if( empty($status_row) ){ $content .= '<div class="reached">'; $status_row = 'reached'; }
@@ -86,7 +100,6 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 					if($status_row == 'reached'){ $content .= '</div><div class="unreached">'; $status_row = 'unreached'; }
 				}
 				
-				//now build the award
 				$content .= '
 					<div class="award ac-'.$intAchID.' awToggleTrigger">
 						<div class="ac-icon floatLeft">
@@ -124,14 +137,15 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 				$content .= '</div></div>';
 			}
 			
-			$content .= '</div></div></div>';
+			$content .= '</div></div></div>
+				<div class="contentFooter">'.generate_pagination($this->strPath.$this->SID, $allAwardsCount, $arrUserSettings['aw_pagination'], $intPage, 'page').'</div>';
 			
 			$this->tpl->add_js('
 				$("#my_aw_progress").progressbar({
 					value: '.$status_count.',
-					max: '.count($list_order).',
+					max: '.$allAwardsCount.',
 				});
-				$(".progress-label").text("'.$status_count.' / '.count($list_order).'");
+				$(".progress-label").text("'.$status_count.' / '.$allAwardsCount.'");
 				$("#achievement-points").text("'.$intAP.'");
 				
 				$(".awToggleTrigger").on("click", function(event){
@@ -149,13 +163,15 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 				});
 			', 'docready');
 			
-			//-----------------------------------------------------------------------------------
+			
+		}else{ $content = 'You don\'t have the permission to see the awards'; }
+		
+		//-----------------------------------------------------------------------------------
 			$output = array(
 				'title'   => $this->user->lang('aw_customtab_title'),
 				'content' => $content,
 			);
 			return $output;
-		}
 	}
 
 

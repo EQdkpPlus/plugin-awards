@@ -8,12 +8,10 @@
 
 --------------------------------------------
 spontan einfälle...
-	- Pageobject Pagination
 	- mehrere Cron Module an einem Award mit zugehöriger Abhängigkeits möglichkeit
-	- eigene Pagination auswahl für Admin sites unter usersettings
 	- sicherheitscheck bei der ajax.php maybe csrf token
 	- bei add/edit award quick info tooltips
-	- Die Style änderung fürs PO dynamischer gestalten mit Template erkennung und einfügung ins Dropdown (so kann man sagen Style: Inkraja und nicht AwPerReihe XY)
+	- Die Style änderung fürs PO dynamischer gestalten mit Template erkennung und einfügung ins Dropdown (so kann man sagen Style: Inkraja und nicht AwPerReihe XY und dann noch das DIablo Temp erstellen)
 	- vllt. die Zuweisungen editieren/updaten Funktion etwas erweitern mit Notify und korrektem Log eintrag
 --------------------------------------------
 
