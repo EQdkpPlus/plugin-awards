@@ -40,7 +40,7 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 			$intViewerID	= $this->user->id;
 			$allAwards		= array();
 			$intAP			= 0;
-			$status_count	= 0;
+			$awReachedCounter	= 0;
 			$status_row		= '';
 			$content		= '';
 			
@@ -49,9 +49,9 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 				$award = $this->awards->award($intAchID, $intUserID);
 				if(is_array($award['member_r'][$intUserID])){
 					$allAwards[$award['id']] = $award['date'];
-				}else{
-					$allAwards[$award['id']] = false;
-				}
+					$intAP += $award['points']; $awReachedCounter++;
+					
+				}else{ $allAwards[$award['id']] = false; }
 			}
 			arsort($allAwards);
 			
@@ -93,7 +93,6 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 				else{					   $blnAchDKP = 0; }
 				
 				if($status > 0){
-					$status_count++; $intAP += $award['points'];
 					if( empty($status_row) ){ $content .= '<div class="reached">'; $status_row = 'reached'; }
 				}else{
 					if( empty($status_row) ){ $content .= '<div class="unreached">'; $status_row = 'unreached'; }
@@ -146,10 +145,10 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 			
 			$this->tpl->add_js('
 				$("#my_aw_progress").progressbar({
-					value: '.$status_count.',
+					value: '.$awReachedCounter.',
 					max: '.$allAwardsCount.',
 				});
-				$(".progress-label").text("'.$status_count.' / '.$allAwardsCount.'");
+				$(".progress-label").text("'.$awReachedCounter.' / '.$allAwardsCount.'");
 				$("#achievement-points").text("'.$intAP.'");
 				
 				$(".awToggleTrigger").on("click", function(event){

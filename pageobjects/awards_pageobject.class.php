@@ -62,12 +62,12 @@ class awards_pageobject extends pageobject
 		
 		//sorting -- award by latest date -- rebuild array to read in multiple loops
 		foreach($arrAchIDs as $intAchID){
-			$award = $this->awards->award($intAchID);
-			if(is_array($award['member_r'][$intUserID])){
+			$award = $this->awards->award($intAchID, true);
+			if(is_array($award['member_r'])){
 				$list_order[$award['id']] = $award['date'];
-			}else{
-				$list_order[$award['id']] = false;
-			}
+				$intAP += $award['points']; $awReachedCounter++;
+				
+			}else{ $list_order[$award['id']] = false; }
 		}
 		arsort($list_order);
 		foreach($list_order as $key => $value) $allAwards[] = $key;
@@ -93,11 +93,9 @@ class awards_pageobject extends pageobject
 				elseif($award['dkp'] > 0){ $blnAchDKP = 2; }
 				else{					   $blnAchDKP = 0; }
 				
-				if(!is_array($award['member_r'])){ $awReached = 'unreached'; }
-				else{ $awReachedCounter++; $intAP += $award['points']; }
+				if(!is_array($award['member_r'])) $awReached = 'unreached';
 				
-				if(is_array($award['member_r'][$intUserID])){ $blnUserReached = true; }
-				else{ $blnUserReached = false; }
+				$blnUserReached = (is_array($award['member_r'][$intUserID]))? true : false;
 				
 				$this->tpl->assign_block_vars('awards_row.award', array(
 					'ID'		=> $intAchID,

@@ -8,6 +8,9 @@
 
 --------------------------------------------
 spontan einfälle...
+	- bissl code cleanen DKP <=> 0-1-2 kann direkt aufs template gelagert werden.
+	- bissl code cleaning, reduziere die php notices
+	- Edit Award Warung bei DKP eintragen like: Ein nachträgliches ändern der DKP wird nicht empfohlen, bereits vergebene DKP werden nicht aktualisiert!
 	- mehrere Cron Module an einem Award mit zugehöriger Abhängigkeits möglichkeit
 	- sicherheitscheck bei der ajax.php maybe csrf token
 	- bei add/edit award quick info tooltips
