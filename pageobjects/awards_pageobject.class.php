@@ -48,7 +48,7 @@ class awards_pageobject extends pageobject
 	  */
 	public function display(){
 		$arrAchIDs		= $this->pdh->get('awards_achievements', 'id_list');
-		$intUserID		= $this->user->id;
+		$intViewerID		= $this->user->id;
 		$intAwardRows	= 1; // Gibt an wieviele Erfolge pro Reihe angezeigt werden sollen
 		
 		//define defaults for dynamic vars
@@ -57,7 +57,7 @@ class awards_pageobject extends pageobject
 		$awReached	= 'reached';
 		
 		//read the usersettings and set $intAwardRows
-		$arrUserSettings = $this->pdh->get('user', 'plugin_settings', array($intUserID));
+		$arrUserSettings = $this->pdh->get('user', 'plugin_settings', array($intViewerID));
 		if($arrUserSettings['aw_layout']) $intAwardRows = $arrUserSettings['aw_layout'];
 		
 		//sorting -- award by latest date -- rebuild array to read in multiple loops
@@ -95,7 +95,7 @@ class awards_pageobject extends pageobject
 				
 				if(!is_array($award['member_r'])) $awReached = 'unreached';
 				
-				$blnUserReached = (is_array($award['member_r'][$intUserID]))? true : false;
+				$blnUserReached = (is_array($award['member_r'][$intViewerID]))? true : false;
 				
 				$this->tpl->assign_block_vars('awards_row.award', array(
 					'ID'		=> $intAchID,
@@ -147,11 +147,12 @@ class awards_pageobject extends pageobject
 		}
 		
 		$this->tpl->assign_vars(array(
-			'AP'			=> $intAP,
-			'AWARD_IN_ROW'	=> $intAwardRows,
-			'S_AW_MANAGE'	=> $this->user->check_auth('a_awards_manage'),
-			'S_AW_ADD'		=> $this->user->check_auth('a_awards_add'),
-			'PAGINATION'	=> generate_pagination($this->strPath.$this->SID, $allAwardsCount, $arrUserSettings['aw_pagination'], $intPage, 'page'),
+			'AP'				=> $intAP,
+			'AWARD_IN_ROW'		=> $intAwardRows,
+			'USER_PROFILE_LINK' => $this->routing->build('User', $this->pdh->get('user', 'name', array($intViewerID)), 'u'.$intViewerID),
+			'S_AW_MANAGE'		=> $this->user->check_auth('a_awards_manage'),
+			'S_AW_ADD'			=> $this->user->check_auth('a_awards_add'),
+			'PAGINATION'		=> generate_pagination($this->strPath.$this->SID, $allAwardsCount, $arrUserSettings['aw_pagination'], $intPage, 'page'),
 		));
 		$this->tpl->add_js('
 			$("#aw_progress").progressbar({
