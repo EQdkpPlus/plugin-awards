@@ -57,8 +57,8 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 			
 			//split $allAwards for pagination
 			$intPage = $this->in->get('page', 0);
-			$arrUserSettings = $this->pdh->get('user', 'plugin_settings', array($intUserID));
-			$arrUserSettings['aw_pagination'] = (isset($arrUserSettings['aw_pagination']))?: 25;
+			$arrUserSettings = $this->pdh->get('user', 'plugin_settings', array($intViewerID));
+			$arrUserSettings['aw_pagination'] = (isset($arrUserSettings['aw_pagination']))? $arrUserSettings['aw_pagination'] : 25;
 			$allAwardsCount = count($allAwards);
 			$allAwards = array_slice($allAwards, $intPage * $arrUserSettings['aw_pagination'], $arrUserSettings['aw_pagination'], true);
 			
@@ -85,7 +85,7 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 				//check persmission to see
 				$perm_admin = $this->user->check_auth('a_', false);
 				$perm_user  = $this->pdh->get('awards_library', 'member_of_award', array($intAchID));
-				$perm_user  = in_array($intUserID, $perm_user);
+				$perm_user  = in_array($intViewerID, $perm_user);
 				if($award['special'] && !($perm_user || $perm_admin)) continue;
 				
 				if(	   $award['dkp'] < 0){ $blnAchDKP = 1; }
@@ -100,10 +100,14 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 					if($status_row == 'reached'){ $content .= '</div><div class="unreached">'; $status_row = 'unreached'; }
 				}
 				
+				if(!$award['active']) $strActive = '<i class="fa fa-clock-o ac-inactive" title="Award is inactive"></i>';
+				if($award['special']) $strSpecial = '<i class="fa fa-eye-slash ac-special" title="Award is secret"></i>';
+				
 				$content .= '
 					<div class="award ac-'.$intAchID.' awToggleTrigger">
 						<div class="ac-icon floatLeft">
 							'.$this->awards->build_icon($intAchID, $award['icon'], unserialize($award['icon_colors'])).'
+							'.$strActive.$strSpecial.'
 						</div>
 						<div class="ac-points floatRight">
 				';
@@ -113,7 +117,7 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 					else { $content .= '<span class="ac-points-big" style="color: #20C000;">'; }
 					$content .= $award['dkp'].'<span class="ac-points-small">'.$award['points'].'</span></span>';
 					
-				} else { $content .= '<span class="ac-points-big">'.$intAchPoints.'</span>'; }
+				} else { $content .= '<span class="ac-points-big">'.$award['points'].'</span>'; }
 				
 				$content .= '
 					</div>

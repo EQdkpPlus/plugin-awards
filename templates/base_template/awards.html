@@ -103,6 +103,12 @@ $(document).ready(function() {
 					<div class="award {awards_row.award.REACHED} ac-{awards_row.award.ID} awToggleTrigger">
 						<div class="ac-icon floatLeft">
 							{awards_row.award.ICON}
+							<!-- IF NOT awards_row.award.ACTIVE -->
+								<i class="fa fa-clock-o ac-inactive" title="Award is inactive"></i>
+							<!-- ENDIF -->
+							<!-- IF awards_row.award.SPECIAL -->
+								<i class="fa fa-eye-slash ac-special" title="Award is secret"></i>
+							<!-- ENDIF -->
 						</div>
 						
 						<div class="ac-points floatRight">

@@ -74,7 +74,7 @@ class awards_pageobject extends pageobject
 		
 		//split $allAwards for pagination
 		$intPage = $this->in->get('page', 0);
-		$arrUserSettings['aw_pagination'] = (isset($arrUserSettings['aw_pagination']))?: 25;
+		$arrUserSettings['aw_pagination'] = (isset($arrUserSettings['aw_pagination']))? $arrUserSettings['aw_pagination'] : 25;
 		$allAwardsCount = count($allAwards);
 		$allAwards = array_slice($allAwards, $intPage * $arrUserSettings['aw_pagination'], $arrUserSettings['aw_pagination']);
 		

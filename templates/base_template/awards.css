@@ -122,6 +122,21 @@
 }
 .unreached .ac-icon img, .unreached .ac-icon svg { opacity: 0.5; }
 
+.ac-inactive {
+	position: relative;
+	top: -36px;
+	left: 15px;
+	opacity: 0.1;
+}
+.ac-special {
+	position: relative;
+	top: -37px;
+	left: 17px;
+	opacity: 0.1;
+}
+#awards .award:hover .ac-inactive,
+#awards .award:hover .ac-special { opacity: 0.5; }
+
 .ac-points { width: 50px; }
 .ac-points-big {
 	font-size: 2em;
