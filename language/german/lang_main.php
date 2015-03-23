@@ -41,6 +41,8 @@ $lang = array(
   'aw_tab_user'					=> 'Meine Erfolge',
   'aw_user_unreached'			=> 'Hat diesen Erfolg noch nicht errungen',
   'aw_member_unreached'			=> 'nicht errungen',
+  'aw_is_inactive'				=> 'Erfolg ist deaktiviert',
+  'aw_is_special'				=> 'Erfolg ist versteckt',
   
   'user_sett_tab_awards'		=> 'Awards Plugin',
   'user_sett_fs_awards'			=> 'Awards Haupteinstellungen',
@@ -103,6 +105,7 @@ $lang = array(
   'action_assignment_deleted'	=> 'Erfolgszuweisung gelöscht',
   
   'aw_plugin_not_installed'		=> 'Das Awards-Plugin ist nicht installiert.',
+  'aw_no_permission'			=> 'Du hast keine Berechtigung die Erfolge einzusehen.',
   'aw_add_success'				=> '%s wurde hinzugefügt',
   'aw_add_nosuccess'			=> '%s konnte nicht hinzugefügt werden',
   'aw_assign_success'			=> '%s wurde<br />%s zugewiesen',

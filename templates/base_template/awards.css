@@ -56,21 +56,29 @@
 	box-shadow: none;
 }
 
+#awards .award.unreached,
 #awards .unreached .award {
 	height: auto;
 	border: 2px solid #777;
 	box-shadow: 0px 30px 60px rgba(0, 0, 0, 0.8) inset;
 }
+#awards .award.unreached:hover,
 #awards .unreached .award:hover {
 	border-color: #CCC;
 	box-shadow: 0px 0px 60px rgba(0, 0, 0, 0.5) inset;
 }
-#awards .unreached .award * { opacity: 0.5; }
-#awards .unreached .award:hover * { opacity: 0.8; }
-#aw_progress {
-    margin: 5px;
-	font-size: 0.7em !important;
-}
+#awards .award.unreached .ac-main,
+#awards .award.unreached .ac-points,
+#awards .unreached .award .ac-main,
+#awards .unreached .award .ac-points { opacity: 0.5; }
+
+#awards .award.unreached:hover .ac-main,
+#awards .award.unreached:hover .ac-points,
+#awards .unreached .award:hover .ac-main,
+#awards .unreached .award:hover .ac-points { opacity: 0.8; }
+
+
+#aw_progress { margin: 5px; font-size: 0.7em !important; }
 #aw_progress .ui-progressbar-value { margin-top: -1.7em; }
 #aw_progress .progress-label {
     text-align: center;
@@ -127,12 +135,16 @@
 	top: -36px;
 	left: 15px;
 	opacity: 0.1;
+	cursor: help;
+	z-index: 1;
 }
 .ac-special {
 	position: relative;
 	top: -37px;
 	left: 17px;
 	opacity: 0.1;
+	cursor: help;
+	z-index: 1;
 }
 #awards .award:hover .ac-inactive,
 #awards .award:hover .ac-special { opacity: 0.5; }

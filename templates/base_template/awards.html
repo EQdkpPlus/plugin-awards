@@ -104,16 +104,16 @@ $(document).ready(function() {
 						<div class="ac-icon floatLeft">
 							{awards_row.award.ICON}
 							<!-- IF NOT awards_row.award.ACTIVE -->
-								<i class="fa fa-clock-o ac-inactive" title="Award is inactive"></i>
+								<i class="fa fa-clock-o ac-inactive" title="{L_aw_is_inactive}"></i>
 							<!-- ENDIF -->
 							<!-- IF awards_row.award.SPECIAL -->
-								<i class="fa fa-eye-slash ac-special" title="Award is secret"></i>
+								<i class="fa fa-eye-slash ac-special" title="{L_aw_is_special}"></i>
 							<!-- ENDIF -->
 						</div>
 						
 						<div class="ac-points floatRight">
-							<!-- IF awards_row.award.DKP_ACTIVE != "0" -->
-							<span class="ac-points-big" style="<!-- IF awards_row.award.DKP_ACTIVE == "1" -->color: #C03D00;<!-- ELSE -->color: #20C000;<!-- ENDIF -->">
+							<!-- IF awards_row.award.DKP -->
+							<span class="ac-points-big <!-- IF awards_row.award.DKP > 0 -->positive<!-- ELSE -->negative<!-- ENDIF -->">
 								{awards_row.award.DKP}
 								<span class="ac-points-small">{awards_row.award.AP}</span>
 							</span>

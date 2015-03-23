@@ -99,8 +99,8 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 					if($status_row == 'reached'){ $content .= '</div><div class="unreached">'; $status_row = 'unreached'; }
 				}
 				
-				if(!$award['active']) $strActive = '<i class="fa fa-clock-o ac-inactive" title="Award is inactive"></i>';
-				if($award['special']) $strSpecial = '<i class="fa fa-eye-slash ac-special" title="Award is secret"></i>';
+				if(!$award['active']) $strActive = '<i class="fa fa-clock-o ac-inactive" title="'.$this->user->lang('aw_is_inactive').'"></i>';
+				if($award['special']) $strSpecial = '<i class="fa fa-eye-slash ac-special" title="'.$this->user->lang('aw_is_special').'"></i>';
 				
 				$content .= '
 					<div class="award ac-'.$intAchID.' awToggleTrigger">
@@ -112,8 +112,8 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 				';
 				
 				if($blnAchDKP != 0){
-					if($blnAchDKP == 1){ $content .= '<span class="ac-points-big" style="color: #C03D00;">'; }
-					else { $content .= '<span class="ac-points-big" style="color: #20C000;">'; }
+					if($blnAchDKP == 1){ $content .= '<span class="ac-points-big negative">'; }
+					else { $content .= '<span class="ac-points-big positive">'; }
 					$content .= $award['dkp'].'<span class="ac-points-small">'.$award['points'].'</span></span>';
 					
 				} else { $content .= '<span class="ac-points-big">'.$award['points'].'</span>'; }
@@ -167,7 +167,7 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 			', 'docready');
 			
 			
-		}else{ $content = 'You don\'t have the permission to see the awards'; }
+		}else{ $content = $this->user->lang('aw_no_permission'); }
 		
 		//-----------------------------------------------------------------------------------
 			$output = array(
