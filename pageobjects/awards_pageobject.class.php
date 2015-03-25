@@ -89,6 +89,10 @@ class awards_pageobject extends pageobject
 				
 				$strAchIcon = $this->awards->build_icon($intAchID, $award['icon'], unserialize($award['icon_colors']));
 				
+				if(	   $award['dkp'] < 0){ $blnAchDKP = 1; }
+				elseif($award['dkp'] > 0){ $blnAchDKP = 2; }
+				else{					   $blnAchDKP = 0; }
+				
 				if(!is_array($award['member_r'])) $awReached = 'unreached';
 				
 				$blnUserReached = (is_array($award['member_r'][$intViewerID]))? true : false;
