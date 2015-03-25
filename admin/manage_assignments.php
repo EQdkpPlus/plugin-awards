@@ -175,8 +175,8 @@ class awards_manage_assignments extends page_generic
 	  * display main page
 	  */
 	public function display(){
-		$arrUserSettings = $this->pdh->get('user', 'plugin_settings', array($intUserID));
-		$arrUserSettings['aw_admin_pagination'] = (isset($arrUserSettings['aw_admin_pagination']))?: 100;
+		$arrUserSettings = $this->pdh->get('user', 'plugin_settings', array($this->user->id));
+		$arrUserSettings['aw_admin_pagination'] = (isset($arrUserSettings['aw_admin_pagination']))? $arrUserSettings['aw_admin_pagination'] : 100;
 		
 		$view_list = $this->pdh->aget('awards_assignments', 'adj_group_key', 0, array($this->pdh->get('awards_assignments', 'id_list', array())));
 		$view_list = array_flip($view_list);

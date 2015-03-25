@@ -256,8 +256,8 @@ class awards_manage_achievements extends page_generic
 	  * display all achievements
 	  */
 	public function display() {
-		$arrUserSettings = $this->pdh->get('user', 'plugin_settings', array($intUserID));
-		$arrUserSettings['aw_admin_pagination'] = (isset($arrUserSettings['aw_admin_pagination']))?: 100;
+		$arrUserSettings = $this->pdh->get('user', 'plugin_settings', array($this->user->id));
+		$arrUserSettings['aw_admin_pagination'] = (isset($arrUserSettings['aw_admin_pagination']))? $arrUserSettings['aw_admin_pagination'] : 100;
 		
 		$this->tpl->add_js("
 			$(\"#article_categories-table tbody\").sortable({

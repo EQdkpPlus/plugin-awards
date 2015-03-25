@@ -388,7 +388,7 @@ if ( !class_exists( "pdh_r_awards_library" ) ) {
 						$dates[] = (int)$this->awards_library[$key]['date'];
 					}
 				}
-				if($dates[0])
+				if(isset($dates[0]))
 					foreach($dates as $date){
 						$earliest_date = ($date < $earliest_date) ? $date : $earliest_date;
 					}

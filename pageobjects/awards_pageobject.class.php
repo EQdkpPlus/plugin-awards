@@ -63,7 +63,7 @@ class awards_pageobject extends pageobject
 		//sorting -- award by latest date -- rebuild array to read in multiple loops
 		foreach($arrAchIDs as $intAchID){
 			$award = $this->awards->award($intAchID, true);
-			if(is_array($award['member_r'])){
+			if(isset($award['member_r'])){
 				$list_order[$award['id']] = $award['date'];
 				$intAP += $award['points']; $awReachedCounter++;
 				
@@ -89,13 +89,9 @@ class awards_pageobject extends pageobject
 				
 				$strAchIcon = $this->awards->build_icon($intAchID, $award['icon'], unserialize($award['icon_colors']));
 				
-				if(	   $award['dkp'] < 0){ $blnAchDKP = 1; }
-				elseif($award['dkp'] > 0){ $blnAchDKP = 2; }
-				else{					   $blnAchDKP = 0; }
+				if($awReached == 'reached' && !isset($award['member_r'])) $awReached = 'unreached';
 				
-				if(!is_array($award['member_r'])) $awReached = 'unreached';
-				
-				$blnUserReached = (is_array($award['member_r'][$intViewerID]))? true : false;
+				$blnUserReached = (isset($award['member_r'][$intViewerID]))? true : false;
 				
 				$this->tpl->assign_block_vars('awards_row.award', array(
 					'ID'		=> $intAchID,
@@ -107,13 +103,12 @@ class awards_pageobject extends pageobject
 					'SPECIAL'	=> $award['special'],
 					'AP'		=> $award['points'],
 					'DKP'		=> $award['dkp'],
-					'DKP_ACTIVE'=> $blnAchDKP,
 					'REACHED'	=> $awReached,
 					'USER_R'	=> $blnUserReached,
 				));
 				
 				//build the members
-				if(is_array($award['member_r']))
+				if(isset($award['member_r']))
 					foreach($award['member_r'] as $intUserID => $arrMembers){
 						$this->tpl->assign_block_vars('awards_row.award.users', array(
 							'ID'		=> $intUserID,
@@ -127,7 +122,7 @@ class awards_pageobject extends pageobject
 							));
 						}
 					}
-				if(is_array($award['member_u']))
+				if(isset($award['member_u']))
 					foreach($award['member_u'] as $intUserID => $arrMembers){
 						$this->tpl->assign_block_vars('awards_row.award.users', array(
 							'ID'		=> $intUserID,
