@@ -1,0 +1,68 @@
+<script type="text/javascript">
+$(document).ready(function() {
+	$('.awToggleTrigger').on('click', function(event){
+		if ($(this).hasClass('show-member')){
+			$(this).removeClass('show-member');
+			$(this).children('.ac-user-list').hide(50);
+		}else{
+			$('.awToggleTrigger').each(function(){
+				$(this).removeClass('show-member');
+				$(this).children('.ac-user-list').hide(50);
+			});
+			$(this).addClass('show-member');
+			$(this).children('.ac-user-list').show(200);
+		}
+	});
+});
+</script>
+
+<div id="awards">
+	<div id="progress-header">
+		<div class="progress-left floatLeft">Fortschritt:&nbsp;</div>
+		<div class="progress-right floatRight">
+			<span id="achievement-points">Loading...</span>&nbsp;<i class="fa fa-bookmark-o"></i>
+		</div>
+		<div id="my_aw_progress">
+			<div class="progress-label">Loading...</div>
+		</div>
+	</div>
+	
+	<div class="aw-list">
+	<!-- BEGIN award -->
+		<!-- IF NOT award.SPECIAL OR award.USER_R OR S_ADMIN -->
+		<div class="award {award.REACHED} ac-{award.ID} awToggleTrigger">
+			<div class="ac-icon floatLeft">
+				{award.ICON}
+				<!-- IF NOT award.ACTIVE -->
+					<i class="fa fa-clock-o ac-inactive" title="{L_aw_is_inactive}"></i>
+				<!-- ENDIF -->
+				<!-- IF award.SPECIAL -->
+					<i class="fa fa-eye-slash ac-special" title="{L_aw_is_special}"></i>
+				<!-- ENDIF -->
+			</div>
+			
+			<div class="ac-points floatRight">
+				<!-- IF award.DKP -->
+				<span class="ac-points-big <!-- IF award.DKP > 0 -->positive<!-- ELSE -->negative<!-- ENDIF -->">
+					{award.DKP}
+					<span class="ac-points-small">{award.AP}</span>
+				</span>
+				<!-- ELSE -->
+				<span class="ac-points-big">
+					{award.AP}
+				</span>
+				<!-- ENDIF -->
+			</div>
+			
+			<div class="ac-main">
+				<h2 class="ac-title">{award.TITLE}</h2>
+				<p class="ac-desc">{award.DESC}</p>
+				<p class="ac-date">{award.DATE}</p>
+			</div>
+		</div>
+		<!-- ENDIF -->
+	<!-- END award -->
+	</div>
+</div>
+
+<div class="contentFooter">{PAGINATION}</div>
