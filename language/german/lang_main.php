@@ -73,8 +73,13 @@ $lang = array(
   'aw_desc_help'				=> 'Beschreibung des Erfolgs',
   'aw_active_help'				=> 'Bestimmt, ob dieser Erfolg zugewiesen werden darf.',
   'aw_special_help'				=> 'Besondere Erfolge sind erst sichtbar wenn diese errungen wurden.',
+  'aw_ap_help'					=> 'Award Punkte(Erfolgspunkte) dienen als seperate Währung zu DKP.',
+  'aw_dkp_help'					=> 'DKP Punkte werden bei erhalt dem jeweiligem Spieler zugerechnet.',
+  'aw_dkp_warn'					=> 'Ein nachträgliches ändern der DKP wird nicht empfohlen, bereits vergebene DKP werden nicht aktualisiert!',
+  'aw_event_help'				=> 'Wähle ein Ereignis für diesen Erfolg aus.',
   'aw_auto_assign_help'			=> '"Plugins: Awards" Cronjob muss aktiviert sein!<br />
 									Beispiel: [Ab X Raids] 100',
+  'aw_icon_help'				=> 'Wähle ein passendes Icon aus oder lade ein eigenes hoch.<br />SVG Bilder bieten zusätzliche Farbmöglichkeiten, dazu sollten sie aber entsprechend angepasst sein siehe dazu das Wiki.',
   
   'aw_sortation'				=> 'Sortierung',
   'aw_icon_colors'				=> 'Icon Farben',

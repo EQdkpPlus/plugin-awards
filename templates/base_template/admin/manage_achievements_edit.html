@@ -98,15 +98,18 @@
 		<dd>{R_SPECIAL_STATE}</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_aw_value}:</label></dt>
+		<dt><label>{L_aw_value}:</label>
+		<br/><span>{L_aw_ap_help}</span></dt>
 		<dd>{SPINNER_POINTS}</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_aw_dkp_value}:</label></dt>
+		<dt><label>{L_aw_dkp_value}: <!-- IF AID --><i class="fa fa-exclamation-triangle" title="{L_aw_dkp_warn}" style="color:#DD5D00; cursor: help;"></i><!-- ENDIF --></label>
+		<br/><span>{L_aw_dkp_help}</span></dt>
 		<dd>{SPINNER_DKP}</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_event}:</label></dt>
+		<dt><label>{L_event}:</label>
+		<br/><span>{L_aw_event_help}</span></dt>
 		<dd>{DD_EVENT}</dd>
 	</dl>
 	<dl>
@@ -115,7 +118,8 @@
 		<dd>{DD_MODULE} <input type="text" id="module_set" class="input" value="{MODULE_SET}" name="module_set" size='20' placeholder="param1,param2,..." /></dd>
 	</dl>
 	<dl>
-		<dt><label>{L_aw_icon_header}:</label></dt>
+		<dt><label>{L_aw_icon_header}:</label>
+		<br /><span>{L_aw_icon_help}</span></dt>
 		<dd><button class="mainoption" type="button" id="iubuttonedit" onclick="elfinder_all();"><i class="fa fa-upload"></i> {L_aw_upload_icon}</button></dd>
 	</dl>
 	<table width="87%" border="0" cellspacing="1" cellpadding="2" class="scrollable-x floatLeft">
