@@ -97,8 +97,14 @@ $lang = array(
   
   
   // Cronjob Modules
-  'aw_cronmodule_disabled'		=> 'Kein Modul ausgewählt',
-  'aw_cronmodule_raids'			=> 'ab X Raids',
+  'aw_module_row_delete'		=> 'Lösche diese Bedingung',
+  'aw_module_condition'			=> 'der folgenden Bedingungen müssen zu treffen.',
+  'aw_module_all'				=> 'Alle',
+  'aw_module_any'				=> 'Eines',
+  
+  'aw_cronmodule_raids'			=> 'Benutzer hat an [x] Raids teilgenommen',
+  'aw_cronmodule_inf_raids'		=> 'Raids',
+  /* PUT HERE THE LANGUAGE STRIPES OF YOUR OWN MODULE */
   
   
   // System Messages

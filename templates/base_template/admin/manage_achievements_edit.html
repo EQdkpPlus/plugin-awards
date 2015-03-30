@@ -66,7 +66,30 @@
 				$('#colorchange .icon_preview svg g:nth-child('+i+')').css('fill', $('#colorchange #icon_layer_'+i+'_input').val());
 			}
 		});
+		
+		//check pre-defined cronjob module condition
+		if( $('#module_cond').val() != 0 ){ $('.module_show').show(); }else{ $('.module_show').hide(); }
+		
+		//handle cronjob module rows
+		$('#module_cond').change(function(){
+			if( $(this).val() != 0 ){ $('.module_show').show(); }
+			else{ $('.module_show').hide(); }
+		});
+		
+		$('#modules option').on('click', function(event){
+			if( !$(this).attr('disabled') ){
+				$(this).attr('disabled', 'disabled');
+				new_row = $('#aw_reference_table tr[name="'+$(this).val()+'"]').html();
+				$("#aw_module_table").find('tbody').append('<tr>'+new_row+'</tr>');
+			}
+		});
 	});
+	
+	function delete_module_row(obj, module){
+		$('#modules option[value="'+module+'"]').removeAttr('disabled');
+		$('#modules option[value="'+module+'"]').removeAttr('selected');
+		$(obj).parent().parent().remove();
+	}
 </script>
 <style>
 	#colorchange { position: absolute; display: inline-block; text-align: right; visibility: hidden; }
@@ -115,7 +138,23 @@
 	<dl>
 		<dt><label>{L_aw_auto_assign}:</label>
 		<br /><span>{L_aw_auto_assign_help}</span></dt>
-		<dd>{DD_MODULE} <input type="text" id="module_set" class="input" value="{MODULE_SET}" name="module_set" size='20' placeholder="param1,param2,..." /></dd>
+		<dd>
+			{DD_MODULE_COND} <span class="module_show">{L_aw_module_condition}</span>
+			<table id="aw_module_table" class="table fullwidth colorswitch module_show">
+				<tbody>
+				<!-- BEGIN module_row -->
+				<tr>
+					<td><input type="hidden" name="module[{module_row.NAME}][name]" value="{module_row.NAME}" />{module_row.TITLE}</td>
+					<!-- IF module_row.ADDITION -->
+					<td style="padding: 2px 0px 0px;"><input type="text" name="module[{module_row.NAME}][value]" value="{module_row.VALUE}" class="input" style="height: 13px;" size="3" /> {module_row.VALUE_TEXT}</td>
+					<!-- ENDIF -->
+					<td><i class="fa fa-trash-o fa-lg hand" title="{L_aw_module_row_delete}"  onclick="delete_module_row(this, '{module_row.NAME}');"></i></td>
+				</tr>
+				<!-- END module_row -->
+				</tbody>
+			</table>
+			{DD_MODULES}
+		</dd>
 	</dl>
 	<dl>
 		<dt><label>{L_aw_icon_header}:</label>
@@ -161,3 +200,15 @@
 </div>
 {CSRF_TOKEN}
 </form>
+
+<table id="aw_reference_table" style="display:none;">
+	<!-- BEGIN all_modules_row -->
+	<tr name="{all_modules_row.NAME}">
+		<td><input type="hidden" name="module[{all_modules_row.NAME}][name]" value="{all_modules_row.NAME}" />{all_modules_row.TITLE}</td>
+		<!-- IF all_modules_row.ADDITION -->
+		<td style="padding: 2px 0px 0px;"><input type="text" name="module[{all_modules_row.NAME}][value]" value="" class="input" style="height: 13px;" size="3" /> {all_modules_row.VALUE_TEXT}</td>
+		<!-- ENDIF -->
+		<td><i class="fa fa-trash-o fa-lg hand" title="{L_aw_module_row_delete}"  onclick="delete_module_row(this, '{all_modules_row.NAME}');"></i></td>
+	</tr>
+	<!-- END all_modules_row -->
+</table>

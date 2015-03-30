@@ -57,8 +57,8 @@ class awards_manage_achievements extends page_generic
 	public function save(){	
 		$id 				= $this->in->get('aid', 0);
 		
-		$hmultilangName = new htextmultilang('name');
-		$hmultilangDesc = new htextareamultilang('description');
+		$hmultilangName		= new htextmultilang('name');
+		$hmultilangDesc		= new htextareamultilang('description');
 		$strAchName			= $hmultilangName->_inpval();
 		$strAchDescription	= $hmultilangDesc->_inpval();
 		
@@ -69,18 +69,19 @@ class awards_manage_achievements extends page_generic
 		$fltAchDKP			= $this->in->get('dkp', 0);
 		$intEventID			= $this->in->get('event', 'int');
 		$strAchIcon			= $this->in->get('icon', 'default.svg');
-		$arrAchIconColors	= array();
-		$strAchModule		= $this->in->get('module');
-		$strAchModuleSet	= $this->in->get('module_set');
 		
+		$strAchModuleSet = array();
+		$strAchModule	 = array('conditions' => $this->in->get('module_cond', 0));
+		foreach($this->in->getArray('module', 'raw') as $module){
+			$strAchModule[] = $module['name'];
+			$strAchModuleSet[$module['name']] = (isset($module['value']))? $module['value'] : '';
+		}
+		$strAchModule	 = serialize($strAchModule);
+		$strAchModuleSet = serialize($strAchModuleSet);
+		
+		$arrAchIconColors	= array();
 		for($i=1; $i<=5; $i++) $arrAchIconColors[] = $this->in->get('icon_layer_'.$i);
 		$arrAchIconColors = serialize($arrAchIconColors);
-		
-		// parse module settings
-		if(!empty($strAchModuleSet)){
-			$strAchModuleSet = str_replace(' ', '', $strAchModuleSet);
-			$strAchModuleSet = serialize( explode(',',$strAchModuleSet) );
-		}
 		
 		if ($id){ //update Achievement
 			$blnResult = $this->pdh->put('awards_achievements', 'update', array($id, $strAchName, $strAchDescription, $intAchSortID, $blnAchActive, $blnAchSpecial, $intAchPoints, $fltAchDKP, $strAchIcon, $arrAchIconColors, $strAchModule, $strAchModuleSet, $intEventID));
@@ -129,22 +130,6 @@ class awards_manage_achievements extends page_generic
 	public function edit(){
 		$id = $this->in->get('aid', 0);
 		
-		// fetch Cronjob Modules
-		$modules = array( NULL => $this->user->lang('aw_cronmodule_disabled') );
-		$module_folder = opendir($this->root_path.'plugins/awards/cronjob/module');
-		while (false !== ($module = readdir($module_folder))) {
-			if (substr($module, -21) == '_cronmodule.class.php'){
-				$module_name = substr($module, 0, -21);
-				$modules[$module_name] = $this->user->lang('aw_cronmodule_'.$module_name);
-			}
-		}
-		$arrModuleDropdown = $modules;
-		
-		// parse module settings
-		$strModuleSet = $this->pdh->get('awards_achievements', 'module_set', array($id));
-		if(!empty($strModuleSet))
-			$strModuleSet = implode(',', unserialize($strModuleSet));
-		
 		// fetch events
 		$arrEvents = array();
 		$arrEventIDs = $this->pdh->get('event', 'id_list');
@@ -156,40 +141,48 @@ class awards_manage_achievements extends page_generic
 		$arrAchIconColors = $this->pdh->get('awards_achievements', 'icon_colors', array($id));
 		$arrAchIconColors = unserialize($arrAchIconColors);
 		
+		// fetch Cronjob Modules
+		$arrAllModules = array();
+		$module_folder = opendir($this->root_path.'plugins/awards/cronjob/module');
+		while(false !== ($module = readdir($module_folder))){
+			if(substr($module, -21) == '_cronmodule.class.php'){
+				$module_name = substr($module, 0, -21);
+				$module_name_lang	  = $this->user->lang('aw_cronmodule_'.$module_name);
+				$module_addition_lang = $this->user->lang('aw_cronmodule_inf_'.$module_name);
+				
+				$arrAllModules[$module_name] = $module_name_lang;
+				
+				$this->tpl->assign_block_vars('all_modules_row', array(
+					'NAME'		=> $module_name,
+					'TITLE'		=> $module_name_lang,
+					'ADDITION'	=> !empty($module_addition_lang),
+					'VALUE_TEXT'=> (!empty($module_addition_lang))? $module_addition_lang : '',
+				));
+			}
+		}
 		
-		if ($id){
-			$this->tpl->assign_vars(array(
-				'ML_NAME'			=> new htextmultilang('name', array('value' => unserialize($this->pdh->get('awards_achievements', 'name', array($id))), 'size' => 30, 'required' => true)),
-				'ML_DESCRIPTION'	=> new htextareamultilang('description', array('value' => unserialize($this->pdh->get('awards_achievements', 'description', array($id))), 'rows' => '3', 'cols' => '50')),
-				'R_ACTIVE_STATE'	=> new hradio('active_state', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => $this->pdh->get('awards_achievements', 'active', array($id)))),
-				'R_SPECIAL_STATE'	=> new hradio('special_state', array('options' => array(0 => $this->user->lang('published'), 1 => $this->user->lang('not_published')), 'value' => $this->pdh->get('awards_achievements', 'special', array($id)))),
-				'SPINNER_POINTS' 	=> new hspinner('points', array('value' => $this->pdh->get('awards_achievements', 'points', array($id)), 'max'  => 100000, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),
-				'SPINNER_DKP'		=> new hspinner('dkp', array('value' =>  ($this->pdh->get('awards_achievements', 'dkp', array($id))), 'max'  => 100000, 'min'  => -100000, 'step' => 5)),
-				'DD_MODULE'			=> new hdropdown('module', array('options' => $arrModuleDropdown, 'value' => $this->pdh->get('awards_achievements', 'module', array($id)))),
-				'DD_EVENT'			=> new hdropdown('event', array('options' => $arrEvents, 'value' => $this->pdh->get('awards_achievements', 'event_id', array($id)))),
-				'MODULE_SET'		=> (!empty($strModuleSet))? $strModuleSet : '',
-				'CP_ICON_LAYER_1'	=> $this->jquery->colorpicker('icon_layer_1', ($arrAchIconColors[0])?:'#000000'),
-				'CP_ICON_LAYER_2'	=> $this->jquery->colorpicker('icon_layer_2', ($arrAchIconColors[1])?:'#FFFFFF'),
-				'CP_ICON_LAYER_3'	=> $this->jquery->colorpicker('icon_layer_3', ($arrAchIconColors[2])?:'#FFFFFF'),
-				'CP_ICON_LAYER_4'	=> $this->jquery->colorpicker('icon_layer_4', ($arrAchIconColors[3])?:'#FFFFFF'),
-				'CP_ICON_LAYER_5'	=> $this->jquery->colorpicker('icon_layer_5', ($arrAchIconColors[4])?:'#FFFFFF'),
-			));
-		} else {
-			$this->tpl->assign_vars(array(
-				'ML_NAME'			=> new htextmultilang('name', array('size' => 30, 'required' => true)),
-				'ML_DESCRIPTION'	=> new htextareamultilang('description', array('rows' => '3', 'cols' => '50')),
-				'R_ACTIVE_STATE'	=> new hradio('active_state', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => 1)),
-				'R_SPECIAL_STATE'	=> new hradio('special_state', array('options' => array(0 => $this->user->lang('published'), 1 => $this->user->lang('not_published')), 'value' => 0)),
-				'SPINNER_POINTS'	=> new hspinner('points', array('value' =>  10, 'max'  => 100000, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),	
-				'SPINNER_DKP'		=> new hspinner('dkp', array('value' =>  0, 'max'  => 100000, 'min'  => -100000, 'step' => 5)),
-				'DD_MODULE'			=> new hdropdown('module', array('options' => $arrModuleDropdown, 'value' => NULL)),
-				'DD_EVENT'			=> new hdropdown('event', array('options' => $arrEvents, 'value' => '')),
-				'MODULE_SET'		=> '',
-				'CP_ICON_LAYER_1'	=> $this->jquery->colorpicker('icon_layer_1', '#000000'),
-				'CP_ICON_LAYER_2'	=> $this->jquery->colorpicker('icon_layer_2', '#FFFFFF'),
-				'CP_ICON_LAYER_3'	=> $this->jquery->colorpicker('icon_layer_3', '#FFFFFF'),
-				'CP_ICON_LAYER_4'	=> $this->jquery->colorpicker('icon_layer_4', '#FFFFFF'),
-				'CP_ICON_LAYER_5'	=> $this->jquery->colorpicker('icon_layer_5', '#FFFFFF'),
+		// fetch & parse Cronjob Modules infos from PDH
+		$arrAchModules		  = ($id)? $this->pdh->get('awards_achievemenets', 'module', array($id)) : array(0, '');
+		$arrAchModuleSettings = ($id)? $this->pdh->get('awards_achievemenets', 'module_set', array($id)) : array();
+		
+		$intModuleCondition = $arrAchModules['conditions'];
+		$arrModuleCondtions = array(
+			'0' => $this->user->lang('no'),
+			'all' => $this->user->lang('aw_module_all'),
+			'any' => $this->user->lang('aw_module_any'),
+		);
+		
+		$arrDisableModules = array();
+		foreach(array_slice($arrAchModules, 1) as $strModule){
+			if(empty($strModule)) break;
+			$arrDisableModules[$strModule] = $strModule;
+			
+			$this->tpl->assign_block_vars('module_row', array(
+				'NAME'		=> $strModule,
+				'TITLE'		=> $this->user->lang('aw_cronmodule_'.$strModule),
+				'ADDITION'	=> isset($arrAchModuleSettings[$strModule]),
+				'VALUE'		=> (isset($arrAchModuleSettings[$strModule]))? $arrAchModuleSettings[$strModule] : NULL,
+				'VALUE_TEXT'=> (isset($arrAchModuleSettings[$strModule]))? $this->user->lang('aw_cronmodule_inf_'.$strModule) : '',
 			));
 		}
 		
@@ -233,12 +226,25 @@ class awards_manage_achievements extends page_generic
 				);
 			}
 		}
-		
-		// Icon Upload
 		$this->jquery->fileBrowser('all', 'image', $this->pfh->FolderPath('images','awards', 'absolute'), array('title' => $this->user->lang('aw_upload_icon'), 'onclosejs' => '$(\'#eventSubmBtn\').click();'));
 		
+		
 		$this->tpl->assign_vars(array(
-			'AID' => $id,
+			'AID'				=> $id,
+			'ML_NAME'			=> new htextmultilang('name', array('value' => ($id)? unserialize($this->pdh->get('awards_achievements', 'name', array($id))) : '', 'size' => 30, 'required' => true)),
+			'ML_DESCRIPTION'	=> new htextareamultilang('description', array('value' => ($id)? unserialize($this->pdh->get('awards_achievements', 'description', array($id))) : '', 'rows' => '3', 'cols' => '50')),
+			'R_ACTIVE_STATE'	=> new hradio('active_state', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => ($id)? $this->pdh->get('awards_achievements', 'active', array($id)) : 1)),
+			'R_SPECIAL_STATE'	=> new hradio('special_state', array('options' => array(0 => $this->user->lang('published'), 1 => $this->user->lang('not_published')), 'value' => ($id)? $this->pdh->get('awards_achievements', 'special', array($id)) : 0)),
+			'SPINNER_POINTS' 	=> new hspinner('points', array('value' => ($id)? $this->pdh->get('awards_achievements', 'points', array($id)) : 10, 'max'  => 100000, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),
+			'SPINNER_DKP'		=> new hspinner('dkp', array('value' => ($id)? $this->pdh->get('awards_achievements', 'dkp', array($id)) : 0, 'max'  => 100000, 'min'  => -100000, 'step' => 5)),
+			'DD_EVENT'			=> new hdropdown('event', array('options' => $arrEvents, 'value' => ($id)? $this->pdh->get('awards_achievements', 'event_id', array($id)) : '')),
+			'DD_MODULE_COND'	=> new hdropdown('module_cond', array('options' => $arrModuleCondtions, 'value' => ($intModuleCondition)?: 0)),
+			'DD_MODULES'		=> new hdropdown('modules', array('options' => $arrAllModules, 'value' => 0, 'todisable' => $arrDisableModules, 'class' => 'module_show')),
+			'CP_ICON_LAYER_1'	=> $this->jquery->colorpicker('icon_layer_1', ($arrAchIconColors[0])?:'#000000'),
+			'CP_ICON_LAYER_2'	=> $this->jquery->colorpicker('icon_layer_2', ($arrAchIconColors[1])?:'#FFFFFF'),
+			'CP_ICON_LAYER_3'	=> $this->jquery->colorpicker('icon_layer_3', ($arrAchIconColors[2])?:'#FFFFFF'),
+			'CP_ICON_LAYER_4'	=> $this->jquery->colorpicker('icon_layer_4', ($arrAchIconColors[3])?:'#FFFFFF'),
+			'CP_ICON_LAYER_5'	=> $this->jquery->colorpicker('icon_layer_5', ($arrAchIconColors[4])?:'#FFFFFF'),
 		));
 		
 		// -- EQDKP ---------------------------------------------------------------

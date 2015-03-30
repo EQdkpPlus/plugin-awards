@@ -32,21 +32,40 @@ if ( !class_exists( "awards_crontask" ) ) {
 
 
 		public function run(){
-			$arrAchIDs = $this->pdh->get('awards_achievements', 'id_list');
+			$arrAchIDs	  = $this->pdh->get('awards_achievements', 'id_list');
 			
 			foreach($arrAchIDs as $intAchID){
 				if( $this->pdh->get('awards_achievements', 'active', array($intAchID)) ){
-					$strAchModule = $this->pdh->get('awards_achievements', 'module', array($intAchID));
+					$arrMemberIDs = $this->pdh->get('member', 'id_list');
+					$arrAchModule = unserialize($this->pdh->get('awards_achievements', 'module', array($intAchID)));
+					$arrAchModuleConditions = $arrAchModule['conditions'];
+					$arrAchModule = array_slice($arrAchModule, 1);
 					
-					if(!empty($strAchModule)){
-						require($this->root_path.'plugins/awards/cronjob/module/'.$strAchModule.'_cronmodule.class.php');
-						$module = registry::register($strAchModule.'_cronmodule');
-						
-						$arrMemberIDs = $module->run($intAchID);
-						if($arrMemberIDs){
-							$this->awards->add_assignment($intAchID, $arrMemberIDs);
+					if($arrAchModuleConditions == 'all'){
+						foreach($arrAchModule as $strAchModule){
+							if(!class_exists($strAchModule.'_cronmodule'))
+								if((include $this->root_path.'plugins/awards/cronjob/module/'.$strAchModule.'_cronmodule.class.php') == false) continue;
+							
+							$module = registry::register($strAchModule.'_cronmodule');
+							$arrMemberIDs = $module->run($intAchID, $arrMemberIDs);
+							if($arrMemberIDs) $arrMemberIDs = array_unique($arrMemberIDs);
 						}
-					}
+						$this->awards->add_assignment($intAchID, $arrMemberIDs);
+						
+						
+					}elseif($arrAchModuleConditions == 'any'){
+						foreach($arrAchModule as $strModule){
+							if(!class_exists($strAchModule.'_cronmodule'))
+								if((include $this->root_path.'plugins/awards/cronjob/module/'.$strAchModule.'_cronmodule.class.php') == false) continue;
+							
+							$module = registry::register($strAchModule.'_cronmodule');
+							$arrMemberIDs = $module->run($intAchID, $arrMemberIDs);
+							
+							if($arrMemberIDs) $this->awards->add_assignment($intAchID, $arrMemberIDs);
+						}
+						
+						
+					}else{ continue; }
 				}
 			}
 		}
