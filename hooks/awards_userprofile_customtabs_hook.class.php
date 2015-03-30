@@ -40,8 +40,7 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 			$intViewerID	= $this->user->id;
 			$allAwards		= array();
 			$intAP			= 0;
-			$awReachedCounter	= 0;
-			$status_row		= '';
+			$awReachedCounter = 0;
 			$content		= '';
 			
 			//sorting -- newest date = up, false = unreached
@@ -63,85 +62,29 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 			$allAwards = array_slice($allAwards, $intPage * $arrUserSettings['aw_pagination'], $arrUserSettings['aw_pagination'], true);
 			
 			
-			//build the content
-			$content = '
-				<div id="awards">
-					<div id="progress-header">
-						<div class="progress-left floatLeft">Fortschritt:&nbsp;</div>
-						<div class="progress-right floatRight">
-							<span id="achievement-points">Loading...</span>&nbsp;<i class="fa fa-bookmark-o"></i>
-						</div>
-						<div id="my_aw_progress">
-							<div class="progress-label">Loading...</div>
-						</div>
-					</div>
-					<div class="aw-list">
-			';
-			
-			//now build each award
 			foreach($allAwards as $intAchID => $status){
 				$award = $this->awards->award($intAchID, $intUserID);
 				
-				//check persmission to see
-				$perm_admin = $this->user->check_auth('a_', false);
-				$perm_user  = $this->pdh->get('awards_library', 'member_of_award', array($intAchID));
-				$perm_user  = in_array($intViewerID, $perm_user);
-				if($award['special'] && !($perm_user || $perm_admin)) continue;
+				$strAchIcon = $this->awards->build_icon($intAchID, $award['icon'], unserialize($award['icon_colors']));
 				
-				if(	   $award['dkp'] < 0){ $blnAchDKP = 1; }
-				elseif($award['dkp'] > 0){ $blnAchDKP = 2; }
-				else{					   $blnAchDKP = 0; }
+				if(!is_array($award['member_r'][$intViewerID])) $awReached = 'unreached';
 				
-				if($status > 0){
-					if( empty($status_row) ){ $content .= '<div class="reached">'; $status_row = 'reached'; }
-				}else{
-					if( empty($status_row) ){ $content .= '<div class="unreached">'; $status_row = 'unreached'; }
-					if($status_row == 'reached'){ $content .= '</div><div class="unreached">'; $status_row = 'unreached'; }
-				}
-				
-				if(!$award['active']) $strActive = '<i class="fa fa-clock-o ac-inactive" title="'.$this->user->lang('aw_is_inactive').'"></i>';
-				if($award['special']) $strSpecial = '<i class="fa fa-eye-slash ac-special" title="'.$this->user->lang('aw_is_special').'"></i>';
-				
-				$content .= '
-					<div class="award ac-'.$intAchID.' awToggleTrigger">
-						<div class="ac-icon floatLeft">
-							'.$this->awards->build_icon($intAchID, $award['icon'], unserialize($award['icon_colors'])).'
-							'.$strActive.$strSpecial.'
-						</div>
-						<div class="ac-points floatRight">
-				';
-				
-				if($blnAchDKP != 0){
-					if($blnAchDKP == 1){ $content .= '<span class="ac-points-big negative">'; }
-					else { $content .= '<span class="ac-points-big positive">'; }
-					$content .= $award['dkp'].'<span class="ac-points-small">'.$award['points'].'</span></span>';
-					
-				} else { $content .= '<span class="ac-points-big">'.$award['points'].'</span>'; }
-				
-				$content .= '
-					</div>
-					<div class="ac-main">
-						<h2 class="ac-title">'.$this->user->multilangValue($award['name']).'</h2>
-						<p class="ac-desc">'.$this->user->multilangValue($award['desc']).'</p>
-						<p class="ac-date">'.$this->time->user_date($award['date']).'</p>
-					</div>
-					<div class="ac-user-list" style="display:none;">
-				';
-				
-				if($award['member_r'][$intUserID])
-					foreach($award['member_r'][$intUserID] as $intMemberID => $intMemberDate){
-						$content .= '
-							<div class="ac-member-reached user-'.$intMemberID.'">
-								'.$this->pdh->get('member', 'html_name', array($intMemberID)).' - '.$this->time->user_date($intMemberDate).'
-							</div>
-						';
-					}
-					
-				$content .= '</div></div>';
+				$this->tpl->assign_block_vars('award', array(
+					'ID'		=> $intAchID,
+					'TITLE'		=> $this->user->multilangValue($award['name']),
+					'DESC'		=> $this->user->multilangValue($award['desc']),
+					'DATE'		=> ($award['date'])? $this->time->user_date($award['date']) : '',
+					'ICON'		=> $strAchIcon,
+					'ACTIVE'	=> $award['active'],
+					'SPECIAL'	=> $award['special'],
+					'AP'		=> $award['points'],
+					'DKP'		=> $award['dkp'],
+					'REACHED'	=> $awReached,
+					'USER_R'	=> (is_array($award['member_r'][$intViewerID]))? true : false,
+				));
 			}
 			
-			$content .= '</div></div></div>
-				<div class="contentFooter">'.generate_pagination($this->strPath.$this->SID, $allAwardsCount, $arrUserSettings['aw_pagination'], $intPage, 'page').'</div>';
+			
 			
 			$this->tpl->add_js('
 				$("#my_aw_progress").progressbar({
@@ -150,22 +93,13 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 				});
 				$(".progress-label").text("'.$awReachedCounter.' / '.$allAwardsCount.'");
 				$("#achievement-points").text("'.$intAP.'");
-				
-				$(".awToggleTrigger").on("click", function(event){
-					if ($(this).hasClass("show-member")){
-						$(this).removeClass("show-member");
-						$(this).children(".ac-user-list").hide(50);
-					}else{
-						$(".awToggleTrigger").each(function(){
-							$(this).removeClass("show-member");
-							$(this).children(".ac-user-list").hide(50);
-						});
-						$(this).addClass("show-member");
-						$(this).children(".ac-user-list").show(200);
-					}
-				});
 			', 'docready');
 			
+			$template_file = file_get_contents($this->root_path.$this->pm->get_data('awards', 'template_path').'base_template/user_awards.html');
+			$content = $this->tpl->compileString($template_file, array(
+				'AP'			=> $intAP,
+				'PAGINATION'	=> generate_pagination($this->strPath.$this->SID, $allAwardsCount, $arrUserSettings['aw_pagination'], $intPage, 'page'),
+			));
 			
 		}else{ $content = $this->user->lang('aw_no_permission'); }
 		
