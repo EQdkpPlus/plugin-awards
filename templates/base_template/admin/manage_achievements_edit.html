@@ -68,11 +68,11 @@
 		});
 		
 		//check pre-defined cronjob module condition
-		if( $('#module_cond').val() != 0 ){ $('.module_show').show(); }else{ $('.module_show').hide(); }
+		if( $('#module_cond option:selected').val() != 'disable' ){ $('.module_show').show(); }else{ $('.module_show').hide(); }
 		
 		//handle cronjob module rows
 		$('#module_cond').change(function(){
-			if( $(this).val() != 0 ){ $('.module_show').show(); }
+			if( $(this).val() != 'disable' ){ $('.module_show').show(); }
 			else{ $('.module_show').hide(); }
 		});
 		

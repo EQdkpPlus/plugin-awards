@@ -69,9 +69,10 @@ class awards_manage_achievements extends page_generic
 		$fltAchDKP			= $this->in->get('dkp', 0);
 		$intEventID			= $this->in->get('event', 'int');
 		$strAchIcon			= $this->in->get('icon', 'default.svg');
+		$strModuleCond		= $this->in->get('module_cond');
 		
 		$strAchModuleSet = array();
-		$strAchModule	 = array('conditions' => $this->in->get('module_cond', 0));
+		$strAchModule	 = array('conditions' => ($strModuleCond)?: 'disable');
 		foreach($this->in->getArray('module', 'raw') as $module){
 			$strAchModule[] = $module['name'];
 			$strAchModuleSet[$module['name']] = (isset($module['value']))? $module['value'] : '';
@@ -162,14 +163,14 @@ class awards_manage_achievements extends page_generic
 		}
 		
 		// fetch & parse Cronjob Modules infos from PDH
-		$arrAchModules		  = ($id)? $this->pdh->get('awards_achievemenets', 'module', array($id)) : array(0, '');
-		$arrAchModuleSettings = ($id)? $this->pdh->get('awards_achievemenets', 'module_set', array($id)) : array();
+		$arrAchModules		  = ($id)? unserialize($this->pdh->get('awards_achievements', 'module', array($id))) : array(0, '');
+		$arrAchModuleSettings = ($id)? unserialize($this->pdh->get('awards_achievements', 'module_set', array($id))) : array();
 		
-		$intModuleCondition = $arrAchModules['conditions'];
+		$strModuleCondition = ($id)? $arrAchModules['conditions'] : 'disable';
 		$arrModuleCondtions = array(
-			'0' => $this->user->lang('no'),
-			'all' => $this->user->lang('aw_module_all'),
-			'any' => $this->user->lang('aw_module_any'),
+			'disable' => $this->user->lang('no'),
+			'all'	  => $this->user->lang('aw_module_all'),
+			'any'	  => $this->user->lang('aw_module_any'),
 		);
 		
 		$arrDisableModules = array();
@@ -238,8 +239,8 @@ class awards_manage_achievements extends page_generic
 			'SPINNER_POINTS' 	=> new hspinner('points', array('value' => ($id)? $this->pdh->get('awards_achievements', 'points', array($id)) : 10, 'max'  => 100000, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),
 			'SPINNER_DKP'		=> new hspinner('dkp', array('value' => ($id)? $this->pdh->get('awards_achievements', 'dkp', array($id)) : 0, 'max'  => 100000, 'min'  => -100000, 'step' => 5)),
 			'DD_EVENT'			=> new hdropdown('event', array('options' => $arrEvents, 'value' => ($id)? $this->pdh->get('awards_achievements', 'event_id', array($id)) : '')),
-			'DD_MODULE_COND'	=> new hdropdown('module_cond', array('options' => $arrModuleCondtions, 'value' => ($intModuleCondition)?: 0)),
-			'DD_MODULES'		=> new hdropdown('modules', array('options' => $arrAllModules, 'value' => 0, 'todisable' => $arrDisableModules, 'class' => 'module_show')),
+			'DD_MODULE_COND'	=> new hdropdown('module_cond', array('options' => $arrModuleCondtions, 'value' => $strModuleCondition)),
+			'DD_MODULES'		=> new hdropdown('modules', array('options' => $arrAllModules, 'value' => '', 'todisable' => $arrDisableModules, 'class' => 'module_show')),
 			'CP_ICON_LAYER_1'	=> $this->jquery->colorpicker('icon_layer_1', ($arrAchIconColors[0])?:'#000000'),
 			'CP_ICON_LAYER_2'	=> $this->jquery->colorpicker('icon_layer_2', ($arrAchIconColors[1])?:'#FFFFFF'),
 			'CP_ICON_LAYER_3'	=> $this->jquery->colorpicker('icon_layer_3', ($arrAchIconColors[2])?:'#FFFFFF'),
