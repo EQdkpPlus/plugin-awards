@@ -104,6 +104,7 @@ $lang = array(
   
   'aw_cronmodule_raids'			=> 'Benutzer hat an [x] Raids teilgenommen',
   'aw_cronmodule_inf_raids'		=> 'Raids',
+  'aw_cronmodule_birthday'		=> 'Benutzer hat Geburtstag',
   /* PUT HERE THE LANGUAGE STRIPES OF YOUR OWN MODULE */
   
   

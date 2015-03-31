@@ -54,7 +54,7 @@ if ( !class_exists( "awards_crontask" ) ) {
 						
 						
 					}elseif($arrAchModuleConditions == 'any'){
-						foreach($arrAchModule as $strModule){
+						foreach($arrAchModule as $strAchModule){
 							if(!class_exists($strAchModule.'_cronmodule'))
 								if((include $this->root_path.'plugins/awards/cronjob/module/'.$strAchModule.'_cronmodule.class.php') == false) continue;
 							
