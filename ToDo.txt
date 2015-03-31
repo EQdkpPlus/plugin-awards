@@ -1,14 +1,17 @@
 
+- Assignment delete
+
+	- Cache probleme, at delete an assignment,..
+
+
 - Cron Module
 
-	- den include verbessern //falls nicht vorhanden break anstatt ein fatal error zu provozieren
-    - Raidbeteiligung: Anzahl der Raids in dem entsprechenden ausgewählten MultiDKP (das könnten ja auch mehrere sein)
+	- Raidbeteiligung: Anzahl der Raids in dem entsprechenden ausgewählten MultiDKP (das könnten ja auch mehrere sein)
 	- Punktestände erreicht oder eine gewisse Anzahl an Items erhalten hat
 
 
 --------------------------------------------
 spontan einfälle...
-	- mehrere Cron Module an einem Award mit zugehöriger Abhängigkeits möglichkeit
 	- sicherheitscheck bei der ajax.php maybe csrf token
 	- Die Style änderung fürs PO dynamischer gestalten mit Template erkennung und einfügung ins Dropdown (so kann man sagen Style: Inkraja und nicht AwPerReihe XY und dann noch das DIablo Temp erstellen)
 	- vllt. die Zuweisungen editieren/updaten Funktion etwas erweitern mit Notify und korrektem Log eintrag

@@ -181,9 +181,9 @@ class awards_manage_achievements extends page_generic
 			$this->tpl->assign_block_vars('module_row', array(
 				'NAME'		=> $strModule,
 				'TITLE'		=> $this->user->lang('aw_cronmodule_'.$strModule),
-				'ADDITION'	=> isset($arrAchModuleSettings[$strModule]),
-				'VALUE'		=> (isset($arrAchModuleSettings[$strModule]))? $arrAchModuleSettings[$strModule] : NULL,
-				'VALUE_TEXT'=> (isset($arrAchModuleSettings[$strModule]))? $this->user->lang('aw_cronmodule_inf_'.$strModule) : '',
+				'ADDITION'	=> !empty($arrAchModuleSettings[$strModule]),
+				'VALUE'		=> (!empty($arrAchModuleSettings[$strModule]))? $arrAchModuleSettings[$strModule] : NULL,
+				'VALUE_TEXT'=> (!empty($arrAchModuleSettings[$strModule]))? $this->user->lang('aw_cronmodule_inf_'.$strModule) : '',
 			));
 		}
 		
