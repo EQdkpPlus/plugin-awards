@@ -193,7 +193,7 @@ class awards_manage_assignments extends page_generic
 			'table_sort_dir'		=> 'desc',
 			'table_sort_col'		=> 0,
 			'table_presets'			=> array(
-				array('name' => 'awards_assignments_date',		'sort' => true, 'th_add' => '', 'td_add' => ''),
+				array('name' => 'awards_assignments_date',		'sort' => true, 'th_add' => 'width="40"', 'td_add' => 'style="text-align:center"'),
 				array('name' => 'awards_assignments_name',		'sort' => true, 'th_add' => '', 'td_add' => ''),
 				array('name' => 'awards_assignments_m4agk4aid', 'sort' => true, 'th_add' => '', 'td_add' => ''),
 				array('name' => 'awards_assignments_points',	'sort' => true, 'th_add' => 'width="20"', 'td_add' => 'style="text-align:right"'),
