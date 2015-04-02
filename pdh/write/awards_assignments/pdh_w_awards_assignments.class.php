@@ -177,7 +177,7 @@ if(!class_exists('pdh_w_awards_assignments')) {
 			
 			$this->log_insert('action_assignment_deleted', $log_action, $id, $strAchName, 1, 'awards');
 			
-			$this->pdh->enqueue_hook('action_assignment_updated', $id);
+			$this->pdh->enqueue_hook('awards_assignments_update', $id);
 			$this->pdh->enqueue_hook('awards_library_update');
 			return true;
 		}
