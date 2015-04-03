@@ -36,6 +36,7 @@ $lang = array(
   'aw_ap'						=> 'Award Punkte',
   'aw_points'					=> 'Award Punkte',
   'aw_dkp'						=> 'DKP',
+  'aw_progress'					=> 'Fortschritt',
   'aw_all_guild_achievements'	=> 'Alle Gildenerfolge',
   'aw_customtab_title'			=> 'Meine Erfolge',
   'aw_tab_user'					=> 'Meine Erfolge',

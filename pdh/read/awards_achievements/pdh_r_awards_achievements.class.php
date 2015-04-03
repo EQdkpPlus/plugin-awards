@@ -287,18 +287,20 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 			}
 			
 			if( pathinfo($strAchIcon, PATHINFO_EXTENSION) == "svg"){
-				$strAchIcon		= '<div class="aw-'.$intAchievementID.'">'.file_get_contents($strAchIcon).'</div>';
-				$strAchIconCSS	= '';
-				
-				// build the CSS Code for each SVG
+				$strAchIcon		= '
+					<div class="aw-'.$intAchievementID.'">
+						'.file_get_contents($strAchIcon).'
+						<div class="icon_colors" style="display: none;">
+				';
 				$icon_color_step = 1;
 				foreach($arrAchIconColors as $strAchIconColor){
-					$strAchIconCSS .= '.aw-'.$intAchievementID.' svg g:nth-child('.$icon_color_step.'){fill: '.$strAchIconColor.';}';
+					$strAchIcon	.= '<i class="color-'.$icon_color_step.'">'.$strAchIconColor.'</i>';
 					$icon_color_step++;
 				}
-				$this->tpl->add_css('.aw-'.$intAchievementID.' svg{ height: 28px; width: 28px; margin: -9px 0px; }'.$strAchIconCSS);
+				$strAchIcon	.= '</div></div>';
+				
 			} else {
-				$strAchIcon = '<img src="'.$strAchIcon.'" size="25" />';
+				$strAchIcon = '<img src="'.$strAchIcon.'" style="height: 28px; width: 28px; margin: -4px 0px;" />';
 			}
 			
 			return $strAchIcon;

@@ -48,7 +48,7 @@ class awards_pageobject extends pageobject
 	  */
 	public function display(){
 		$arrAchIDs		= $this->pdh->get('awards_achievements', 'id_list');
-		$intViewerID		= $this->user->id;
+		$intViewerID	= $this->user->id;
 		$intAwardRows	= 1; // Gibt an wieviele Erfolge pro Reihe angezeigt werden sollen
 		
 		//define defaults for dynamic vars
@@ -82,10 +82,12 @@ class awards_pageobject extends pageobject
 		//start the loops
 		while($award_counter < count($allAwards)){
 			$this->tpl->assign_block_vars('awards_row', array());
+			$aw_row_counter = 1;
 			
 			do{
-				if(!$intAchID = $allAwards[$award_counter]) break;
-				$award = $this->awards->award($intAchID, true);
+				if(!isset($allAwards[$award_counter])) break;
+				$intAchID = $allAwards[$award_counter];
+				$award	  = $this->awards->award($intAchID, true);
 				
 				$strAchIcon = $this->awards->build_icon($intAchID, $award['icon'], unserialize($award['icon_colors']));
 				
@@ -138,7 +140,8 @@ class awards_pageobject extends pageobject
 					}
 				
 				$award_counter ++;
-			}while($award_counter < $intAwardRows);
+				$aw_row_counter ++;
+			}while($aw_row_counter <= $intAwardRows);
 		}
 		
 		$this->tpl->assign_vars(array(

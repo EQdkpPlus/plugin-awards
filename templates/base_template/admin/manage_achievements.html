@@ -74,8 +74,20 @@
 					$('#notify_container').notify('create', 'success', {text: data,title: '',custom: true,},{expires: 3000, speed: 1000});
 			});
 		}
+		
+		$.each( $('div[class^="aw-"] .icon_colors'), function(){
+			aw_icon_id	= $(this).parent().attr('class').substring(3);
+			icon_areas	= $('.aw-' + aw_icon_id + ' svg').children('g').length;
+			
+			for(i=1; i<=icon_areas; i++){
+				$('.aw-' + aw_icon_id + ' svg g:nth-child('+i+')').css('fill', $('.aw-' + aw_icon_id + ' i.color-' + i).text());
+			}
+		});
 	});
 </script>
+<style>
+	div[class^="aw-"] svg { height: 28px; width: 28px; margin: -9px 0px; }
+</style>
 
 <form method="post" action="{ACTION}" name="post">
 	<div class="contentHeader">
