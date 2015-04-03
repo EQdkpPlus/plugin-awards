@@ -102,9 +102,13 @@ $lang = array(
   'aw_module_all'				=> 'Alle',
   'aw_module_any'				=> 'Eines',
   
-  'aw_cronmodule_raids'			=> 'Benutzer hat an [x] Raids teilgenommen',
+  'aw_cronmodule_raids'			=> 'Charakter hat an [x] Raids teilgenommen',
   'aw_cronmodule_inf_raids'		=> 'Raids',
   'aw_cronmodule_birthday'		=> 'Benutzer hat Geburtstag',
+  'aw_cronmodule_cap'			=> 'Charakter erhielt über [x] DKP',
+  'aw_cronmodule_inf_cap'		=> 'DKP',
+  'aw_cronmodule_items'			=> 'Charakter erhielt über [x] Items',
+  'aw_cronmodule_inf_items'		=> 'Items',
   /* PUT HERE THE LANGUAGE STRIPES OF YOUR OWN MODULE */
   
   

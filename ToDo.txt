@@ -2,7 +2,6 @@
 - Cron Module
 
 	- Raidbeteiligung: Anzahl der Raids in dem entsprechenden ausgewählten MultiDKP (das könnten ja auch mehrere sein)
-	- Punktestände erreicht oder eine gewisse Anzahl an Items erhalten hat
 
 
 --------------------------------------------
@@ -10,6 +9,7 @@ spontan einfälle...
 	- sicherheitscheck bei der ajax.php maybe csrf token
 	- Die Style änderung fürs PO dynamischer gestalten mit Template erkennung und einfügung ins Dropdown (so kann man sagen Style: Inkraja und nicht AwPerReihe XY und dann noch das DIablo Temp erstellen)
 	- vllt. die Zuweisungen editieren/updaten Funktion etwas erweitern mit Notify und korrektem Log eintrag
+	- Cron Modul System erweitern mit eigen definierten inputfeldern, defaults, evntl andere Sachen noch (dafür müsst man die Module "initialisieren und installieren können per extra admin page, infos wie language und co liegen dann in einer DB Tabelle)
 --------------------------------------------
 
 
