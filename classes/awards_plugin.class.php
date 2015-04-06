@@ -101,7 +101,7 @@ if(!class_exists('awards_plugin')){
 				// build the CSS Code for each SVG
 				$icon_color_step = 1;
 				foreach($arrAchIconColors as $strAchIconColor){
-					$strAchIconCSS .= '.award.ac-'.$intAchID.' .ac-icon svg g:nth-child('.$icon_color_step.'){fill: '.$strAchIconColor.';}';
+					$strAchIconCSS .= '.award[data-id="'.$intAchID.'"] .ac-icon svg g:nth-child('.$icon_color_step.'){fill: '.$strAchIconColor.';}';
 					$icon_color_step++;
 				}
 				$this->tpl->add_css($strAchIconCSS);

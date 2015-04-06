@@ -82,6 +82,24 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 					'REACHED'	=> $awReached,
 					'USER_R'	=> (is_array($award['member_r'][$intViewerID]))? true : false,
 				));
+				
+				//build the members
+				if(isset($award['member_r'][$intUserID]))
+					foreach($award['member_r'][$intUserID] as $intMemberID => $intMemberDate){
+						$this->tpl->assign_block_vars('award.members', array(
+							'MEMBER'	=> $this->pdh->get('member', 'name_decorated', array($intMemberID, 15)),
+							'DATE'		=> ($intMemberDate)? '- '.$this->time->user_date($intMemberDate) : $this->user->lang('aw_member_unreached'),
+						));
+					}
+				if(isset($award['member_u'][$intUserID]))
+					foreach($award['member_u'][$intUserID] as $intMemberID => $intMemberDate){
+						$this->tpl->assign_block_vars('award.members', array(
+							'MEMBER'	=> $this->pdh->get('member', 'name_decorated', array($intMemberID, 15)),
+							'DATE'		=> $this->user->lang('aw_member_unreached'),
+						));
+					}
+				
+				
 			}
 			
 			

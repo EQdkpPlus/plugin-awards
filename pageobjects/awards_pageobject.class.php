@@ -49,16 +49,14 @@ class awards_pageobject extends pageobject
 	public function display(){
 		$arrAchIDs		= $this->pdh->get('awards_achievements', 'id_list');
 		$intViewerID	= $this->user->id;
-		$intAwardRows	= 1; // Gibt an wieviele Erfolge pro Reihe angezeigt werden sollen
 		
-		//define defaults for dynamic vars
-		$intAP		= $award_counter = $awReachedCounter = $blnUserReached = 0;
+		$intAP		= $awReachedCounter = $blnUserReached = 0;
 		$list_order = $allAwards = array();
+		$strLayout	= 'default';	# USE OTHER DEFAULT-LAYOUT BY REPLACE default TO minimalist 
 		$awReached	= 'reached';
 		
-		//read the usersettings and set $intAwardRows
 		$arrUserSettings = $this->pdh->get('user', 'plugin_settings', array($intViewerID));
-		if($arrUserSettings['aw_layout']) $intAwardRows = $arrUserSettings['aw_layout'];
+		if(isset($arrUserSettings['aw_layout']) && is_string($arrUserSettings['aw_layout'])) $strLayout = $arrUserSettings['aw_layout'];
 		
 		//sorting -- award by latest date -- rebuild array to read in multiple loops
 		foreach($arrAchIDs as $intAchID){
@@ -80,74 +78,62 @@ class awards_pageobject extends pageobject
 		
 		
 		//start the loops
-		while($award_counter < count($allAwards)){
-			$this->tpl->assign_block_vars('awards_row', array());
-			$aw_row_counter = 1;
+		foreach($allAwards as $intAchID){
+			$award		= $this->awards->award($intAchID, true);
+			$strAchIcon = $this->awards->build_icon($intAchID, $award['icon'], unserialize($award['icon_colors']));
 			
-			do{
-				if(!isset($allAwards[$award_counter])) break;
-				$intAchID = $allAwards[$award_counter];
-				$award	  = $this->awards->award($intAchID, true);
-				
-				$strAchIcon = $this->awards->build_icon($intAchID, $award['icon'], unserialize($award['icon_colors']));
-				
-				if($awReached == 'reached' && !isset($award['member_r'])) $awReached = 'unreached';
-				
-				$blnUserReached = (isset($award['member_r'][$intViewerID]))? true : false;
-				
-				$this->tpl->assign_block_vars('awards_row.award', array(
-					'ID'		=> $intAchID,
-					'TITLE'		=> $this->user->multilangValue($award['name']),
-					'DESC'		=> $this->user->multilangValue($award['desc']),
-					'DATE'		=> ($award['date'])? $this->time->user_date($award['date']) : '',
-					'ICON'		=> $strAchIcon,
-					'ACTIVE'	=> $award['active'],
-					'SPECIAL'	=> $award['special'],
-					'AP'		=> $award['points'],
-					'DKP'		=> $award['dkp'],
-					'REACHED'	=> $awReached,
-					'USER_R'	=> $blnUserReached,
-				));
-				
-				//build the members
-				if(isset($award['member_r']))
-					foreach($award['member_r'] as $intUserID => $arrMembers){
-						$this->tpl->assign_block_vars('awards_row.award.users', array(
-							'ID'		=> $intUserID,
-							'USER'		=> $this->pdh->geth('user', 'name', array($intUserID, '', '', true)),
-							'REACHED'	=> 'reached',
+			if($awReached == 'reached' && !isset($award['member_r'])) $awReached = 'unreached';
+			$blnUserReached = (isset($award['member_r'][$intViewerID]))? true : false;
+			
+			$this->tpl->assign_block_vars('award', array(
+				'ID'		=> $intAchID,
+				'TITLE'		=> $this->user->multilangValue($award['name']),
+				'DESC'		=> $this->user->multilangValue($award['desc']),
+				'DATE'		=> ($award['date'])? $this->time->user_date($award['date']) : '',
+				'ICON'		=> $strAchIcon,
+				'ACTIVE'	=> $award['active'],
+				'SPECIAL'	=> $award['special'],
+				'AP'		=> $award['points'],
+				'DKP'		=> $award['dkp'],
+				'REACHED'	=> $awReached,
+				'USER_R'	=> $blnUserReached,
+			));
+			
+			//build the members
+			if(isset($award['member_r']))
+				foreach($award['member_r'] as $intUserID => $arrMembers){
+					$this->tpl->assign_block_vars('award.users', array(
+						'ID'		=> $intUserID,
+						'USER'		=> $this->pdh->geth('user', 'name', array($intUserID, '', '', true)),
+						'REACHED'	=> 'reached',
+					));
+					foreach($arrMembers as $intMemberID => $intMemberDate){
+						$this->tpl->assign_block_vars('award.users.members', array(
+							'MEMBER'	=> $this->pdh->get('member', 'name_decorated', array($intMemberID, 15)),
+							'DATE'		=> ($intMemberDate)? '- '.$this->time->user_date($intMemberDate) : $this->user->lang('aw_member_unreached'),
 						));
-						foreach($arrMembers as $intMemberID => $intMemberDate){
-							$this->tpl->assign_block_vars('awards_row.award.users.members', array(
-								'MEMBER'	=> $this->pdh->get('member', 'name_decorated', array($intMemberID, 15)),
-								'DATE'		=> ($intMemberDate)? '- '.$this->time->user_date($intMemberDate) : $this->user->lang('aw_member_unreached'),
-							));
-						}
 					}
-				if(isset($award['member_u']))
-					foreach($award['member_u'] as $intUserID => $arrMembers){
-						$this->tpl->assign_block_vars('awards_row.award.users', array(
-							'ID'		=> $intUserID,
-							'USER'		=> $this->pdh->geth('user', 'name', array($intUserID, '', '', true)),
-							'REACHED'	=> 'unreached',
+				}
+			if(isset($award['member_u']))
+				foreach($award['member_u'] as $intUserID => $arrMembers){
+					$this->tpl->assign_block_vars('award.users', array(
+						'ID'		=> $intUserID,
+						'USER'		=> $this->pdh->geth('user', 'name', array($intUserID, '', '', true)),
+						'REACHED'	=> 'unreached',
+					));
+					foreach($arrMembers as $intMemberID => $intMemberDate){
+						$this->tpl->assign_block_vars('award.users.members', array(
+							'MEMBER'	=> $this->pdh->get('member', 'name_decorated', array($intMemberID, 15)),
+							'DATE'		=> $this->user->lang('aw_member_unreached'),
 						));
-						foreach($arrMembers as $intMemberID => $intMemberDate){
-							$this->tpl->assign_block_vars('awards_row.award.users.members', array(
-								'MEMBER'	=> $this->pdh->get('member', 'name_decorated', array($intMemberID, 15)),
-								'DATE'		=> $this->user->lang('aw_member_unreached'),
-							));
-						}
 					}
-				
-				$award_counter ++;
-				$aw_row_counter ++;
-			}while($aw_row_counter <= $intAwardRows);
+				}
 		}
 		
 		$this->tpl->assign_vars(array(
 			'AP'				=> $intAP,
-			'AWARD_IN_ROW'		=> $intAwardRows,
-			'USER_PROFILE_LINK' => $this->routing->build('User', $this->pdh->get('user', 'name', array($intViewerID)), 'u'.$intViewerID),
+			'LAYOUT'			=> $strLayout,
+			'USER_PROFILE_LINK' => $this->routing->build('User', $this->pdh->get('user', 'name', array($intViewerID)), 'u'.$intViewerID).'#2384ece2c',
 			'S_AW_MANAGE'		=> $this->user->check_auth('a_awards_manage'),
 			'S_AW_ADD'			=> $this->user->check_auth('a_awards_add'),
 			'PAGINATION'		=> generate_pagination($this->strPath.$this->SID, $allAwardsCount, $arrUserSettings['aw_pagination'], $intPage, 'page'),

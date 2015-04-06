@@ -10,7 +10,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-<!-- IF AWARD_IN_ROW == 1 -->
+<!-- IF LAYOUT == 'default' -->
 	$('.awToggleTrigger').on('click', function(event){
 		if ($(this).hasClass('show-member')){
 			$(this).removeClass('show-member');
@@ -35,33 +35,9 @@ $(document).ready(function() {
 		});
 	});
 <!-- ELSE -->
-	$('.awToggleTrigger').on('click', function(event){
-		if ($(this).hasClass('show-more')){
-			$(this).removeClass('show-more');
-			$(this).children('.aw-extended').hide(50);
-		}else{
-			$('.awToggleTrigger').each(function(){
-				$(this).removeClass('show-more');
-				$(this).children('.aw-extended').hide(50);
-			});
-			$(this).addClass('show-more');
-			$(this).children('.aw-extended').show(200);
-		}
-	});
-	
 	$('.awardtooltip').each(function() {
 		$(this).qtip({
-			content: $(this).data('name') + ' - ' + $(this).data('date'),
-			position: { at: 'bottom center', my: 'top center', },
-			style: { tip: { corner: true }, widget: true },
-			show: { solo: true, },
-			hide: { fixed: true, }
-		});
-	});
-	
-	$('.membertooltip').each(function() {
-		$(this).qtip({
-			content: $(this).children('.membertooltip-data'),
+			content: $(this).children('.awardtooltip-data'),
 			position: { at: 'bottom center', my: 'top center' },
 			style: { tip: { corner: true }, widget: true },
 			show: { solo: true, effect: function(offset){ $(this).slideDown(100); } },
@@ -94,50 +70,50 @@ $(document).ready(function() {
 				<div class="progress-label">Loading...</div>
 			</div>
 			<div class="aw-divider"></div>
-			<!-- BEGIN awards_row -->
-				<!-- IF AWARD_IN_ROW != 1 --><div class="awards_row"><!-- ENDIF -->
+			
+				<!-- IF LAYOUT != 'default' --><div class="awards_row"><!-- ENDIF -->
 				
 				<!-- BEGIN award -->
-				<!-- IF NOT awards_row.award.SPECIAL OR awards_row.award.USER_R OR S_ADMIN -->
-					<!-- IF AWARD_IN_ROW == 1 -->
-					<div class="award {awards_row.award.REACHED} ac-{awards_row.award.ID} awToggleTrigger">
+				<!-- IF NOT award.SPECIAL OR award.USER_R OR S_ADMIN -->
+					<!-- IF LAYOUT == 'default' -->
+					<div class="award {award.REACHED} awToggleTrigger" data-id="{award.ID}">
 						<div class="ac-icon floatLeft">
-							{awards_row.award.ICON}
-							<!-- IF NOT awards_row.award.ACTIVE -->
+							{award.ICON}
+							<!-- IF NOT award.ACTIVE -->
 								<i class="fa fa-clock-o ac-inactive" title="{L_aw_is_inactive}"></i>
 							<!-- ENDIF -->
-							<!-- IF awards_row.award.SPECIAL -->
+							<!-- IF award.SPECIAL -->
 								<i class="fa fa-eye-slash ac-special" title="{L_aw_is_special}"></i>
 							<!-- ENDIF -->
 						</div>
 						
 						<div class="ac-points floatRight">
-							<!-- IF awards_row.award.DKP -->
-							<span class="ac-points-big <!-- IF awards_row.award.DKP > 0 -->positive<!-- ELSE -->negative<!-- ENDIF -->">
-								{awards_row.award.DKP}
-								<span class="ac-points-small">{awards_row.award.AP}</span>
+							<!-- IF award.DKP -->
+							<span class="ac-points-big <!-- IF award.DKP > 0 -->positive<!-- ELSE -->negative<!-- ENDIF -->">
+								{award.DKP}
+								<span class="ac-points-small">{award.AP}</span>
 							</span>
 							<!-- ELSE -->
 							<span class="ac-points-big">
-								{awards_row.award.AP}
+								{award.AP}
 							</span>
 							<!-- ENDIF -->
 						</div>
 						
 						<div class="ac-main">
-							<h2 class="ac-title">{awards_row.award.TITLE}</h2>
-							<p class="ac-desc">{awards_row.award.DESC}</p>
-							<p class="ac-date">{awards_row.award.DATE}</p>
+							<h2 class="ac-title">{award.TITLE}</h2>
+							<p class="ac-desc">{award.DESC}</p>
+							<p class="ac-date">{award.DATE}</p>
 						</div>
 						
 						<div class="ac-user-list" style="display:none;">
 							<!-- BEGIN users -->
-							<div class="ac-member-{awards_row.award.users.REACHED} user-{awards_row.award.users.ID} membertooltip">
-								{awards_row.award.users.USER}
+							<div class="ac-member-{award.users.REACHED} membertooltip" data-user="{award.users.ID}">
+								{award.users.USER}
 								<div class="membertooltip-data" style="display:none;">
-									<!-- IF awards_row.award.users.REACHED == "reached" -->
+									<!-- IF award.users.REACHED == "reached" -->
 									<!-- BEGIN members -->
-										{awards_row.award.users.members.MEMBER} {awards_row.award.users.members.DATE}
+										{award.users.members.MEMBER} {award.users.members.DATE}
 										<br />
 									<!-- END members -->
 									<!-- ELSE -->
@@ -151,42 +127,38 @@ $(document).ready(function() {
 					
 					<!-- ELSE -->
 					
-					<div class="award {awards_row.award.REACHED} ac-{awards_row.award.ID} awToggleTrigger">
-						<div class="ac-icon floatLeft awardtooltip" data-name="{awards_row.award.TITLE}" data-date="{awards_row.award.DATE}">
-							{awards_row.award.ICON}
-						</div>
-						
-						<div class="aw-extended floatRight membertooltip" style="display:none;">
-							<h2 class="ac-title">{awards_row.award.TITLE}</h2>
-							{awards_row.award.DESC}<br />
-							{awards_row.award.DATE}<br />
-							
-							DKP: {awards_row.award.DKP}<br />
-							AP: {awards_row.award.AP}
-							
-							<div class="membertooltip-data" style="display:none;">
-							<!-- BEGIN users -->
-								<div class="ac-member-{awards_row.award.users.REACHED} user-{awards_row.award.users.ID}">
-									{awards_row.award.users.USER}
-									<!-- IF awards_row.award.users.REACHED == "reached" -->
-									<!-- BEGIN members -->
-										{awards_row.award.users.members.MEMBER} {awards_row.award.users.members.DATE}
-										<br />
-									<!-- END members -->
+					<div class="award {award.REACHED}" data-id="{award.ID}">
+						<div class="ac-icon floatLeft awardtooltip" data-name="{award.TITLE}" data-date="{award.DATE}">
+							{award.ICON}
+							<div class="awardtooltip-data" style="display:none;">
+								<h2 class="ac-title">{award.TITLE}</h2>
+								{award.DESC}<br />
+								{award.DATE}<br />
+								
+								DKP: {award.DKP}<br />
+								AP: {award.AP}
+								
+								<!-- BEGIN users -->
+								<div class="ac-member-{award.users.REACHED} user-{award.users.ID}">
+									{award.users.USER}
+									<!-- IF award.users.REACHED == "reached" -->
+										<!-- BEGIN members -->
+										{award.users.members.MEMBER} {award.users.members.DATE}<br />
+										<!-- END members -->
 									<!-- ELSE -->
 										{L_aw_user_unreached}
 									<!-- ENDIF -->
 								</div>
-							<!-- END users -->
-						</div>
+								<!-- END users -->
+							</div>
 						</div>
 					</div>
 					<!-- ENDIF -->
 				<!-- ENDIF -->
 				<!-- END award -->
 				
-			<!-- IF AWARD_IN_ROW != 1 --></div><!-- ENDIF -->
-			<!-- END awards_row -->
+			<!-- IF LAYOUT != 'default' --></div><!-- ENDIF -->
+			
 		</div>
 	</div>
 	

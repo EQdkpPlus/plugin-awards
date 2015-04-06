@@ -1,4 +1,24 @@
 
+// konnte bisher nicht gelöst werden -- input ist automatisch = #000
+Colorpicker übernimmt transparent aber es kommt nicht durch ..und setzt zurück auf schwarz
+
+
+
+Nicht zeigen der unreached members / users in der hauptansicht ..bzw evntl nur auf inkras style beschränken
+
+
+//---- SOLVED ------------
+- Zeige X Erfolge pro reihe umarbeiten zu Template Shemas wie Defualt oder Inkra Style nutzen
+- icon rahmen entfernen und ggf nur in der default ansicht zeigen
+- den hashwert des userprofile tabs merken.. wegen vergleich ob gleich oder nicht und entsprechend schaun ob man es als link verarbeiten kann
+- bei Zeige nur Icons .. das aufklappen kommt weg und wird in einem großen tooltip reingehauen
+
+
+Büdde prüfe nach allen Arbeiten die solved sachen :p
+
+
+
+
 - Cron Module
 
 	- Raidbeteiligung: Anzahl der Raids in dem entsprechenden ausgewählten MultiDKP (das könnten ja auch mehrere sein)

@@ -240,10 +240,12 @@ class awards extends plugin_generic
 						'type'		=> 'radio',
 					),
 					'aw_layout'	=> array(
-						'type'	  => 'spinner',
-						'min'	  => 1,
-						'step'	  => 1,
-						'default' => 1
+						'type'	  => 'dropdown',
+						'tolang'  => true,
+						'options' => array(
+							'default'	 => 'user_sett_f_aw_layout_default',
+							'minimalist' => 'user_sett_f_aw_layout_minimalist',
+						),
 					),
 					'aw_pagination' => array(
 						'type'	  => 'spinner',

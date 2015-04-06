@@ -48,9 +48,11 @@ $lang = array(
   'user_sett_tab_awards'		=> 'Awards Plugin',
   'user_sett_fs_awards'			=> 'Awards Haupteinstellungen',
   'user_sett_f_aw_show_hook'	=> 'Awards Quick Info anzeigen',
-  'user_sett_f_aw_layout'		=> 'Zeige x Erfolge pro Reihe',
+  'user_sett_f_aw_layout'		=> 'Layout',
   'user_sett_f_aw_pagination'	=> 'Erfolge pro Seite',
-  'user_sett_f_aw_admin_pagination' => 'Zuweisungen pro Seite',
+  'user_sett_f_aw_admin_pagination'   => '[ACP] Erfolge/Zuweisungen pro Seite',
+  'user_sett_f_aw_layout_default'	  => 'Standart',
+  'user_sett_f_aw_layout_minimalist'  => 'Minimalistisch',
   
   // Admin
   'aw_manage_achievements'		=> 'Erfolge verwalten',

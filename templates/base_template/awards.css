@@ -21,12 +21,12 @@
 /***************************************
  *               TABS  
  ***************************************/
-#awards .aw-tabs,
-#awards .aw-tabs ul {
+.aw-tabs,
+.aw-tabs ul {
 	height: 25px;
 	width: 100%;
 }
-#awards .aw-tabs li {
+.aw-tabs li {
 	padding: 5px 10px;
 	margin: 1px 0.2em 0px 0px;
 	border: 1px solid;
@@ -37,13 +37,13 @@
 	color: #000;
 	box-shadow: 0px 0px 1px #000, 0px 1px 15px rgba(0, 0, 0, 0.3) inset;
 }
-#awards .aw-tabs li i { padding: 0px; line-height: 0; }
-#awards .aw-tabs li:hover { box-shadow: 0px 1px 5px #06f inset; }
+.aw-tabs li i { padding: 0px; line-height: 0; }
+.aw-tabs li:hover { box-shadow: 0px 1px 5px #06f inset; }
 
 /***************************************
  *              CONTENT  
  ***************************************/
-#awards .award {
+.award {
 	height: auto;
 	padding: 5px;
 	margin: 1px 0;
@@ -51,31 +51,44 @@
 	border-radius: 2px;
 	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5) inset;
 }
-#awards .award:hover {
+.award:hover {
 	border-color: #6BA6FF;
 	box-shadow: 0px 0px 7px #06f;
 }
 
-#awards .award.unreached,
-#awards .unreached .award {
+.award.unreached,
+.unreached .award {
 	height: auto;
 	border: 2px solid #777;
 	box-shadow: 0px 30px 60px rgba(0, 0, 0, 0.8) inset;
 }
-#awards .award.unreached:hover,
-#awards .unreached .award:hover {
+.award.unreached:hover,
+.unreached .award:hover,
+.award.unreached.show-member,
+.unreached.show-member .award {
 	border-color: #CCC;
 	box-shadow: 0px 0px 60px rgba(0, 0, 0, 0.5) inset;
 }
-#awards .award.unreached .ac-main,
-#awards .award.unreached .ac-points,
-#awards .unreached .award .ac-main,
-#awards .unreached .award .ac-points { opacity: 0.5; }
 
-#awards .award.unreached:hover .ac-main,
-#awards .award.unreached:hover .ac-points,
-#awards .unreached .award:hover .ac-main,
-#awards .unreached .award:hover .ac-points { opacity: 0.8; }
+.unreached .ac-main,
+.unreached .ac-points,
+.unreached .award .ac-main,
+.unreached .award .ac-points { opacity: 0.2; }
+
+.unreached .ac-icon img,
+.unreached .ac-icon svg { opacity: 0.2; }
+
+.unreached:hover .ac-icon img,
+.unreached:hover .ac-icon svg,
+.unreached.show-member .ac-icon img,
+.unreached.show-member .ac-icon svg { opacity: 0.5; }
+
+.unreached:hover .ac-main,
+.unreached:hover .ac-points,
+.unreached .award:hover .ac-main,
+.unreached .award:hover .ac-points,
+.unreached.show-member .ac-main,
+.unreached.show-member .ac-points { opacity: 0.8; }
 
 
 #aw_progress { margin: 5px; font-size: 0.7em !important; }
@@ -124,11 +137,8 @@
 .ac-icon img, .ac-icon svg {
 	height: 50px;
 	width: 50px;
-	border: 2px solid #FFF;
 	border-radius: 4px;
-	box-shadow: 0px 1px 5px #000;
 }
-.unreached .ac-icon img, .unreached .ac-icon svg { opacity: 0.5; }
 
 .ac-inactive {
 	position: relative;
