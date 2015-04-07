@@ -108,13 +108,14 @@ class awards_pageobject extends pageobject
 						'REACHED'	=> 'reached',
 					));
 					foreach($arrMembers as $intMemberID => $intMemberDate){
+						if($strLayout == 'minimalist' && !isset($intMemberDate)) continue;
 						$this->tpl->assign_block_vars('award.users.members', array(
 							'MEMBER'	=> $this->pdh->get('member', 'name_decorated', array($intMemberID, 15)),
 							'DATE'		=> ($intMemberDate)? '- '.$this->time->user_date($intMemberDate) : $this->user->lang('aw_member_unreached'),
 						));
 					}
 				}
-			if(isset($award['member_u']))
+			if(isset($award['member_u']) && $strLayout != 'minimalist')
 				foreach($award['member_u'] as $intUserID => $arrMembers){
 					$this->tpl->assign_block_vars('award.users', array(
 						'ID'		=> $intUserID,

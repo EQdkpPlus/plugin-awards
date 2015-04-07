@@ -71,11 +71,41 @@ $(document).ready(function() {
 			</div>
 			<div class="aw-divider"></div>
 			
-				<!-- IF LAYOUT != 'default' --><div class="awards_row"><!-- ENDIF -->
+				<!-- IF LAYOUT != 'default' --><div class="{LAYOUT}"><!-- ENDIF -->
 				
 				<!-- BEGIN award -->
 				<!-- IF NOT award.SPECIAL OR award.USER_R OR S_ADMIN -->
-					<!-- IF LAYOUT == 'default' -->
+					<!-- IF LAYOUT == 'minimalist' -->
+					
+					<div class="award {award.REACHED}" data-id="{award.ID}">
+						<div class="ac-icon floatLeft awardtooltip" data-name="{award.TITLE}" data-date="{award.DATE}">
+							{award.ICON}
+							<div class="awardtooltip-data" style="display:none;">
+								<h2 class="ac-title">{award.TITLE}</h2>
+								{award.DESC}<br />
+								{award.DATE}<br />
+								
+								DKP: {award.DKP}<br />
+								AP: {award.AP}
+								
+								<!-- BEGIN users -->
+								<div class="ac-member-{award.users.REACHED} user-{award.users.ID}">
+									{award.users.USER}
+									<!-- IF award.users.REACHED == "reached" -->
+										<!-- BEGIN members -->
+										{award.users.members.MEMBER} {award.users.members.DATE}<br />
+										<!-- END members -->
+									<!-- ELSE -->
+										{L_aw_user_unreached}
+									<!-- ENDIF -->
+								</div>
+								<!-- END users -->
+							</div>
+						</div>
+					</div>
+					
+					<!-- ELSE -->
+					
 					<div class="award {award.REACHED} awToggleTrigger" data-id="{award.ID}">
 						<div class="ac-icon floatLeft">
 							{award.ICON}
@@ -125,34 +155,6 @@ $(document).ready(function() {
 						</div>
 					</div>
 					
-					<!-- ELSE -->
-					
-					<div class="award {award.REACHED}" data-id="{award.ID}">
-						<div class="ac-icon floatLeft awardtooltip" data-name="{award.TITLE}" data-date="{award.DATE}">
-							{award.ICON}
-							<div class="awardtooltip-data" style="display:none;">
-								<h2 class="ac-title">{award.TITLE}</h2>
-								{award.DESC}<br />
-								{award.DATE}<br />
-								
-								DKP: {award.DKP}<br />
-								AP: {award.AP}
-								
-								<!-- BEGIN users -->
-								<div class="ac-member-{award.users.REACHED} user-{award.users.ID}">
-									{award.users.USER}
-									<!-- IF award.users.REACHED == "reached" -->
-										<!-- BEGIN members -->
-										{award.users.members.MEMBER} {award.users.members.DATE}<br />
-										<!-- END members -->
-									<!-- ELSE -->
-										{L_aw_user_unreached}
-									<!-- ENDIF -->
-								</div>
-								<!-- END users -->
-							</div>
-						</div>
-					</div>
 					<!-- ENDIF -->
 				<!-- ENDIF -->
 				<!-- END award -->

@@ -224,14 +224,14 @@
 
 
 /***************************************
- *          IF AWARDS_ROW
+ *     IF LAYOUT == minimalist
  ***************************************/
-#awards .awards_row .award { display: inline-block; }
+.minimalist .award { display: inline-block; }
 
-#awards .awards_row .ac-icon img, #awards .awards_row .ac-icon svg { height: 75px; width: 75px; }
+.minimalist .ac-icon img,
+.minimalist .ac-icon svg { height: 75px; width: 75px; }
 
-#awards .awards_row .award .ac-title { margin-bottom: 1px; }
-#awards .awards_row .award .aw-extended { padding-left: 5px; }
+.minimalist .award .ac-title { margin-bottom: 1px; }
 
 
 
@@ -273,7 +273,7 @@
  *         EXAMPLE CODE for the custom.css
  ********************************************************/
 /*  These rules will overwrite all SVG icons.
-	On the g:nth-child() can you see which SVG Part will called.
+	With the g:nth-child() can you see which SVG Element will be called.
 		e.g. g:nth-child(1) for background-color        */
 		
 /*
