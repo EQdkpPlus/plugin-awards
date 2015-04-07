@@ -39,14 +39,15 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 			$intUserID		= $intUserID['user_id'];
 			$intViewerID	= $this->user->id;
 			$allAwards		= array();
-			$intAP			= 0;
-			$awReachedCounter = 0;
+			$intAP			= $awReachedCounter = 0;
+			$awReached		= 'reached';
 			$content		= '';
+			
 			
 			//sorting -- newest date = up, false = unreached
 			foreach($arrAchIDs as $intAchID){
 				$award = $this->awards->award($intAchID, $intUserID);
-				if(is_array($award['member_r'][$intUserID])){
+				if(isset($award['member_r'][$intUserID])){
 					$allAwards[$award['id']] = $award['date'];
 					$intAP += $award['points']; $awReachedCounter++;
 					
@@ -67,7 +68,7 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 				
 				$strAchIcon = $this->awards->build_icon($intAchID, $award['icon'], unserialize($award['icon_colors']));
 				
-				if(!is_array($award['member_r'][$intViewerID])) $awReached = 'unreached';
+				if(!isset($award['member_r'][$intViewerID])) $awReached = 'unreached';
 				
 				$this->tpl->assign_block_vars('award', array(
 					'ID'		=> $intAchID,
@@ -80,7 +81,7 @@ if (!class_exists('awards_userprofile_customtabs_hook')){
 					'AP'		=> $award['points'],
 					'DKP'		=> $award['dkp'],
 					'REACHED'	=> $awReached,
-					'USER_R'	=> (is_array($award['member_r'][$intViewerID]))? true : false,
+					'USER_R'	=> (isset($award['member_r'][$intViewerID]))? true : false,
 				));
 				
 				//build the members

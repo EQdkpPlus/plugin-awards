@@ -145,7 +145,7 @@ class awards extends plugin_generic
 		$this->timekeeper->add_cron(
 			'awards', array(
 				'extern'		=> true,
-				'ajax'			=> false,
+				'ajax'			=> true,
 				'delay'			=> false,
 				'repeat'		=> true,
 				'repeat_type'	=> 'daily',

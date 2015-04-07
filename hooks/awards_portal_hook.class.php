@@ -60,7 +60,7 @@ if (!class_exists('awards_portal_hook')){
 				//build output
 				$output = '
 					<div class="awards-tooltip-container hiddenSmartphone">
-						<a class="awards-tooltip-trigger tooltip-trigger" data-tooltip="awards-tooltip">
+						<a class="awards-tooltip-trigger hand tooltip-trigger" data-tooltip="awards-tooltip">
 							<i class="fa fa-mortar-board fa-lg"></i> <span>'.$this->user->lang('awards').'</span>
 						</a>
 						<ul id="awards-tooltip" class="dropdown-menu" role="menu">
@@ -70,7 +70,7 @@ if (!class_exists('awards_portal_hook')){
 									<i class="fa fa-shield" title="'.$this->user->lang('aw_tt_reached_dkp').'"></i>'.$floatDKP.'
 								</div>
 								<div class="floatRight">
-									<span class="hand" onclick="window.location=\''.$this->root_path.'\'">'.$this->user->lang('aw_tt_my_awards').'</span> • 
+									<span class="hand" onclick="window.location=\''.$this->routing->build('User', $this->pdh->get('user', 'name', array($intUserID)), 'u'.$intUserID).'#2384ece2c'.'\'">'.$this->user->lang('aw_tt_my_awards').'</span> • 
 									<span class="hand" onclick="window.location=\''.$this->controller_path.'Settings/'.$this->SID.'\'"><i class="fa fa-cog fa-lg"></i></span>
 								</div>
 								<div class="clear"></div>

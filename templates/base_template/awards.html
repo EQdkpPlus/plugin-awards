@@ -81,20 +81,21 @@ $(document).ready(function() {
 						<div class="ac-icon floatLeft awardtooltip" data-name="{award.TITLE}" data-date="{award.DATE}">
 							{award.ICON}
 							<div class="awardtooltip-data" style="display:none;">
-								<h2 class="ac-title">{award.TITLE}</h2>
-								{award.DESC}<br />
-								{award.DATE}<br />
-								
-								DKP: {award.DKP}<br />
-								AP: {award.AP}
+								<h2 style="margin-bottom:1px;">{award.TITLE}</h2>
+								<span style="position:absolute; top:1px; right:3px;">{award.DATE}</span>
+								<span>{award.DESC}</span>
+								<br /><br />
+								DKP: {award.DKP}<br />AP: {award.AP}
 								
 								<!-- BEGIN users -->
-								<div class="ac-member-{award.users.REACHED} user-{award.users.ID}">
-									{award.users.USER}
+								<div style="padding-top:10px;">
+									<span style="font-weight:700;">{award.users.USER}</span>
 									<!-- IF award.users.REACHED == "reached" -->
+										<div style="padding-left:15px;">
 										<!-- BEGIN members -->
-										{award.users.members.MEMBER} {award.users.members.DATE}<br />
+										<span style="font-weight:700;">{award.users.members.MEMBER}</span> {award.users.members.DATE}<br />
 										<!-- END members -->
+										</div>
 									<!-- ELSE -->
 										{L_aw_user_unreached}
 									<!-- ENDIF -->
