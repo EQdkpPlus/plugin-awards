@@ -57,8 +57,8 @@ $lang = array(
   // Admin
   'aw_manage_achievements'		=> 'Erfolge verwalten',
   'aw_manage_assignments'		=> 'Zuweisungen verwalten',
-  'aw_tab_assign'				=> 'Alle Erfolge <i class="adminicon"></i>',
-  'aw_tab_achieve'				=> 'Alle Zuweisungen <i class="adminicon"></i>',
+  'aw_tab_assign'				=> '<i class="adminicon"></i>Alle Erfolge',
+  'aw_tab_achieve'				=> '<i class="adminicon"></i>Alle Zuweisungen',
   
   'aw_add_achievement'			=> 'Erfolg hinzufügen',
   'aw_edit_achievement'			=> 'Erfolg editieren',

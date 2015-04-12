@@ -19,29 +19,50 @@
  */
 
 /***************************************
- *               TABS  
+ *              CONTENT  
  ***************************************/
-.aw-tabs,
-.aw-tabs ul {
-	height: 25px;
-	width: 100%;
+.aw-points {
+	margin-top: .4em;
+	margin-left: 3em;
+	font-size: 15px;
+	font-weight: 700;
+	font-family: "Times New Roman", Times, serif;
+	cursor: help;
 }
-.aw-tabs li {
-	padding: 5px 10px;
-	margin: 1px 0.2em 0px 0px;
-	border: 1px solid;
-	border-top-left-radius: 7px;
-	border-top-right-radius: 7px;
-	border-bottom-width: 0px;
-	float: right;
-	color: #000;
-	box-shadow: 0px 0px 1px #000, 0px 1px 15px rgba(0, 0, 0, 0.3) inset;
+
+.aw-tabs { margin-right:2px; }
+.aw-tabs button { height:2em; }
+
+#aw_progress { margin: 5px; font-size: 0.7em !important; }
+#aw_progress .ui-progressbar-value { margin-top: -1.7em; }
+#aw_progress .progress-label {
+    text-align: center;
+    font-weight: 700;
+    margin-top: 0.2em;
+    font-size: 12px;
 }
-.aw-tabs li i { padding: 0px; line-height: 0; }
-.aw-tabs li:hover { box-shadow: 0px 1px 5px #06f inset; }
+
+.aw-divider {
+	margin: 5px 0;
+    height: 1px;
+	border-radius: 40%;
+    background: linear-gradient( to right,
+		rgba(0, 0, 0, 0.1) 0%,
+		rgba(87, 87, 87, 0.82) 40%,
+		#303030 50%,
+		rgba(87, 87, 87, 0.82) 60%,
+		rgba(0, 0, 0, 0.1) 100%
+	)repeat scroll 0% 0% transparent;
+}
+.aw-divider-tab {
+	margin-top: 0;
+	margin-bottom: 5px;
+	height: 1px;
+	border-radius: 40%;
+}
 
 /***************************************
- *              CONTENT  
+ *               AWARD  
  ***************************************/
 .award {
 	height: auto;
@@ -89,50 +110,6 @@
 .unreached .award:hover .ac-points,
 .unreached.show-member .ac-main,
 .unreached.show-member .ac-points { opacity: 0.8; }
-
-
-#aw_progress { margin: 5px; font-size: 0.7em !important; }
-#aw_progress .ui-progressbar-value { margin-top: -1.7em; }
-#aw_progress .progress-label {
-    text-align: center;
-    font-weight: 700;
-    margin-top: 0.2em;
-    font-size: 12px;
-}
-
-.aw-points {
-	margin-left: 3em;
-	font-size: 15px;
-	font-weight: 700;
-	font-family: "Times New Roman", Times, serif;
-	cursor: help;
-}
-
-.aw-divider {
-	margin: 5px 0;
-    height: 1px;
-	border-radius: 40%;
-    background: linear-gradient( to right,
-		rgba(0, 0, 0, 0.1) 0%,
-		rgba(87, 87, 87, 0.82) 40%,
-		#303030 50%,
-		rgba(87, 87, 87, 0.82) 60%,
-		rgba(0, 0, 0, 0.1) 100%
-	)repeat scroll 0% 0% transparent;
-}
-.aw-divider-tab {
-	margin-top: 0;
-	margin-bottom: 5px;
-	height: 1px;
-	border-radius: 40%;
-	background: linear-gradient(to right,
-		rgba(0, 0, 0, 0.1) 0%,
-		rgba(87, 87, 87, 0.82) 40%,
-		#4B4B4B 50%,
-		#353535 70%,
-		#000 100%
-	)repeat scroll 0% 0% transparent;
-}
 
 .ac-icon img, .ac-icon svg {
 	height: 50px;
@@ -249,7 +226,7 @@
 #my_aw_progress .ui-progressbar-value { margin-top: -14px; }
 
 /***************************************
- *           AWARDS-TOOLTIP 
+ *          AWARD QUICK INFO 
  ***************************************/
 .awards-tooltip-container { display: inline; position: relative; }
 #awards-tooltip { padding: 3px; min-width: 300px; display: none; }
@@ -265,6 +242,9 @@
 .aw-tt-member { position: absolute; right: 4px; bottom: 0; }
 
 .aw-tt-action-bar-btm { text-align: center; }
+
+
+
 
 /********************************************************
  *         EXAMPLE CODE for the custom.css
