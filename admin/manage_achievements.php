@@ -68,7 +68,7 @@ class awards_manage_achievements extends page_generic
 		$intAchPoints		= $this->in->get('points', 10);
 		$fltAchDKP			= $this->in->get('dkp', 0);
 		$intEventID			= $this->in->get('event', 'int');
-		$strAchIcon			= $this->in->get('icon', 'default.svg');
+		$strAchIcon			= $this->in->get('icon', 'default.png');
 		$strModuleCond		= $this->in->get('module_cond');
 		
 		$strAchModuleSet = array();
@@ -209,7 +209,8 @@ class awards_manage_achievements extends page_generic
 		$fields = (ceil($num/6))*6;
 		$i = 0;
 		
-		if ($id) $strAchIcon = $this->pdh->get('awards_achievements', 'icon', array($id));
+		if($id) $strAchIcon = $this->pdh->get('awards_achievements', 'icon', array($id));
+		else	$strAchIcon = 'default.png';
 		
 		while($i<$fields)
 		{

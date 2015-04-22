@@ -91,7 +91,7 @@ if(!class_exists('awards_plugin')){
 			if( file_exists($icon_folder.$strAchIcon) ){
 				$strAchIcon = $this->pfh->FolderPath('images', 'awards', 'absolute').$strAchIcon;
 			} else {
-				$strAchIcon = $this->root_path.'plugins/awards/images/'.$strAchIcon;
+				$strAchIcon = $this->environment->link.'plugins/awards/images/'.$strAchIcon;
 			}
 			
 			if( pathinfo($strAchIcon, PATHINFO_EXTENSION) == "svg"){

@@ -51,10 +51,10 @@ if (!defined('EQDKP_INC')){
 class awards extends plugin_generic
 {
 
-	public $version    = '0.0.1';
+	public $version    = '0.1.0';
 	public $build      = '';
 	public $copyright  = 'Asitara';
-	public $vstatus    = 'Alpha';
+	public $vstatus    = 'Beta';
 
 	protected static $apiLevel = 20;
 
@@ -77,7 +77,7 @@ class awards extends plugin_generic
 			'description'       => $this->user->lang('awards_short_desc'),
 			'long_description'  => $this->user->lang('awards_long_desc'),
 			'homepage'          => 'https://eqdkp-plus.eu/',
-			'manuallink'        => 'https://eqdkp-plus.eu/manual',
+			'manuallink'        => 'https://eqdkp-plus.eu/wiki/Plugin:_Awards',
 			'plus_version'      => '2.0',
 			'build'             => $this->build,
 		));
