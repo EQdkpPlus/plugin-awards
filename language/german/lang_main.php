@@ -105,6 +105,7 @@ $lang = array(
   'aw_module_condition'			=> 'der folgenden Bedingungen müssen zu treffen.',
   'aw_module_all'				=> 'Alle',
   'aw_module_any'				=> 'Eines',
+  'aw_module_choose_option'		=> '-- Wähle eine Bedingung --',
   
   'aw_cronmodule_raids'			=> 'Charakter hat an [x] Raids teilgenommen',
   'aw_cronmodule_inf_raids'		=> 'Raids',

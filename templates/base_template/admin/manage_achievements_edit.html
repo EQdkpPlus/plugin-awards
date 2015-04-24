@@ -77,10 +77,11 @@
 			else{ $('.module_show').hide(); }
 		});
 		
-		$('#modules option').on('click', null, function(event){
-			if( !$(this).attr('disabled') ){
-				$(this).attr('disabled', 'disabled');
-				new_row = $('#aw_reference_table tr[name="'+$(this).val()+'"]').html();
+		$('#modules').change(function(event){
+			selected_module = $(this).val();
+			if( !$('#modules option[value="'+selected_module+'"]').attr('disabled') ){
+				$('#modules option[value="'+selected_module+'"]').attr('disabled', 'disabled');
+				new_row = $('#aw_reference_table tr[name="'+selected_module+'"]').html();
 				$("#aw_module_table").find('tbody').append('<tr>'+new_row+'</tr>');
 			}
 		});
@@ -90,6 +91,18 @@
 		$('#modules option[value="'+module+'"]').removeAttr('disabled');
 		$('#modules option[value="'+module+'"]').removeAttr('selected');
 		$(obj).parent().parent().remove();
+	}
+	
+	function changecolor(){
+		$('#colorchange').dialog({
+			title: '{L_aw_edit_icon}',
+			height: 'auto',
+			width: 350,
+			modal: true,
+			close: function(event, ui){
+				$(this).dialog('destroy');
+			}
+		});
 	}
 </script>
 <style>
@@ -164,7 +177,7 @@
 		<br /><span>{L_aw_icon_help}</span></dt>
 		<dd>
 			<button class="mainoption" type="button" id="iubuttonedit" onclick="elfinder_all();"><i class="fa fa-upload"></i> {L_aw_upload_icon}</button>
-			<button class="mainoption" type="button" id="changecolor_btn" onclick="$('#colorchange').dialog({ height: 'auto', width: 350, title: '{L_aw_edit_icon}'});"><i class="fa fa-paint-brush"></i> {L_aw_edit_icon}</button>
+			<button class="mainoption" type="button" id="changecolor_btn" onclick="changecolor();"><i class="fa fa-paint-brush"></i> {L_aw_edit_icon}</button>
 		</dd>
 	</dl>
 	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="scrollable-x floatLeft">

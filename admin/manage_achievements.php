@@ -143,7 +143,7 @@ class awards_manage_achievements extends page_generic
 		$arrAchIconColors = unserialize($arrAchIconColors);
 		
 		// fetch Cronjob Modules
-		$arrAllModules = array();
+		$arrAllModules = array('choose_option' => $this->user->lang('aw_module_choose_option'));
 		$module_folder = opendir($this->root_path.'plugins/awards/cronjob/module');
 		while(false !== ($module = readdir($module_folder))){
 			if(substr($module, -21) == '_cronmodule.class.php'){
@@ -173,7 +173,7 @@ class awards_manage_achievements extends page_generic
 			'any'	  => $this->user->lang('aw_module_any'),
 		);
 		
-		$arrDisableModules = array();
+		$arrDisableModules = array('choose_option');
 		foreach(array_slice($arrAchModules, 1) as $strModule){
 			if(empty($strModule)) break;
 			$arrDisableModules[$strModule] = $strModule;
@@ -241,7 +241,7 @@ class awards_manage_achievements extends page_generic
 			'SPINNER_DKP'		=> new hspinner('dkp', array('value' => ($id)? $this->pdh->get('awards_achievements', 'dkp', array($id)) : 0, 'max'  => 100000, 'min'  => -100000, 'step' => 5)),
 			'DD_EVENT'			=> new hdropdown('event', array('options' => $arrEvents, 'value' => ($id)? $this->pdh->get('awards_achievements', 'event_id', array($id)) : '')),
 			'DD_MODULE_COND'	=> new hdropdown('module_cond', array('options' => $arrModuleCondtions, 'value' => $strModuleCondition)),
-			'DD_MODULES'		=> new hdropdown('modules', array('options' => $arrAllModules, 'value' => '', 'todisable' => $arrDisableModules, 'class' => 'module_show')),
+			'DD_MODULES'		=> new hdropdown('modules', array('options' => $arrAllModules, 'value' => 'choose_option', 'todisable' => $arrDisableModules, 'class' => 'module_show')),
 			'CP_ICON_LAYER_1'	=> $this->jquery->colorpicker('icon_layer_1', ($arrAchIconColors[0])?:'#FFFFFF'),
 			'CP_ICON_LAYER_2'	=> $this->jquery->colorpicker('icon_layer_2', ($arrAchIconColors[1])?:'#000000'),
 			'CP_ICON_LAYER_3'	=> $this->jquery->colorpicker('icon_layer_3', ($arrAchIconColors[2])?:'#000000'),
