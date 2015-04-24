@@ -233,7 +233,7 @@
 
 .aw-tt-action-bar .floatLeft { font-weight: 700; }
 .aw-tt-action-bar .floatLeft i:nth-child(1) { padding: 0 3px; font-size: 14px; }
-.aw-tt-action-bar .floatLeft i:nth-child(2) { padding-right: 3px; font-size: 14px;color: #FFD700; }
+.aw-tt-action-bar .floatLeft i:nth-child(2) { padding-right: 3px; font-size: 14px; }
 
 #awards-tooltip li ul li { position: relative; margin: 0 !important; min-height: 22px; }
 

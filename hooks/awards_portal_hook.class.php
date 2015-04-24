@@ -67,7 +67,7 @@ if (!class_exists('awards_portal_hook')){
 							<li class="aw-tt-action-bar"> 
 								<div class="floatLeft">
 									<i class="fa fa-bookmark-o" title="'.$this->user->lang('aw_tt_reached_ap').'"></i>'.$intAP.'&nbsp;
-									<i class="fa fa-shield" title="'.$this->user->lang('aw_tt_reached_dkp').'"></i>'.$floatDKP.'
+									<i class="fa fa-trophy fa-lg" title="'.$this->user->lang('aw_tt_reached_dkp').'"></i>'.$floatDKP.'
 								</div>
 								<div class="floatRight">
 									<span class="hand" onclick="window.location=\''.$this->routing->build('User', $this->pdh->get('user', 'name', array($intUserID)), 'u'.$intUserID).'#2384ece2c'.'\'">'.$this->user->lang('aw_tt_my_awards').'</span> • 

@@ -30,7 +30,7 @@ $(document).ready(function() {
 	<div class="aw-list">
 	<!-- BEGIN award -->
 		<!-- IF NOT award.SPECIAL OR award.USER_R OR S_ADMIN -->
-		<div class="award {award.REACHED} ac-{award.ID} awToggleTrigger">
+		<div class="award {award.REACHED} awToggleTrigger" data-id="{award.ID}">
 			<div class="ac-icon floatLeft">
 				{award.ICON}
 				<!-- IF NOT award.ACTIVE -->

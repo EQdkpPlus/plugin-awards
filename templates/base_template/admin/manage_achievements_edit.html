@@ -17,7 +17,7 @@
 			icon_src = $('input[type="radio"][name="icon"][checked="checked"]').next('img').attr('src');
 			icon_ext = icon_src.substring(icon_src.length - 4);
 			if(icon_ext == '.svg'){
-				$('#colorchange').css('visibility', 'visible');
+				$('#changecolor_btn').removeAttr('disabled');
 				$('#colorchange .icon_preview').load(icon_src, function() {
 					icon_areas = $('#colorchange .icon_preview svg').children('g').length;
 					for(i=1; i<=5; i++){
@@ -30,10 +30,10 @@
 					}
 				});
 			}else{
-				$('#colorchange').css('visibility', 'hidden');
+				$('#changecolor_btn').attr('disabled', 'disabled');
 			}
 		}else{
-			$('#colorchange').css('visibility', 'hidden');
+			$('#changecolor_btn').attr('disabled', 'disabled');
 		}
 		
 		//check if the selected icon an svg
@@ -41,7 +41,7 @@
 			icon_src = $(this).next('img').attr('src');
 			icon_ext = icon_src.substring(icon_src.length - 4);
 			if(icon_ext == '.svg'){
-				$('#colorchange').css('visibility', 'visible');
+				$('#changecolor_btn').removeAttr('disabled');
 				$('#colorchange .icon_preview').empty();
 				$('#colorchange .icon_preview').load(icon_src, function() {
 					icon_areas = $('#colorchange .icon_preview svg').children('g').length;
@@ -55,9 +55,10 @@
 					}
 				});
 			}else{
-				$('#colorchange').css('visibility', 'hidden');
+				$('#changecolor_btn').attr('disabled', 'disabled');
 			}
 		});
+		
 		
 		//change dynamicly icon with new colors
 		$('.sp-picker-container button.sp-choose').on('click', function(){
@@ -76,7 +77,7 @@
 			else{ $('.module_show').hide(); }
 		});
 		
-		$('#modules option').on('click', function(event){
+		$('#modules option').on('click', null, function(event){
 			if( !$(this).attr('disabled') ){
 				$(this).attr('disabled', 'disabled');
 				new_row = $('#aw_reference_table tr[name="'+$(this).val()+'"]').html();
@@ -93,9 +94,8 @@
 </script>
 <style>
 	table tr.colorswitch { line-height: 60px; }
-	#colorchange { position: absolute; display: inline-block; text-align: right; visibility: hidden; }
-	#colorchange .icon_preview svg { width: 128px; height: 128px; }
-	#colorchange .colorchange_container { position: relative; top: -6.5em; }
+	#colorchange { text-align: right; display: none; }
+	#colorchange .icon_preview svg { width: 160px; height: 160px; }
 </style>
 
 <form method="post" action="{ACTION}" name="post">
@@ -162,9 +162,12 @@
 	<dl>
 		<dt><label>{L_aw_icon_header}:</label>
 		<br /><span>{L_aw_icon_help}</span></dt>
-		<dd><button class="mainoption" type="button" id="iubuttonedit" onclick="elfinder_all();"><i class="fa fa-upload"></i> {L_aw_upload_icon}</button></dd>
+		<dd>
+			<button class="mainoption" type="button" id="iubuttonedit" onclick="elfinder_all();"><i class="fa fa-upload"></i> {L_aw_upload_icon}</button>
+			<button class="mainoption" type="button" id="changecolor_btn" onclick="$('#colorchange').dialog({ height: 'auto', width: 350, title: '{L_aw_edit_icon}'});"><i class="fa fa-paint-brush"></i> {L_aw_edit_icon}</button>
+		</dd>
 	</dl>
-	<table width="87%" border="0" cellspacing="1" cellpadding="2" class="scrollable-x floatLeft">
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="scrollable-x floatLeft">
 		<!-- IF ICONS -->
 		<!-- BEGIN files_row -->
 		<tr class="colorswitch">
@@ -183,7 +186,7 @@
 	
 	<div id="colorchange">
 		<div class="colorchange_container">
-			<div class="icon_preview"></div>
+			<div class="icon_preview floatLeft"></div>
 			Background: {CP_ICON_LAYER_1}<br />
 			Layer 1: {CP_ICON_LAYER_2}<br />
 			Layer 2: {CP_ICON_LAYER_3}<br />

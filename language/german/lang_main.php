@@ -53,6 +53,7 @@ $lang = array(
   'user_sett_f_aw_admin_pagination'   => '[ACP] Erfolge/Zuweisungen pro Seite',
   'user_sett_f_aw_layout_default'	  => 'Standart',
   'user_sett_f_aw_layout_minimalist'  => 'Minimalist',
+  'user_sett_f_ntfy_awards_new_award' => 'Award Plugin: Neuer Erfolg',
   
   // Admin
   'aw_manage_achievements'		=> 'Erfolge verwalten',
@@ -65,18 +66,19 @@ $lang = array(
   'aw_add_assignment'			=> 'Erfolg zuweisen',
   'aw_edit_assignment'			=> 'Zuweisung editieren',
   
-  'aw_special'					=> 'Spezial',
+  'aw_special'					=> 'Besonderer Erfolg',
   'aw_value'					=> 'AP Wert',
   'aw_dkp_value'				=> 'DKP Wert',
   'aw_auto_assign'				=> 'Automatisch zuweisen',
   'aw_icon_header'				=> 'Icon auswählen',
   'aw_upload_icon'				=> 'Icon hinzufügen',
+  'aw_edit_icon'				=> 'Icon bearbeiten',
   
   'aw_name_help'				=> 'Name / Titel des Erfolgs',
   'aw_desc_help'				=> 'Beschreibung des Erfolgs',
   'aw_active_help'				=> 'Bestimmt, ob dieser Erfolg zugewiesen werden darf.',
   'aw_special_help'				=> 'Besondere Erfolge sind erst sichtbar wenn diese errungen wurden.',
-  'aw_ap_help'					=> 'Award Punkte(Erfolgspunkte) dienen als seperate Währung zu DKP.',
+  'aw_ap_help'					=> 'Award Punkte (Erfolgspunkte) dienen als seperate Währung zu DKP.',
   'aw_dkp_help'					=> 'DKP werden bei erhalt dem jeweiligem Spieler zugerechnet.',
   'aw_dkp_warn'					=> 'Ein nachträgliches ändern der DKP wird nicht empfohlen, bereits vergebene DKP werden nicht aktualisiert!',
   'aw_event_help'				=> 'Wähle ein Ereignis für diesen Erfolg aus.',

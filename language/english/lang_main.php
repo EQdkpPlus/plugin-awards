@@ -53,6 +53,7 @@ $lang = array(
   'user_sett_f_aw_admin_pagination'   => '[ACP] Achieve/Assignments per site',
   'user_sett_f_aw_layout_default'	  => 'Default',
   'user_sett_f_aw_layout_minimalist'  => 'Minimalist',
+  'user_sett_f_ntfy_awards_new_award' => 'Award Plugin: New Achievement',
   
   // Admin
   'aw_manage_achievements'		=> 'Manage achievements',
@@ -65,18 +66,19 @@ $lang = array(
   'aw_add_assignment'			=> 'Assign achievement',
   'aw_edit_assignment'			=> 'Edit assignment',
   
-  'aw_special'					=> 'Special',
+  'aw_special'					=> 'Special achievement',
   'aw_value'					=> 'AP worth',
   'aw_dkp_value'				=> 'DKP worth',
   'aw_auto_assign'				=> 'Auto-assign',
   'aw_icon_header'				=> 'Select icon',
   'aw_upload_icon'				=> 'Add icon',
+  'aw_edit_icon'				=> 'Edit icon',
   
   'aw_name_help'				=> 'Name / Title of achievement',
   'aw_desc_help'				=> 'Description of achievement',
   'aw_active_help'				=> 'Determines whether this achievement may be assigned.',
   'aw_special_help'				=> 'Besondere Erfolge sind erst sichtbar wenn diese errungen wurden.',
-  'aw_ap_help'					=> 'Award Points(achievementpoints) serve as Awards own currency',
+  'aw_ap_help'					=> 'Award Points (achievementpoints) serve as Awards own currency',
   'aw_dkp_help'					=> 'These DKP get the respective player which reached this achievement.',
   'aw_dkp_warn'					=> 'A later change of DKP is not recommended, already assigned DKP will not be updated!',
   'aw_event_help'				=> 'Select an Event for this achievement.',

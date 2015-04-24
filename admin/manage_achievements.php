@@ -236,17 +236,17 @@ class awards_manage_achievements extends page_generic
 			'ML_NAME'			=> new htextmultilang('name', array('value' => ($id)? unserialize($this->pdh->get('awards_achievements', 'name', array($id))) : '', 'size' => 30, 'required' => true)),
 			'ML_DESCRIPTION'	=> new htextareamultilang('description', array('value' => ($id)? unserialize($this->pdh->get('awards_achievements', 'description', array($id))) : '', 'rows' => '3', 'cols' => '50')),
 			'R_ACTIVE_STATE'	=> new hradio('active_state', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => ($id)? $this->pdh->get('awards_achievements', 'active', array($id)) : 1)),
-			'R_SPECIAL_STATE'	=> new hradio('special_state', array('options' => array(0 => $this->user->lang('published'), 1 => $this->user->lang('not_published')), 'value' => ($id)? $this->pdh->get('awards_achievements', 'special', array($id)) : 0)),
+			'R_SPECIAL_STATE'	=> new hradio('special_state', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => ($id)? $this->pdh->get('awards_achievements', 'special', array($id)) : 0)),
 			'SPINNER_POINTS' 	=> new hspinner('points', array('value' => ($id)? $this->pdh->get('awards_achievements', 'points', array($id)) : 10, 'max'  => 100000, 'min'  => 0, 'step' => 5, 'onlyinteger' => true)),
 			'SPINNER_DKP'		=> new hspinner('dkp', array('value' => ($id)? $this->pdh->get('awards_achievements', 'dkp', array($id)) : 0, 'max'  => 100000, 'min'  => -100000, 'step' => 5)),
 			'DD_EVENT'			=> new hdropdown('event', array('options' => $arrEvents, 'value' => ($id)? $this->pdh->get('awards_achievements', 'event_id', array($id)) : '')),
 			'DD_MODULE_COND'	=> new hdropdown('module_cond', array('options' => $arrModuleCondtions, 'value' => $strModuleCondition)),
 			'DD_MODULES'		=> new hdropdown('modules', array('options' => $arrAllModules, 'value' => '', 'todisable' => $arrDisableModules, 'class' => 'module_show')),
-			'CP_ICON_LAYER_1'	=> $this->jquery->colorpicker('icon_layer_1', ($arrAchIconColors[0])?:'#000000'),
-			'CP_ICON_LAYER_2'	=> $this->jquery->colorpicker('icon_layer_2', ($arrAchIconColors[1])?:'#FFFFFF'),
-			'CP_ICON_LAYER_3'	=> $this->jquery->colorpicker('icon_layer_3', ($arrAchIconColors[2])?:'#FFFFFF'),
-			'CP_ICON_LAYER_4'	=> $this->jquery->colorpicker('icon_layer_4', ($arrAchIconColors[3])?:'#FFFFFF'),
-			'CP_ICON_LAYER_5'	=> $this->jquery->colorpicker('icon_layer_5', ($arrAchIconColors[4])?:'#FFFFFF'),
+			'CP_ICON_LAYER_1'	=> $this->jquery->colorpicker('icon_layer_1', ($arrAchIconColors[0])?:'#FFFFFF'),
+			'CP_ICON_LAYER_2'	=> $this->jquery->colorpicker('icon_layer_2', ($arrAchIconColors[1])?:'#000000'),
+			'CP_ICON_LAYER_3'	=> $this->jquery->colorpicker('icon_layer_3', ($arrAchIconColors[2])?:'#000000'),
+			'CP_ICON_LAYER_4'	=> $this->jquery->colorpicker('icon_layer_4', ($arrAchIconColors[3])?:'#000000'),
+			'CP_ICON_LAYER_5'	=> $this->jquery->colorpicker('icon_layer_5', ($arrAchIconColors[4])?:'#000000'),
 		));
 		
 		// -- EQDKP ---------------------------------------------------------------

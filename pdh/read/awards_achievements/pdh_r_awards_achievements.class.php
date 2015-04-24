@@ -260,7 +260,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		}
 		
 		public function get_html_dkp($intAchievementID){
-			return $this->get_dkp($intAchievementID).' <span class="adminicon" />';
+			return $this->get_dkp($intAchievementID).' <i class="fa fa-trophy fa-lg" />';
 		}
 
 		/**
