@@ -91,7 +91,7 @@ if(!class_exists('awards_plugin')){
 			if( file_exists($icon_folder.$strAchIcon) ){
 				$strAchIcon = $this->pfh->FolderPath('images', 'awards', 'absolute').$strAchIcon;
 			} else {
-				$strAchIcon = $this->environment->link.'plugins/awards/images/'.$strAchIcon;
+				$strAchIcon = $this->env->link.'plugins/awards/images/'.$strAchIcon;
 			}
 			
 			if( pathinfo($strAchIcon, PATHINFO_EXTENSION) == "svg"){
@@ -101,7 +101,7 @@ if(!class_exists('awards_plugin')){
 				// build the CSS Code for each SVG
 				$icon_color_step = 1;
 				foreach($arrAchIconColors as $strAchIconColor){
-					$strAchIconCSS .= '.award[data-id="'.$intAchID.'"] .ac-icon svg g:nth-child('.$icon_color_step.'){fill: '.$strAchIconColor.';}';
+					if(!empty($strAchIconColor)) $strAchIconCSS .= '.award[data-id="'.$intAchID.'"] .ac-icon svg g:nth-child('.$icon_color_step.'){fill: '.$strAchIconColor.';}';
 					$icon_color_step++;
 				}
 				$this->tpl->add_css($strAchIconCSS);
