@@ -228,7 +228,7 @@ class awards_manage_achievements extends page_generic
 				);
 			}
 		}
-		$this->jquery->fileBrowser('all', 'image', $this->pfh->FolderPath('images','awards', 'absolute'), array('title' => $this->user->lang('aw_upload_icon'), 'onclosejs' => '$(\'#eventSubmBtn\').click();'));
+		$this->jquery->fileBrowser('all', 'image', $this->pfh->FolderPath('images','awards', 'absolute'), array('title' => $this->user->lang('aw_upload_icon'), 'onclosejs' => 'location.reload();'));
 		
 		
 		$this->tpl->assign_vars(array(

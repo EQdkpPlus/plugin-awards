@@ -58,8 +58,8 @@ $lang = array(
   // Admin
   'aw_manage_achievements'		=> 'Manage achievements',
   'aw_manage_assignments'		=> 'Manage assignments',
-  'aw_tab_assign'				=> '<i class="adminicon"></i>All achievements',
-  'aw_tab_achieve'				=> '<i class="adminicon"></i>All assignments',
+  'aw_tab_assign'				=> '<i class="adminicon"></i>All assignments',
+  'aw_tab_achieve'				=> '<i class="adminicon"></i>All achievements',
   
   'aw_add_achievement'			=> 'Add achievement',
   'aw_edit_achievement'			=> 'Edit achievement',
