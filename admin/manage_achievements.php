@@ -88,7 +88,7 @@ class awards_manage_achievements extends page_generic
 			$blnResult = $this->pdh->put('awards_achievements', 'update', array($id, $strAchName, $strAchDescription, $intAchSortID, $blnAchActive, $blnAchSpecial, $intAchPoints, $fltAchDKP, $strAchIcon, $arrAchIconColors, $strAchModule, $strAchModuleSet, $intEventID));
 			
 		} else { //add Achievement
-			$blnResult = $this->pdh->put('awards_achievements', 'add', array($strAchName, $strAchDescription, $blnAchActive, $blnAchSpecial, $intAchPoints, $fltAchDKP, $strAchIcon, $arrAchIconColors, $strAchModule, $strAchModuleSet, $intEventID));
+			$blnResult = $this->pdh->put('awards_achievements', 'add', array($strAchName, $strAchDescription, $intAchSortID, $blnAchActive, $blnAchSpecial, $intAchPoints, $fltAchDKP, $strAchIcon, $arrAchIconColors, $strAchModule, $strAchModuleSet, $intEventID));
 		}
 		
 		//output Message
@@ -233,6 +233,7 @@ class awards_manage_achievements extends page_generic
 		
 		$this->tpl->assign_vars(array(
 			'AID'				=> $id,
+			'SORT_ID'			=> ($id > 0)? $this->pdh->get('awards_achievements', 'sort_id', array($id)) : count($this->pdh->get('awards_achievements', 'id_list'))+1,
 			'ML_NAME'			=> new htextmultilang('name', array('value' => ($id)? unserialize($this->pdh->get('awards_achievements', 'name', array($id))) : '', 'size' => 30, 'required' => true)),
 			'ML_DESCRIPTION'	=> new htextareamultilang('description', array('value' => ($id)? unserialize($this->pdh->get('awards_achievements', 'description', array($id))) : '', 'rows' => '3', 'cols' => '50')),
 			'R_ACTIVE_STATE'	=> new hradio('active_state', array('options' => array(1 => $this->user->lang('yes'), 0 => $this->user->lang('no')), 'value' => ($id)? $this->pdh->get('awards_achievements', 'active', array($id)) : 1)),
@@ -266,13 +267,6 @@ class awards_manage_achievements extends page_generic
 	public function display() {
 		$arrUserSettings = $this->pdh->get('user', 'plugin_settings', array($this->user->id));
 		$arrUserSettings['aw_admin_pagination'] = (isset($arrUserSettings['aw_admin_pagination']))? $arrUserSettings['aw_admin_pagination'] : 100;
-		
-		$this->tpl->add_js("
-			$(\"#article_categories-table tbody\").sortable({
-				cancel: '.not-sortable, input, tr th.footer, th',
-				cursor: 'pointer',
-			});
-		", "docready");
 		
 		$view_list = $this->pdh->get('awards_achievements', 'id_list', array());
 		$hptt_page_settings = array(

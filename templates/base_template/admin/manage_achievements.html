@@ -40,6 +40,7 @@
 				$(this).addClass('eye');
 			}
 		});
+		
 		$('.activeToggleTrigger').on('click', function(event){
 			action = 'active';
 			
@@ -64,6 +65,19 @@
 				$(this).removeClass('fa-square-o icon-color-red');
 				$(this).addClass('fa-check-square-o icon-color-green');
 			}
+		});
+		
+		$('#awards_achievements_table tbody').sortable({
+			cancel: '.not-sortable, input, tr th.footer, th',
+			cursor: 'pointer',
+			update: function(){
+				$('form[name="post"]').submit();
+			},
+		});
+		
+		$(document).on('submit', 'form[name="post"]', function(e) {
+			$.post('{EQDKP_ROOT_PATH}plugins/awards/ajax.php{SID}&sort', $('form[name="post"]').serialize());
+			e.preventDefault();
 		});
 		
 		function ajax(action, id, value){
@@ -97,7 +111,7 @@
 		<button class="mainoption" type="button" name="add" onclick="window.location='manage_achievements.php{SID}&amp;aid=0'"><i class="fa fa-plus"></i>{L_aw_add_achievement}</button>
 	</div>
 	<div class="clear"></div>
-	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="table fullwidth colorswitch" id="article_categories-table">
+	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="table fullwidth colorswitch" id="awards_achievements_table">
 		{ACHIEVEMENTS_LIST}
 	</table>
 	<div class="center pagination_wrapper">
@@ -106,7 +120,6 @@
 	<div class="contentFooter">
 		<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete_selected_entries}</button>
 		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
-		<button class="mainoption" type="submit" name="update" disabled="disabled"><i class="fa fa-check"></i>{L_save}</button>
 	</div>
 {CSRF_TOKEN}	
 </form>

@@ -47,14 +47,14 @@ if(!class_exists('pdh_w_awards_achievements')) {
 
 
 	/**
-	  * Add a Achievement
-	  */
-	public function add($strName, $strDescription, $blnActive, $blnSpecial,
+	 * Add a Achievement
+	 */
+	public function add($strName, $strDescription, $intAchSortID, $blnActive, $blnSpecial,
 						$intPoints, $fltDKP, $strIcon, $arrIconColors, $strModule, $strModuleSet, $intEventID){
 		$arrQuery  = array(
 			'name' 				=> $strName,
 			'description'		=> $strDescription,
-			'sort_id'			=> 99999999,
+			'sort_id'			=> $intAchSortID,
 			'active'			=> $blnActive,
 			'special'			=> $blnSpecial,
 			'points'			=> $intPoints,
@@ -90,8 +90,8 @@ if(!class_exists('pdh_w_awards_achievements')) {
 
 
 	/**
-	  * Update a Achievement
-	  */
+	 * Update a Achievement
+	 */
 	public function update($id, $strName, $strDescription, $intSortID, $blnActive, $blnSpecial,
 							$intPoints, $fltDKP, $strIcon, $arrIconColors, $strModule, $strModuleSet, $intEventID){
 		$arrQuery = array(
@@ -162,8 +162,8 @@ if(!class_exists('pdh_w_awards_achievements')) {
 
 
 	/**
-	  * Set in/active an Achievement
-	  */
+	 * Set in/active an Achievement
+	 */
 	public function set_active($id, $blnActive){
 		$objQuery = $this->db->prepare("UPDATE __awards_achievements :p WHERE id=?")->set(array(
 			'active' => $blnActive,
@@ -175,11 +175,24 @@ if(!class_exists('pdh_w_awards_achievements')) {
 
 
 	/**
-	  * Set no/special an Achievement
-	  */
+	 * Set no/special an Achievement
+	 */
 	public function set_special($id, $blnSpecial){
 		$objQuery = $this->db->prepare("UPDATE __awards_achievements :p WHERE id=?")->set(array(
 			'special' => $blnSpecial,
+		))->execute($id);
+		
+		if ($objQuery) return true;
+		return false;
+	}
+
+
+	/**
+	 * Set sort_id
+	 */
+	public function set_sort_id($id, $intSortID){
+		$objQuery = $this->db->prepare("UPDATE __awards_achievements :p WHERE id=?")->set(array(
+			'sort_id' => $intSortID,
 		))->execute($id);
 		
 		if ($objQuery) return true;
