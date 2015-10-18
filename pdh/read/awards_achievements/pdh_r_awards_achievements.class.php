@@ -69,7 +69,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 				return true;
 			}
 
-			$objQuery = $this->db->query('SELECT * FROM __awards_achievements');
+			$objQuery = $this->db->query('SELECT * FROM __awards_achievements ORDER BY sort_id ASC');
 			if($objQuery){
 				while($drow = $objQuery->fetchAssoc()){
 					//TODO: Check if id Column is available
@@ -173,8 +173,9 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 			return false;
 		}
 		
-		public function get_html_sort_id($intCategoryID){
-			return '<span class="ui-icon ui-icon-arrowthick-2-n-s" title="'.$this->user->lang('dragndrop').'"></span><input type="hidden" name="sortCategories[]" value="'.$intCategoryID.'"/>';
+		public function get_html_sort_id($intAchievementID){
+			return '<span class="ui-icon ui-icon-arrowthick-2-n-s" title="'.$this->user->lang('dragndrop').'"></span>
+					<input type="hidden" name="sort_ids['.$intAchievementID.']" value="'.$this->get_sort_id($intAchievementID).'"/>';
 		}
 
 		/**
