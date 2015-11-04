@@ -51,7 +51,7 @@ if (!defined('EQDKP_INC')){
 class awards extends plugin_generic
 {
 
-	public $version    = '0.2.0';
+	public $version    = '0.2.1';
 	public $build      = '';
 	public $copyright  = 'Asitara';
 	public $vstatus    = 'Beta';
