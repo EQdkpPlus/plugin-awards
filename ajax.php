@@ -40,6 +40,7 @@ class AjaxAwards extends page_generic
 		$handler = array(
 			'active'	=> array('process' => 'set_active'),
 			'special'	=> array('process' => 'set_special'),
+			'sort'		=> array('process' => 'set_sort_ids'),
 		);
 		parent::__construct(false, $handler);
 		$this->process();
@@ -84,10 +85,26 @@ class AjaxAwards extends page_generic
 	}
 
 
-
-	public function display(){
+	/**
+	 * sort Awards
+	 */
+	public function set_sort_ids(){
+		$arrSortIDs		= $this->in->getArray('sort_ids');
+		$intAchSortID	= 1;
 		
+		if(count($arrSortIDs)){
+			foreach($arrSortIDs as $intAchID => $old_sort_id){
+				$this->pdh->put('awards_achievements', 'set_sort_id', array($intAchID, $intAchSortID));
+				$intAchSortID++;
+			}
+			$this->pdh->process_hook_queue();
+		}
+		
+		exit;
 	}
+
+
+	public function display(){}
 }
 registry::register('AjaxAwards');
 ?>
