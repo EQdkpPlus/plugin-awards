@@ -27,8 +27,7 @@ if(!defined('EQDKP_INC')) {
   | pdh_w_awards_achievements
   +--------------------------------------------------------------------------*/
 if(!class_exists('pdh_w_awards_achievements')) {
-  class pdh_w_awards_achievements extends pdh_w_generic
-  {
+  class pdh_w_awards_achievements extends pdh_w_generic {
 	private $arrLogLang = array(
 		'id'				=> "{L_ID}",
 		'name'				=> "{L_NAME}",
@@ -169,7 +168,10 @@ if(!class_exists('pdh_w_awards_achievements')) {
 			'active' => $blnActive,
 		))->execute($id);
 		
-		if ($objQuery) return true;
+		if($objQuery){
+			$this->pdh->enqueue_hook('awards_achievements_update', $id);
+			return true;
+		}
 		return false;
 	}
 
@@ -182,7 +184,10 @@ if(!class_exists('pdh_w_awards_achievements')) {
 			'special' => $blnSpecial,
 		))->execute($id);
 		
-		if ($objQuery) return true;
+		if($objQuery){
+			$this->pdh->enqueue_hook('awards_achievements_update', $id);
+			return true;
+		}
 		return false;
 	}
 
@@ -195,7 +200,10 @@ if(!class_exists('pdh_w_awards_achievements')) {
 			'sort_id' => $intSortID,
 		))->execute($id);
 		
-		if ($objQuery) return true;
+		if($objQuery){
+			$this->pdh->enqueue_hook('awards_achievements_update', $id);
+			return true;
+		}
 		return false;
 	}
 

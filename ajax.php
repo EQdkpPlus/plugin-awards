@@ -28,11 +28,10 @@ include_once($eqdkp_root_path.'common.php');
 /*+----------------------------------------------------------------------------
   | awards_ajax_handling
   +--------------------------------------------------------------------------*/
-class AjaxAwards extends page_generic
-{
+class AjaxAwards extends page_generic {
 	/**
-	  * Constructor
-	  */
+	 * Constructor
+	 */
 	public function __construct(){
 		$this->user->check_auth('a_awards_add');
 		register("pm");
@@ -48,40 +47,52 @@ class AjaxAwards extends page_generic
 
 
 	/**
-	  * set Active
-	  */
+	 * set Active
+	 */
 	public function set_active(){
-		if(isset($_POST['id']) && isset($_POST['value'])){
-			$intAchID		= $_POST['id'];
-			$blnAchActive	= $_POST['value'];
-			
-			if($this->pdh->put('awards_achievements', 'set_active', array($intAchID, $blnAchActive))){
+		$intAchID		= $this->in->get('id', 0);
+		$blnAchActive	= $this->in->get('value', 1);
+		
+		if($intAchID > 0){
+			if( $this->pdh->put('awards_achievements', 'set_active', array($intAchID, $blnAchActive)) ){
 				$this->pdh->process_hook_queue();
-				echo($this->user->lang('success'));
-				exit;
+				
+				die(json_encode(array(
+					'error_code' => 0,
+					'error' => $this->user->lang('success')
+				)));
 			}
 		}
-		echo($this->user->lang('success'));
-		exit;
+		
+		die(json_encode(array(
+			'error_code' => 1,
+			'error' => $this->user->lang('error')
+		)));
 	}
 
 
 	/**
-	  * set Special
-	  */
+	 * set Special
+	 */
 	public function set_special(){
-		if(isset($_POST['id']) && isset($_POST['value'])){
-			$intAchID		= $_POST['id'];
-			$blnAchSpecial	= $_POST['value'];
-			
-			if($this->pdh->put('awards_achievements', 'set_special', array($intAchID, $blnAchSpecial))){
+		$intAchID		= $this->in->get('id', 0);
+		$blnAchSpecial	= $this->in->get('value', 0);
+		
+		if($intAchID > 0){
+			if( $this->pdh->put('awards_achievements', 'set_special', array($intAchID, $blnAchSpecial)) ){
 				$this->pdh->process_hook_queue();
-				echo($this->user->lang('success'));
-				exit;
+				
+				die(json_encode(array(
+					'error_code' => 0,
+					'error' => $this->user->lang('success')
+				)));
 			}
 		}
-		echo($this->user->lang('success'));
-		exit;
+		
+		die(json_encode(array(
+			'error_code' => 1,
+			'error' => $this->user->lang('error')
+		)));
 	}
 
 
@@ -98,13 +109,26 @@ class AjaxAwards extends page_generic
 				$intAchSortID++;
 			}
 			$this->pdh->process_hook_queue();
+			
+			die(json_encode(array(
+				'error_code' => 0,
+				'error' => $this->user->lang('success')
+			)));
 		}
 		
-		exit;
+		die(json_encode(array(
+			'error_code' => 1,
+			'error' => $this->user->lang('error')
+		)));
 	}
 
 
-	public function display(){}
+	public function display(){
+		die(json_encode(array(
+			'error_code' => 1,
+			'error' => $this->user->lang('error')
+		)));
+	}
 }
 registry::register('AjaxAwards');
 ?>
