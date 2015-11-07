@@ -41,7 +41,7 @@ if (!class_exists('awards_portal_hook')){
 			
 			$intUserID = $this->user->id;
 			$arrUserSettings = $this->pdh->get('user', 'plugin_settings', array($intUserID));
-			if($arrUserSettings['aw_show_hook']){
+			if(isset($arrUserSettings['aw_show_hook']) && $arrUserSettings['aw_show_hook']){
 				$arrMemberIDs = $this->pdh->get('member', 'connection_id', array($intUserID));
 				$arrAchIDs = $arrAssDates = array();
 				$intAP = $floatDKP = 0;

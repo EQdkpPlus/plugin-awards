@@ -119,7 +119,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		 * @param integer $intAchievementID
 		 * @return multitype id
 		 */
-		 public function get_id($intAchievementID){
+		public function get_id($intAchievementID){
 			if (isset($this->awards_achievements[$intAchievementID])){
 				return $this->awards_achievements[$intAchievementID]['id'];
 			}
@@ -131,7 +131,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		 * @param integer $intAchievementID
 		 * @return multitype name
 		 */
-		 public function get_name($intAchievementID){
+		public function get_name($intAchievementID){
 			if (isset($this->awards_achievements[$intAchievementID])){
 				return $this->awards_achievements[$intAchievementID]['name'];
 			}
@@ -150,7 +150,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		 * @param integer $intAchievementID
 		 * @return multitype description
 		 */
-		 public function get_description($intAchievementID){
+		public function get_description($intAchievementID){
 			if (isset($this->awards_achievements[$intAchievementID])){
 				return $this->awards_achievements[$intAchievementID]['description'];
 			}
@@ -166,7 +166,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		 * @param integer $intAchievementID
 		 * @return multitype sort_id
 		 */
-		 public function get_sort_id($intAchievementID){
+		public function get_sort_id($intAchievementID){
 			if (isset($this->awards_achievements[$intAchievementID])){
 				return $this->awards_achievements[$intAchievementID]['sort_id'];
 			}
@@ -183,7 +183,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		 * @param integer $intAchievementID
 		 * @return multitype active
 		 */
-		 public function get_active($intAchievementID){
+		public function get_active($intAchievementID){
 			if (isset($this->awards_achievements[$intAchievementID])){
 				return $this->awards_achievements[$intAchievementID]['active'];
 			}
@@ -191,18 +191,13 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		}
 		
 		public function get_html_active($intAchievementID){
-			if ($this->get_active($intAchievementID)){
-				$strImage = '<div>
-								<i class="fa fa-check-square-o fa-lg icon-color-green activeToggleTrigger" style="cursor: pointer;"></i>
-								<input type="hidden" class="active_cb" name="'.$intAchievementID.'" value="1"/>
-							</div>';
+			if($this->get_active($intAchievementID)){
+				return '<i class="fa fa-check-square-o fa-lg icon-color-green activeToggleTrigger" style="cursor: pointer;"></i>
+						<input type="hidden" class="active_cb" name="'.$intAchievementID.'" value="1"/>';
 			} else {
-				$strImage = '<div>
-								<i class="fa fa-square-o fa-lg icon-color-red activeToggleTrigger" style="cursor: pointer;"></i>
-								<input type="hidden" class="active_cb" name="'.$intAchievementID.'" value="0"/>
-							</div>';
+				return '<i class="fa fa-square-o fa-lg icon-color-red activeToggleTrigger" style="cursor: pointer;"></i>
+						<input type="hidden" class="active_cb" name="'.$intAchievementID.'" value="0"/>';
 			}
-			return $strImage;
 		}
 
 		/**
@@ -210,7 +205,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		 * @param integer $intAchievementID
 		 * @return multitype special
 		 */
-		 public function get_special($intAchievementID){
+		public function get_special($intAchievementID){
 			if (isset($this->awards_achievements[$intAchievementID])){
 				return $this->awards_achievements[$intAchievementID]['special'];
 			}
@@ -218,18 +213,13 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		}
 		
 		public function get_html_special($intAchievementID){
-			if ($this->get_special($intAchievementID)){
-				$strImage = '<div>
-								<div class="eye-gray eyeToggleTrigger"></div>
-								<input type="hidden" class="special_cb" name="'.$intAchievementID.'" value="1"/>
-							</div>';
+			if($this->get_special($intAchievementID)){
+				return '<div class="eye-gray eyeToggleTrigger"></div>
+						<input type="hidden" class="special_cb" name="'.$intAchievementID.'" value="1"/>';
 			} else {
-				$strImage = '<div>
-								<div class="eye eyeToggleTrigger"></div>
-								<input type="hidden" class="special_cb" name="'.$intAchievementID.'" value="0"/>
-							</div>';
+				return '<div class="eye eyeToggleTrigger"></div>
+						<input type="hidden" class="special_cb" name="'.$intAchievementID.'" value="0"/>';
 			}
-			return $strImage;
 		}
 
 		/**
@@ -237,7 +227,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		 * @param integer $intAchievementID
 		 * @return multitype points
 		 */
-		 public function get_points($intAchievementID){
+		public function get_points($intAchievementID){
 			if (isset($this->awards_achievements[$intAchievementID])){
 				return $this->awards_achievements[$intAchievementID]['points'];
 			}
@@ -253,7 +243,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		 * @param integer $intAchievementID
 		 * @return multitype dkp
 		 */
-		 public function get_dkp($intAchievementID){
+		public function get_dkp($intAchievementID){
 			if (isset($this->awards_achievements[$intAchievementID])){
 				return $this->awards_achievements[$intAchievementID]['dkp'];
 			}
@@ -269,7 +259,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		 * @param integer $intAchievementID
 		 * @return multitype icon
 		 */
-		 public function get_icon($intAchievementID){
+		public function get_icon($intAchievementID){
 			if (isset($this->awards_achievements[$intAchievementID])){
 				return $this->awards_achievements[$intAchievementID]['icon'];
 			}
@@ -312,7 +302,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		 * @param integer $intAchievementID
 		 * @return multitype icon_colors
 		 */
-		 public function get_icon_colors($intAchievementID){
+		public function get_icon_colors($intAchievementID){
 			if (isset($this->awards_achievements[$intAchievementID])){
 				return $this->awards_achievements[$intAchievementID]['icon_colors'];
 			}
@@ -324,7 +314,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		 * @param integer $intAchievementID
 		 * @return multitype module
 		 */
-		 public function get_module($intAchievementID){
+		public function get_module($intAchievementID){
 			if (isset($this->awards_achievements[$intAchievementID])){
 				return $this->awards_achievements[$intAchievementID]['module'];
 			}
@@ -336,7 +326,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		 * @param integer $intAchievementID
 		 * @return multitype module_set
 		 */
-		 public function get_module_set($intAchievementID){
+		public function get_module_set($intAchievementID){
 			if (isset($this->awards_achievements[$intAchievementID])){
 				return $this->awards_achievements[$intAchievementID]['module_set'];
 			}
@@ -348,7 +338,7 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		 * @param integer $intAchievementID
 		 * @return multitype event_id
 		 */
-		 public function get_event_id($intAchievementID){
+		public function get_event_id($intAchievementID){
 			if (isset($this->awards_achievements[$intAchievementID])){
 				return $this->awards_achievements[$intAchievementID]['event_id'];
 			}
