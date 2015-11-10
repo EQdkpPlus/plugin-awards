@@ -94,9 +94,9 @@ class awards_manage_achievements extends page_generic
 		//output Message
 		if ($blnResult){
 			$this->pdh->process_hook_queue();
-			$this->core->message(sprintf( $this->user->lang('aw_add_success'), $this->user->multilangValue($strAchName) ), $this->user->lang('success'), 'green');
+			$this->core->message(sprintf( $this->user->lang(($id)?'aw_upd_success':'aw_add_success'), $this->user->multilangValue($strAchName) ), $this->user->lang('success'), 'green');
 		} else {
-			$this->core->message(sprintf( $this->user->lang('aw_add_nosuccess'), $this->user->multilangValue($strAchName) ), $this->user->lang('error'), 'red');
+			$this->core->message(sprintf( $this->user->lang(($id)?'aw_upd_nosuccess':'aw_add_nosuccess'), $this->user->multilangValue($strAchName) ), $this->user->lang('error'), 'red');
 		}
 		$this->display();
 	}
