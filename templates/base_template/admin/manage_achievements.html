@@ -12,15 +12,16 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		var action	= '';
-		var id		= '';
-		var value	= '';
+		var data	= { };
 		
 		$('.eyeToggleTrigger').on('click', function(){
-			action	= 'special';
-			id		= $(this).next('.special_cb').attr('name');
-			value	= $(this).next('.special_cb').val();
+			var value	= $(this).next('.special_cb').val();
 			
-			ajax(action, id, (value == '1')? 0 : 1);
+			action		= 'special';
+			data.id		= $(this).next('.special_cb').attr('name');
+			data.value	= (value == '1')? 0 : 1;
+			
+			ajax(action, data);
 			
 			if( value == '0' ){
 				$(this).next('.special_cb').val(1);
@@ -35,11 +36,13 @@
 		});
 		
 		$('.activeToggleTrigger').on('click', function(){
-			action	= 'active';
-			id		= $(this).next('.active_cb').attr('name');
-			value	= $(this).next('.active_cb').val();
+			var value			= $(this).next('.active_cb').val();
 			
-			ajax(action, id, (value == '1')? 0 : 1);
+			action	= 'active';
+			data.id		= $(this).next('.active_cb').attr('name');
+			data.value	= (value == '1')? 0 : 1;
+			
+			ajax(action, data);
 			
 			if( value == '0' ){
 				$(this).next('.active_cb').val(1);
@@ -52,35 +55,17 @@
 			}
 		});
 		
-		function ajax(action, id, value){
-			$.post('{EQDKP_ROOT_PATH}plugins/awards/ajax.php{SID}&'+action, {
-					id: id,
-					value: value
-				}, function(response){
-					response = $.parseJSON(response);
-					
-					if(response.error_code == 0){
-						$('#notify_container').notify('create', 'success', {text: response.error, title: '{L_success}', custom: true,}, {expires: 3000, speed: 1000});
-					}else{
-						$('#notify_container').notify('create', 'error', {text: response.error + response.error_code, title: '{L_error}', custom: true,}, {expires: 3000, speed: 1000});
-					}
-			});
-		}
-		
 		$('#awards_achievements_table tbody').sortable({
 			cancel: '.not-sortable, input, tr th.footer, th',
 			cursor: 'pointer',
 			update: function(){
-				$('form[name="post"]').submit();
+				ajax('sort', $('form[name="post"]').serialize());
 			},
 		});
 		
-		$(document).on('submit', 'form[name="post"]', function(e) {
-			/*$.post('{EQDKP_ROOT_PATH}plugins/awards/ajax.php{SID}&sort',
-				$('form[name="post"]').serialize()
-			);*/
-			$.post('{EQDKP_ROOT_PATH}plugins/awards/ajax.php{SID}&sort',
-				$(this).serialize(),
+		function ajax(action, data){
+			$.post('{EQDKP_ROOT_PATH}plugins/awards/ajax.php{SID}&'+action, 
+				data,
 				function(response){
 					response = $.parseJSON(response);
 					
@@ -90,8 +75,7 @@
 						$('#notify_container').notify('create', 'error', {text: response.error + response.error_code, title: '{L_error}', custom: true,}, {expires: 3000, speed: 1000});
 					}
 			});
-			e.preventDefault();
-		});
+		}
 		
 		$.each( $('div[class^="aw-"] .icon_colors'), function(){
 			aw_icon_id	= $(this).parent().attr('class').substring(3);
