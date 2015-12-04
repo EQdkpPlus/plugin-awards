@@ -62,7 +62,7 @@ class awards_manage_achievements extends page_generic
 		$strAchName			= $hmultilangName->_inpval();
 		$strAchDescription	= $hmultilangDesc->_inpval();
 		
-		$intAchSortID		= $this->in->get('sort_id', 99999999);
+		$intAchSortID		= $this->in->get('sort_id', PHP_INT_MAX);
 		$blnAchActive		= $this->in->get('active_state', 1);
 		$blnAchSpecial		= $this->in->get('special_state', 1);
 		$intAchPoints		= $this->in->get('points', 10);
