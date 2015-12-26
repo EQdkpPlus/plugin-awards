@@ -70,9 +70,9 @@
 					response = $.parseJSON(response);
 					
 					if(response.error_code == 0){
-						$('#notify_container').notify('create', 'success', {text: response.error, title: '{L_success}', custom: true,}, {expires: 3000, speed: 1000});
+						$('#notify_container').notify('create', 'success', {text: response.error, title: {L_success|jsencode}, custom: true,}, {expires: 3000, speed: 1000});
 					}else{
-						$('#notify_container').notify('create', 'error', {text: response.error + response.error_code, title: '{L_error}', custom: true,}, {expires: 3000, speed: 1000});
+						$('#notify_container').notify('create', 'error', {text: response.error + response.error_code, title: {L_error|jsencode}, custom: true,}, {expires: 3000, speed: 1000});
 					}
 			});
 		}
