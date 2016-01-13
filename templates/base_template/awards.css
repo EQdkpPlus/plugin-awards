@@ -19,6 +19,19 @@
  */
 
 /***************************************
+ *             LESS-VARS
+ ***************************************/
+@awardsReachedBorderColor: #CCC;
+@awardsReachedBorderColorHover: #6BA6FF;
+
+@awardsUnreachedBorderColor: #777;
+@awardsUnreachedBorderColorHover: #CCC;
+@awardsUnreachedMemberColor: #666;
+
+@awardsDividerColor: #303030;
+
+
+/***************************************
  *              CONTENT  
  ***************************************/
 .aw-points {
@@ -47,11 +60,11 @@
     height: 1px;
 	border-radius: 40%;
     background: linear-gradient( to right,
-		rgba(0, 0, 0, 0.1) 0%,
-		rgba(87, 87, 87, 0.82) 40%,
-		#303030 50%,
-		rgba(87, 87, 87, 0.82) 60%,
-		rgba(0, 0, 0, 0.1) 100%
+		fade(@awardsDividerColor, 10) 0%,
+		fade(@awardsDividerColor, 82) 40%,
+		@awardsDividerColor 50%,
+		fade(@awardsDividerColor, 82) 60%,
+		fade(@awardsDividerColor, 10) 100%
 	)repeat scroll 0% 0% transparent;
 }
 .aw-divider-tab {
@@ -68,26 +81,26 @@
 	height: auto;
 	padding: 5px;
 	margin: 1px 0;
-	border: 2px solid #CCC;
+	border: 2px solid @awardsReachedBorderColor;
 	border-radius: 2px;
 	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5) inset;
 }
 .award:hover {
-	border-color: #6BA6FF;
+	border-color: @awardsReachedBorderColorHover;
 	box-shadow: 0px 0px 7px #06f;
 }
 
 .award.unreached,
 .unreached .award {
 	height: auto;
-	border: 2px solid #777;
+	border: 2px solid @awardsUnreachedBorderColor;
 	box-shadow: 0px 30px 60px rgba(0, 0, 0, 0.8) inset;
 }
 .award.unreached:hover,
 .unreached .award:hover,
 .award.unreached.show-member,
 .unreached.show-member .award {
-	border-color: #CCC;
+	border-color: @awardsUnreachedBorderColorHover;
 	box-shadow: 0px 0px 60px rgba(0, 0, 0, 0.5) inset;
 }
 
@@ -197,7 +210,7 @@
 	font-weight: bold;
 	opacity: 0.7;
 }
-.ac-member-unreached > a { color: #666 !important; }
+.ac-member-unreached > a { color: @awardsUnreachedMemberColor !important; }
 
 
 /***************************************
