@@ -382,18 +382,21 @@ if ( !class_exists( "pdh_r_awards_library" ) ) {
 		public function get_earliest_date_of_award($id){
 			$dates = array();
 			$earliest_date = PHP_INT_MAX;
-			if (is_array($this->awards_library)){
+			
+			if(is_array($this->awards_library)){
 				foreach($this->awards_library as $key => $value){
 					if($value['achievement_id'] == $id){
 						$dates[] = (int)$this->awards_library[$key]['date'];
 					}
 				}
-				if(isset($dates[0]))
+				if(isset($dates[0])){
 					foreach($dates as $date){
 						$earliest_date = ($date < $earliest_date) ? $date : $earliest_date;
 					}
+					return $earliest_date;
+				}
 			}
-			return $earliest_date;
+			return NULL;
 		}
 
 
