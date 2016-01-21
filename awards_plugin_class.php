@@ -51,7 +51,7 @@ if (!defined('EQDKP_INC')){
 class awards extends plugin_generic
 {
 
-	public $version    = '0.3.1';
+	public $version    = '0.4.0';
 	public $build      = '';
 	public $copyright  = 'Asitara';
 	public $vstatus    = 'Beta';
@@ -78,12 +78,12 @@ class awards extends plugin_generic
 			'long_description'  => $this->user->lang('awards_long_desc'),
 			'homepage'          => 'https://eqdkp-plus.eu/',
 			'manuallink'        => 'https://eqdkp-plus.eu/wiki/Plugin:_Awards',
-			'plus_version'      => '2.0',
+			'plus_version'      => '2.2',
 			'build'             => $this->build,
 		));
 
 		$this->add_dependency(array(
-			'plus_version'      => '2.0'
+			'plus_version'      => '2.2'
 		));
 
 		// -- Register our permissions ------------------------
@@ -196,13 +196,13 @@ class awards extends plugin_generic
 		$admin_menu = array (array(
 			'name' => $this->user->lang('awards'),
 			'icon' => 'fa fa-mortar-board',
-			1 => array (
+			1 => array(
 				'link'  => 'plugins/awards/admin/manage_achievements.php'.$this->SID,
 				'text'  => $this->user->lang('aw_manage_achievements'),
 				'check' => 'a_awards_manage',
 				'icon'  => 'fa-gift'
 			),
-			2 => array (
+			2 => array(
 				'link'  => 'plugins/awards/admin/manage_assignments.php'.$this->SID,
 				'text'  => $this->user->lang('aw_manage_assignments'),
 				'check' => 'a_awards_manage',

@@ -1,13 +1,10 @@
 
-- Cron Module
-
-	- Raidbeteiligung: Anzahl der Raids in dem entsprechenden ausgewählten MultiDKP (das könnten ja auch mehrere sein)
 
 
 --------------------------------------------
 spontan einfälle...
 	- vllt. die Zuweisungen editieren/updaten Funktion etwas erweitern mit Notify und korrektem Log eintrag
-	- Cron Modul System erweitern mit eigen definierten inputfeldern, defaults, evntl andere Sachen noch (dafür müsst man die Module "initialisieren und installieren können per extra admin page, infos wie language und co liegen dann in einer DB Tabelle)
+	- wow_cronmodule siehe Quelltext , AND or OR checkbox einbauen
 --------------------------------------------
 
 

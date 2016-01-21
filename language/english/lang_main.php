@@ -107,15 +107,6 @@ $lang = array(
   'aw_module_any'				=> 'One of',
   'aw_module_choose_option'		=> '-- Choose a condition --',
   
-  'aw_cronmodule_raids'			=> 'Character was on [x] Raids participated',
-  'aw_cronmodule_inf_raids'		=> 'Raids',
-  'aw_cronmodule_birthday'		=> 'User have birthday',
-  'aw_cronmodule_cap'			=> 'Character reached over [x] DKP',
-  'aw_cronmodule_inf_cap'		=> 'DKP',
-  'aw_cronmodule_items'			=> 'Character reached over [x] Items',
-  'aw_cronmodule_inf_items'		=> 'Items',
-  /* PUT HERE THE LANGUAGE STRIPES OF YOUR OWN MODULE */
-  
   
   // System Messages
   'action_achievement_added'	=> 'Achievement created',

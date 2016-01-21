@@ -28,7 +28,7 @@ if ( !defined('EQDKP_INC') ){
   +--------------------------------------------------------------------------*/
 if ( !class_exists( "awards_crontask" ) ) {
 	class awards_crontask extends crontask {
-		public function __construct(){  }
+		public function __construct(){}
 
 
 		public function run(){
@@ -36,32 +36,34 @@ if ( !class_exists( "awards_crontask" ) ) {
 			
 			foreach($arrAchIDs as $intAchID){
 				if( $this->pdh->get('awards_achievements', 'active', array($intAchID)) ){
-					$arrMemberIDs = $this->pdh->get('member', 'id_list');
-					$arrAchModule = unserialize($this->pdh->get('awards_achievements', 'module', array($intAchID)));
-					$arrAchModuleConditions = $arrAchModule['conditions'];
-					$arrAchModule = array_slice($arrAchModule, 1);
+					$arrMemberIDs			= $this->pdh->get('member', 'id_list');
+					$arrAchModules			= unserialize($this->pdh->get('awards_achievements', 'module', array($intAchID)));
+					$arrAchModuleSettings	= unserialize($this->pdh->get('awards_achievements', 'module_set', array($intAchID)));
+					$arrAchModuleConditions	= $arrAchModules['conditions'];
+					$arrAchModules			= array_slice($arrAchModules, 1);
 					
 					if($arrAchModuleConditions == 'all'){
-						foreach($arrAchModule as $strAchModule){
-							if(!class_exists($strAchModule.'_cronmodule'))
-								if((include $this->root_path.'plugins/awards/cronjob/module/'.$strAchModule.'_cronmodule.class.php') == false) continue;
+						foreach($arrAchModules as $strAchModule){
+							include $this->root_path.'plugins/awards/cronjob/modules/'.$strAchModule.'_cronmodule.class.php';
+							$strModuleClass	= $strAchModule.'_cronmodule';
+							$objModule		= new $strModuleClass($arrAchModuleSettings[$strAchModule]);
+							$arrMemberIDs	= $objModule->cron_process($intAchID, $arrMemberIDs);
 							
-							$module = registry::register($strAchModule.'_cronmodule');
-							$arrMemberIDs = $module->run($intAchID, $arrMemberIDs);
-							if($arrMemberIDs) $arrMemberIDs = array_unique($arrMemberIDs);
+							if(!empty($arrMemberIDs) && is_array($arrMemberIDs))
+								$arrMemberIDs = array_unique($arrMemberIDs);
+							else break;
 						}
-						$this->awards->add_assignment($intAchID, $arrMemberIDs);
+						if(!empty($arrMemberIDs) && is_array($arrMemberIDs)) $this->awards->add_assignment($intAchID, $arrMemberIDs);
 						
 						
 					}elseif($arrAchModuleConditions == 'any'){
-						foreach($arrAchModule as $strAchModule){
-							if(!class_exists($strAchModule.'_cronmodule'))
-								if((include $this->root_path.'plugins/awards/cronjob/module/'.$strAchModule.'_cronmodule.class.php') == false) continue;
+						foreach($arrAchModules as $strAchModule){
+							include $this->root_path.'plugins/awards/cronjob/modules/'.$strAchModule.'_cronmodule.class.php';
+							$strModuleClass	= $strAchModule.'_cronmodule';
+							$objModule		= new $strModuleClass($arrAchModuleSettings[$strAchModule]);
+							$arrMemberIDs	= $objModule->cron_process($intAchID, $arrMemberIDs);
 							
-							$module = registry::register($strAchModule.'_cronmodule');
-							$arrMemberIDs = $module->run($intAchID, $arrMemberIDs);
-							
-							if($arrMemberIDs) $this->awards->add_assignment($intAchID, $arrMemberIDs);
+							if(!empty($arrMemberIDs) && is_array($arrMemberIDs)) $this->awards->add_assignment($intAchID, $arrMemberIDs);
 						}
 						
 						
