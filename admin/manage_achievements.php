@@ -71,24 +71,39 @@ class awards_manage_achievements extends page_generic
 		$strAchIcon			= $this->in->get('icon', 'default.png');
 		$strModuleCond		= $this->in->get('module_cond');
 		
-		$strAchModuleSet = array();
-		$strAchModule	 = array('conditions' => ($strModuleCond)?: 'disable');
+		
+		$arrAchModules	 		= array('conditions' => ($strModuleCond)?: 'disable');
+		$arrAchModuleSettings	= array();
 		foreach($this->in->getArray('module', 'raw') as $module){
-			$strAchModule[] = $module['name'];
-			$strAchModuleSet[$module['name']] = (isset($module['value']))? $module['value'] : '';
+			$arrAchModules[] = $module['name'];
+			
+			$module_settings	= array();
+			$module['settings'] = json_decode($module['settings'], true);
+			foreach($module['settings'] as $key => $val){
+				if(substr($key, -2) == '[]'){
+					$key = substr($key, 0, mb_strlen($key, 'UTF-8') - 2);
+					$module_settings[$key] = (is_array($val))? $val : array($val);
+				}else{
+					$module_settings[$key] = $val;
+				}
+			}
+			
+			$arrAchModuleSettings[$module['name']] = (!empty($module_settings))? $module_settings : '';
 		}
-		$strAchModule	 = serialize($strAchModule);
-		$strAchModuleSet = serialize($strAchModuleSet);
+		$strAchModules	 = serialize($arrAchModules);
+		$strAchModuleSettings = serialize($arrAchModuleSettings);
+		
 		
 		$arrAchIconColors	= array();
 		for($i=1; $i<=5; $i++) $arrAchIconColors[] = $this->in->get('icon_layer_'.$i);
 		$arrAchIconColors = serialize($arrAchIconColors);
 		
+		
 		if ($id){ //update Achievement
-			$blnResult = $this->pdh->put('awards_achievements', 'update', array($id, $strAchName, $strAchDescription, $intAchSortID, $blnAchActive, $blnAchSpecial, $intAchPoints, $fltAchDKP, $strAchIcon, $arrAchIconColors, $strAchModule, $strAchModuleSet, $intEventID));
+			$blnResult = $this->pdh->put('awards_achievements', 'update', array($id, $strAchName, $strAchDescription, $intAchSortID, $blnAchActive, $blnAchSpecial, $intAchPoints, $fltAchDKP, $strAchIcon, $arrAchIconColors, $strAchModules, $strAchModuleSettings, $intEventID));
 			
 		} else { //add Achievement
-			$blnResult = $this->pdh->put('awards_achievements', 'add', array($strAchName, $strAchDescription, $intAchSortID, $blnAchActive, $blnAchSpecial, $intAchPoints, $fltAchDKP, $strAchIcon, $arrAchIconColors, $strAchModule, $strAchModuleSet, $intEventID));
+			$blnResult = $this->pdh->put('awards_achievements', 'add', array($strAchName, $strAchDescription, $intAchSortID, $blnAchActive, $blnAchSpecial, $intAchPoints, $fltAchDKP, $strAchIcon, $arrAchIconColors, $strAchModules, $strAchModuleSettings, $intEventID));
 		}
 		
 		//output Message
@@ -144,25 +159,28 @@ class awards_manage_achievements extends page_generic
 		
 		// fetch Cronjob Modules
 		$arrAllModules = array('choose_option' => $this->user->lang('aw_module_choose_option'));
-		$module_folder = opendir($this->root_path.'plugins/awards/cronjob/module');
+		$module_folder = opendir($this->root_path.'plugins/awards/cronjob/modules');
 		while(false !== ($module = readdir($module_folder))){
 			if(substr($module, -21) == '_cronmodule.class.php'){
-				$module_name = substr($module, 0, -21);
-				$module_name_lang	  = $this->user->lang('aw_cronmodule_'.$module_name);
-				$module_addition_lang = $this->user->lang('aw_cronmodule_inf_'.$module_name);
+				include_once $this->root_path.'plugins/awards/cronjob/modules/'.$module;
+				$module_name		= substr($module, 0, -21);
+				$module_class_name	= $module_name.'_cronmodule';
 				
-				$arrAllModules[$module_name] = $module_name_lang;
+				if(!$module_class_name::check_requirements()) continue;
+				$module_lang		= $module_class_name::$language;
+				$use_lang			= (array_key_exists($this->user->lang_name, $module_lang))? $this->user->lang_name : $this->config->get('default_lang');
 				
-				$this->tpl->assign_block_vars('all_modules_row', array(
+				$arrAllModules[$module_name] = $module_lang[$use_lang]['title'];
+				
+				$this->tpl->assign_block_vars('ref_modules_row', array(
 					'NAME'		=> $module_name,
-					'TITLE'		=> $module_name_lang,
-					'ADDITION'	=> !empty($module_addition_lang),
-					'VALUE_TEXT'=> (!empty($module_addition_lang))? $module_addition_lang : '',
+					'TITLE'		=> $module_lang[$use_lang]['title'],
+					'SETTINGS'	=> method_exists($module_class_name, 'display_settings'),
 				));
 			}
 		}
 		
-		// fetch & parse Cronjob Modules infos from PDH
+		// fetch Award Cronjob Modules
 		$arrAchModules		  = ($id)? unserialize($this->pdh->get('awards_achievements', 'module', array($id))) : array(0, '');
 		$arrAchModuleSettings = ($id)? unserialize($this->pdh->get('awards_achievements', 'module_set', array($id))) : array();
 		
@@ -174,16 +192,22 @@ class awards_manage_achievements extends page_generic
 		);
 		
 		$arrDisableModules = array('choose_option');
-		foreach(array_slice($arrAchModules, 1) as $strModule){
-			if(empty($strModule)) break;
-			$arrDisableModules[$strModule] = $strModule;
+		foreach(array_slice($arrAchModules, 1) as $module_name){
+			if(empty($module_name)) break;
+			$module_class_name	= $module_name.'_cronmodule';
+			
+			if(!$module_class_name::check_requirements()) continue;
+			$module_lang		= $module_class_name::$language;
+			$use_lang			= (array_key_exists($this->user->lang_name, $module_lang))? $this->user->lang_name : $this->config->get('default_lang');
+			$blnSettings		= method_exists($module_class_name, 'display_settings');
+			if(is_array($arrAchModuleSettings[$module_name])) $module_settings = sanitize(json_encode($arrAchModuleSettings[$module_name]));
+			
+			$arrDisableModules[$module_name] = $module_name;
 			
 			$this->tpl->assign_block_vars('module_row', array(
-				'NAME'		=> $strModule,
-				'TITLE'		=> $this->user->lang('aw_cronmodule_'.$strModule),
-				'ADDITION'	=> !empty($arrAchModuleSettings[$strModule]),
-				'VALUE'		=> (!empty($arrAchModuleSettings[$strModule]))? $arrAchModuleSettings[$strModule] : NULL,
-				'VALUE_TEXT'=> (!empty($arrAchModuleSettings[$strModule]))? $this->user->lang('aw_cronmodule_inf_'.$strModule) : '',
+				'NAME'		=> $module_name,
+				'TITLE'		=> $module_lang[$use_lang]['title'],
+				'SETTINGS'	=> ($blnSettings)? $module_settings : '',
 			));
 		}
 		
@@ -318,5 +342,4 @@ class awards_manage_achievements extends page_generic
 
 }
 registry::register('awards_manage_achievements');
-
 ?>

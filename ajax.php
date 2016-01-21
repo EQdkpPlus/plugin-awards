@@ -40,6 +40,7 @@ class AjaxAwards extends page_generic {
 			'active'	=> array('process' => 'set_active'),
 			'special'	=> array('process' => 'set_special'),
 			'sort'		=> array('process' => 'set_sort_ids'),
+			'module'	=> array('process' => 'module_settings'),
 		);
 		parent::__construct(false, $handler);
 		$this->process();
@@ -114,6 +115,34 @@ class AjaxAwards extends page_generic {
 				'error_code' => 0,
 				'error' => $this->user->lang('success')
 			)));
+		}
+		
+		die(json_encode(array(
+			'error_code' => 1,
+			'error' => $this->user->lang('error')
+		)));
+	}
+
+
+	/**
+	 *
+	 */
+	public function module_settings(){
+		$strModuleName		= $this->in->get('module_name', '');
+		$jsonModuleSettings	= unsanitize($this->in->get('module_settings', ''));
+		
+		if(!empty($strModuleName)){
+			include_once $this->root_path.'plugins/awards/cronjob/modules/'.$strModuleName.'_cronmodule.class.php';
+			$strModuleClass	= $strModuleName.'_cronmodule';
+			
+			if(class_exists($strModuleClass)){
+				$objModule			= new $strModuleClass;
+				
+				die(json_encode(array(
+					'error_code' => 0,
+					'error' => $objModule->display_settings($jsonModuleSettings)
+				)));
+			}
 		}
 		
 		die(json_encode(array(

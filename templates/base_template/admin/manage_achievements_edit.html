@@ -11,7 +11,7 @@
 <!-- ENDIF -->
 
 <script type="text/javascript">
-	$(document).ready(function() {
+	$(document).ready(function(){
 		//check if the pre-defined icon an svg
 		if({AID}){
 			icon_src = $('input[type="radio"][name="icon"][checked="checked"]').next('img').attr('src');
@@ -81,17 +81,12 @@
 			selected_module = $(this).val();
 			if( !$('#modules option[value="'+selected_module+'"]').attr('disabled') ){
 				$('#modules option[value="'+selected_module+'"]').attr('disabled', 'disabled');
-				new_row = $('#aw_reference_table tr[name="'+selected_module+'"]').html();
-				$("#aw_module_table").find('tbody').append('<tr>'+new_row+'</tr>');
+				new_row = $('#aw_reference_table tr[data-module="'+selected_module+'"]').html();
+				$('#aw_module_table').find('tbody').append('<tr>'+new_row+'</tr>');
+				if($('#aw_reference_table tr[data-module="'+selected_module+'"]').data('settings')) get_module_settings(selected_module);
 			}
 		});
 	});
-	
-	function delete_module_row(obj, module){
-		$('#modules option[value="'+module+'"]').removeAttr('disabled');
-		$('#modules option[value="'+module+'"]').removeAttr('selected');
-		$(obj).parent().parent().remove();
-	}
 	
 	function changecolor(){
 		$('#colorchange').dialog({
@@ -104,6 +99,77 @@
 			}
 		});
 	}
+	
+	function delete_module_row(obj, module){
+		$('#modules option[value="'+module+'"]').removeAttr('disabled');
+		$('#modules option[value="'+module+'"]').removeAttr('selected');
+		$(obj).parent().parent().remove();
+	}
+	
+	function get_module_settings(module){
+		if($('#module_settings div[data-module="'+module+'"]').length){
+			show_module_settings(module);
+			
+		}else{
+			//check if re-opened then read the input and post it via ajax too, so we can instance it directly with the settings
+			settings = $('#aw_module_table input[name="module['+module+'][settings]"]').val();
+			
+			$.post('{EQDKP_ROOT_PATH}plugins/awards/ajax.php{SID}&module', {
+					module_name: module,
+					module_settings: (settings.length != 0)? settings : '',
+					
+				}, function(response){
+					response = $.parseJSON(response);
+					
+					if(response.error_code == 0){
+						$('#module_settings').append('<div data-module="'+module+'">'+response.error+'</div>');
+						show_module_settings(module);
+						
+					}else{
+						$('#notify_container').notify('create', 'error', {text: response.error + response.error_code, title: {L_error|jsencode}, custom: true,}, {expires: 3000, speed: 1000});
+					}
+			});
+		}
+	}
+	
+	function show_module_settings(module){
+		$('#module_settings div[data-module="'+module+'"]').dialog({
+			title: {L_settings|jsencode},
+			height: 'auto',
+			width: 500,
+			modal: true,
+			buttons: {
+				{L_save|jsencode}: function() {
+					//store the settings into input as json before closing window
+					$(this).dialog('destroy');
+					
+					$('#aw_module_table input[name="module['+module+'][settings]"]').val(
+						JSON.stringify( $('#module_settings div[data-module="'+module+'"] :input').serializeObject() )
+					);
+				}
+			},
+			close: function(event, ui){
+				$(this).dialog('destroy');
+			}
+		});
+	}
+	
+	$.fn.serializeObject = function(){
+		var o = { };
+		var a = this.serializeArray();
+		
+		$.each(a, function(){
+			if (o[this.name]){
+				if(!o[this.name].push) o[this.name] = [o[this.name]];
+				o[this.name].push(this.value || '');
+				
+			}else{
+				o[this.name] = this.value || '';
+			}
+		});
+		
+		return o;
+	};
 </script>
 <style>
 	table tr.colorswitch { line-height: 60px; }
@@ -160,8 +226,9 @@
 				<tr>
 					<td><input type="hidden" name="module[{module_row.NAME}][name]" value="{module_row.NAME}" />{module_row.TITLE}</td>
 					<td style="padding: 2px 0px 0px;">
-						<!-- IF module_row.ADDITION -->
-						<input type="text" name="module[{module_row.NAME}][value]" value="{module_row.VALUE}" class="input" style="height: 13px;" size="3" /> {module_row.VALUE_TEXT}
+						<!-- IF module_row.SETTINGS -->
+						<input type="hidden" name="module[{module_row.NAME}][settings]" value="{module_row.SETTINGS}" />
+						<button type="button" onclick="get_module_settings('{module_row.NAME}');" style="font-size: 10px;">{L_settings}</button>
 						<!-- ENDIF -->
 					</td>
 					<td><i class="fa fa-trash-o fa-lg hand" title="{L_aw_module_row_delete}"  onclick="delete_module_row(this, '{module_row.NAME}');"></i></td>
@@ -222,15 +289,18 @@
 </form>
 
 <table id="aw_reference_table" style="display:none;">
-	<!-- BEGIN all_modules_row -->
-	<tr name="{all_modules_row.NAME}">
-		<td><input type="hidden" name="module[{all_modules_row.NAME}][name]" value="{all_modules_row.NAME}" />{all_modules_row.TITLE}</td>
+	<!-- BEGIN ref_modules_row -->
+	<tr data-module="{ref_modules_row.NAME}" data-settings="<!-- IF ref_modules_row.SETTINGS -->true<!-- ELSE -->false<!-- ENDIF -->">
+		<td><input type="hidden" name="module[{ref_modules_row.NAME}][name]" value="{ref_modules_row.NAME}" />{ref_modules_row.TITLE}</td>
 		<td style="padding: 2px 0px 0px;">
-			<!-- IF all_modules_row.ADDITION -->
-			<input type="text" name="module[{all_modules_row.NAME}][value]" value="" class="input" style="height: 13px;" size="3" /> {all_modules_row.VALUE_TEXT}
+			<!-- IF ref_modules_row.SETTINGS -->
+			<input type="hidden" name="module[{ref_modules_row.NAME}][settings]" value="" />
+			<button type="button" onclick="get_module_settings('{ref_modules_row.NAME}');" style="font-size: 10px;">{L_settings}</button>
 			<!-- ENDIF -->
 		</td>
-		<td><i class="fa fa-trash-o fa-lg hand" title="{L_aw_module_row_delete}"  onclick="delete_module_row(this, '{all_modules_row.NAME}');"></i></td>
+		<td><i class="fa fa-trash-o fa-lg hand" title="{L_aw_module_row_delete}"  onclick="delete_module_row(this, '{ref_modules_row.NAME}');"></i></td>
 	</tr>
-	<!-- END all_modules_row -->
+	<!-- END ref_modules_row -->
 </table>
+
+<div id="module_settings" style="display:none;"></div>

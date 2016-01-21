@@ -58,6 +58,7 @@ $lang = array(
   // Admin
   'aw_manage_achievements'		=> 'Erfolge verwalten',
   'aw_manage_assignments'		=> 'Zuweisungen verwalten',
+  'aw_manage_cronmodules'		=> 'Module verwalten',
   'aw_tab_assign'				=> '<i class="adminicon"></i>Alle Zuweisungen',
   'aw_tab_achieve'				=> '<i class="adminicon"></i>Alle Erfolge',
   
@@ -106,15 +107,6 @@ $lang = array(
   'aw_module_all'				=> 'Alle',
   'aw_module_any'				=> 'Eines',
   'aw_module_choose_option'		=> '-- Wähle eine Bedingung --',
-  
-  'aw_cronmodule_raids'			=> 'Charakter hat an [x] Raids teilgenommen',
-  'aw_cronmodule_inf_raids'		=> 'Raids',
-  'aw_cronmodule_birthday'		=> 'Benutzer hat Geburtstag',
-  'aw_cronmodule_cap'			=> 'Charakter erhielt über [x] DKP',
-  'aw_cronmodule_inf_cap'		=> 'DKP',
-  'aw_cronmodule_items'			=> 'Charakter erhielt über [x] Items',
-  'aw_cronmodule_inf_items'		=> 'Items',
-  /* PUT HERE THE LANGUAGE STRIPES OF YOUR OWN MODULE */
   
   
   // System Messages

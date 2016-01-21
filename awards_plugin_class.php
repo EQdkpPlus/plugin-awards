@@ -196,17 +196,23 @@ class awards extends plugin_generic
 		$admin_menu = array (array(
 			'name' => $this->user->lang('awards'),
 			'icon' => 'fa fa-mortar-board',
-			1 => array (
+			1 => array(
 				'link'  => 'plugins/awards/admin/manage_achievements.php'.$this->SID,
 				'text'  => $this->user->lang('aw_manage_achievements'),
 				'check' => 'a_awards_manage',
 				'icon'  => 'fa-gift'
 			),
-			2 => array (
+			2 => array(
 				'link'  => 'plugins/awards/admin/manage_assignments.php'.$this->SID,
 				'text'  => $this->user->lang('aw_manage_assignments'),
 				'check' => 'a_awards_manage',
 				'icon'  => 'fa-list'
+			),
+			3 => array(
+				'link'	=> 'plugins/awards/admin/manage_cronmodules.php'.$this->SID,
+				'text'  => $this->user->lang('aw_manage_cronmodules'),
+				'check' => 'a_awards_manage',
+				'icon'  => 'fa-tasks'
 			),
 		));
 		
