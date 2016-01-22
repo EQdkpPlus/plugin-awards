@@ -24,7 +24,9 @@ if(!defined('EQDKP_INC')){
 }
 
 abstract class cronmodules extends gen_class {
-	public function __construct(){}
+	public function __construct($arrSettings=''){
+		if(!empty($arrSettings) && is_array($arrSettings)) $this->settings = $arrSettings;
+	}
 	
 	abstract public function cron_process($intAchID, $arrMemberIDs);
 	

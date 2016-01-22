@@ -51,7 +51,22 @@ class dkp_cronmodule extends cronmodules {
 	}
 	
 	public function cron_process($intAchID, $arrMemberIDs){
-		return true;
+		$arrMdkpIDs	= (empty($this->settings['mdkp']))? $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list'))) : $this->settings['mdkp'];
+		
+		$arrCountMemberIDs = array();
+		foreach($arrMemberIDs as $intMemberID){
+			foreach($arrMdkpIDs as $intMdkpID){
+				$intCurrentPoints = $this->pdh->get('points', 'current_history', array($intMemberID, $intMultiDKP));
+				if($intCurrentPoints > 0) $arrCountMemberIDs[$intMemberID] = $arrCountMemberIDs[$intMemberID] + $intCurrentPoints;
+			}
+		}
+		
+		$arrMemberIDs = array();
+		foreach($arrCountMemberIDs as $intMemberID => $intCurrentPoints){
+			if($intCurrentPoints >= $this->settings['dkp']) $arrMemberIDs[] = $intMemberID;
+		}
+		
+		return $arrMemberIDs;
 	}
 	
 	public function display_settings($jsonSettings){
@@ -82,46 +97,5 @@ class dkp_cronmodule extends cronmodules {
 		
 		return $htmlout;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	public $requiredPoints = NULL;	
-
-
-	public function run($intAchID, $arrMemberIDs){
-		if($arrMemberIDs){
-			$returnMemberIDs = array();
-			$this->get_data($intAchID);
-			$arrMultiDKPs = $this->pdh->get('multidkp', 'id_list');
-			
-			foreach($arrMultiDKPs as $intMultiDKP)
-				foreach($arrMemberIDs as $intMemberID){
-					$current_points = $this->pdh->get('points', 'current_history', array($intMemberID, $intMultiDKP));
-					
-					if($current_points >= $this->requiredPoints)
-						$returnMemberIDs[] = $intMemberID;
-				}
-			
-			$returnMemberIDs = array_unique($returnMemberIDs);
-			
-			if($returnMemberIDs) return $returnMemberIDs;
-			return false;
-		}
-		return false;
-	}
-
-	//fetch module settings of award
-	public function get_data($intAchID){
-		$strModuleData = unserialize( $this->pdh->get('awards_achievements', 'module_set', array($intAchID)) );
-		$this->requiredPoints = (isset($strModuleData['cap']))? $strModuleData['cap'] : NULL;
-	}
-	
 }
 ?>

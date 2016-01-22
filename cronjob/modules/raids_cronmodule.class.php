@@ -46,7 +46,6 @@ class raids_cronmodule extends cronmodules {
 	);
 	
 	public function cron_process($intAchID, $arrMemberIDs){
-		if(empty($this->settings['event'])) ;
 		$arrEventIDs	= (empty($this->settings['event']))? $this->pdh->get('event', 'id_list') : $this->settings['event'];
 		$arrAllRaidIDs	= $this->pdh->aget('raid', 'raidids4eventid', 0, array($arrEventIDs));
 		
@@ -54,47 +53,17 @@ class raids_cronmodule extends cronmodules {
 		foreach($arrAllRaidIDs as $arrRaidIDs){
 			foreach($arrRaidIDs as $intRaidID){
 				foreach($this->pdh->get('raid', 'raid_attendees', array($intRaidID)) as $intRaidMemberID){
-					#if(in_array($intRaidMemberID, $arrMemberIDs) $arrCountMemberIDs[$intRaidMemberID] = $arrCountMemberIDs[$intRaidMemberID] + 1;
+					if(in_array($intRaidMemberID, $arrMemberIDs)) $arrCountMemberIDs[$intRaidMemberID] = $arrCountMemberIDs[$intRaidMemberID] + 1;
 				}
 			}
 		}
 		
-		d($arrCountMemberIDs);
+		$arrMemberIDs = array();
+		foreach($arrCountMemberIDs as $intMemberID => $intRaidCounter){
+			if($intRaidCounter >= $this->settings['raids']) $arrMemberIDs[] = $intMemberID;
+		}
 		
-		
-		
-		/*foreach($arrMemberIDs as $intMemberID){
-			$arrRaidsOfMember = $this->pdh->get('raid', 'raidids4memberid', array($intMemberID));
-			
-			if(count($arrRaidsOfMember) >= $this->requiredRaids)
-				$returnMemberIDs[] = $intMemberID;
-		}*/
-		
-		
-		
-		
-		
-		
-		
-		
-		/*if($arrMemberIDs){
-			$this->get_data($intAchID);
-			
-			$returnMemberIDs = array();
-			foreach($arrMemberIDs as $intMemberID){
-				$arrRaidsOfMember = $this->pdh->get('raid', 'raidids4memberid', array($intMemberID));
-				
-				if(count($arrRaidsOfMember) >= $this->requiredRaids)
-					$returnMemberIDs[] = $intMemberID;
-			}
-			
-			if($returnMemberIDs) return $returnMemberIDs;
-			return false;
-		}*/
-		
-		
-		
-		return array();
+		return $arrMemberIDs;
 	}
 	
 	public function display_settings($jsonSettings){
@@ -125,43 +94,5 @@ class raids_cronmodule extends cronmodules {
 		
 		return $htmlout;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	public $requiredRaids = 25;	
-	
-	public function run($intAchID, $arrMemberIDs){
-		if($arrMemberIDs){
-			$this->get_data($intAchID);
-			
-			$returnMemberIDs = array();
-			foreach($arrMemberIDs as $intMemberID){
-				$arrRaidsOfMember = $this->pdh->get('raid', 'raidids4memberid', array($intMemberID));
-				
-				if(count($arrRaidsOfMember) >= $this->requiredRaids)
-					$returnMemberIDs[] = $intMemberID;
-			}
-			
-			if($returnMemberIDs) return $returnMemberIDs;
-			return false;
-		}
-		return false;
-	}
-	
-	//fetch module settings of award
-	public function get_data($intAchID){
-		$strModuleData = unserialize( $this->pdh->get('awards_achievements', 'module_set', array($intAchID)) );
-		$this->requiredRaids = (isset($strModuleData['raids']))? $strModuleData['raids'] : 25;
-	}
-	
 }
 ?>

@@ -220,18 +220,18 @@
 		<br /><span>{L_aw_auto_assign_help}</span></dt>
 		<dd>
 			{DD_MODULE_COND} <span class="module_show">{L_aw_module_condition}</span>
-			<table id="aw_module_table" class="table fullwidth colorswitch module_show">
+			<table id="aw_module_table" class="table fullwidth colorswitch module_show" style="margin-left: 30px;">
 				<tbody>
 				<!-- BEGIN module_row -->
 				<tr>
 					<td><input type="hidden" name="module[{module_row.NAME}][name]" value="{module_row.NAME}" />{module_row.TITLE}</td>
-					<td style="padding: 2px 0px 0px;">
+					<td style="width: 15%; padding-top: 2px;">
 						<!-- IF module_row.SETTINGS -->
 						<input type="hidden" name="module[{module_row.NAME}][settings]" value="{module_row.SETTINGS}" />
 						<button type="button" onclick="get_module_settings('{module_row.NAME}');" style="font-size: 10px;">{L_settings}</button>
 						<!-- ENDIF -->
 					</td>
-					<td><i class="fa fa-trash-o fa-lg hand" title="{L_aw_module_row_delete}"  onclick="delete_module_row(this, '{module_row.NAME}');"></i></td>
+					<td style="width: 5%;"><i class="fa fa-trash-o fa-lg hand" title="{L_aw_module_row_delete}"  onclick="delete_module_row(this, '{module_row.NAME}');"></i></td>
 				</tr>
 				<!-- END module_row -->
 				</tbody>
@@ -292,13 +292,13 @@
 	<!-- BEGIN ref_modules_row -->
 	<tr data-module="{ref_modules_row.NAME}" data-settings="<!-- IF ref_modules_row.SETTINGS -->true<!-- ELSE -->false<!-- ENDIF -->">
 		<td><input type="hidden" name="module[{ref_modules_row.NAME}][name]" value="{ref_modules_row.NAME}" />{ref_modules_row.TITLE}</td>
-		<td style="padding: 2px 0px 0px;">
+		<td style="width: 15%; padding-top: 2px;">
 			<!-- IF ref_modules_row.SETTINGS -->
 			<input type="hidden" name="module[{ref_modules_row.NAME}][settings]" value="" />
 			<button type="button" onclick="get_module_settings('{ref_modules_row.NAME}');" style="font-size: 10px;">{L_settings}</button>
 			<!-- ENDIF -->
 		</td>
-		<td><i class="fa fa-trash-o fa-lg hand" title="{L_aw_module_row_delete}"  onclick="delete_module_row(this, '{ref_modules_row.NAME}');"></i></td>
+		<td style="width: 5%;"><i class="fa fa-trash-o fa-lg hand" title="{L_aw_module_row_delete}"  onclick="delete_module_row(this, '{ref_modules_row.NAME}');"></i></td>
 	</tr>
 	<!-- END ref_modules_row -->
 </table>

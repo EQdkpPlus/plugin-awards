@@ -56,7 +56,32 @@ class items_cronmodule extends cronmodules {
 	);
 	
 	public function cron_process($intAchID, $arrMemberIDs){
-		return true;
+		$arrCountMemberIDs = array();
+		
+		if($this->settings['filter'] == 0){
+			$arrPoolIDs	= (empty($this->settings['pool']))? $this->pdh->get('itempool', 'id_list') : $this->settings['pool'];
+			
+			foreach($this->pdh->get('item', 'id_list') as $intItemID){
+				$intPoolID		= $this->pdh->get('item', 'itempool_id', array($intItemID));
+				$intMemberID	= $this->pdh->get('item', 'buyer', array($intItemID));
+				
+				if(in_array($intPoolID, $arrPoolIDs) && in_array($intMemberID, $arrMemberIDs)) $arrCountMemberIDs[$intMemberID] = $arrCountMemberIDs[$intMemberID] + 1;
+			}
+			
+		}else{
+			foreach($this->pdh->get('item', 'ids_by_ingameid', array($this->settings['gameid'])) as $intItemID){
+				$intMemberID	= $this->pdh->get('item', 'buyer', array($intItemID));
+				
+				if(in_array($intMemberID, $arrMemberIDs)) $arrCountMemberIDs[$intMemberID] = $arrCountMemberIDs[$intMemberID] + 1;
+			}
+		}
+		
+		$arrMemberIDs = array();
+		foreach($arrCountMemberIDs as $intMemberID => $intItemCounter){
+			if($intItemCounter >= $this->settings['items']) $arrMemberIDs[] = $intMemberID;
+		}
+		
+		return $arrMemberIDs;
 	}
 	
 	public function display_settings($jsonSettings){
@@ -95,7 +120,7 @@ class items_cronmodule extends cronmodules {
 		<script type="text/javascript">
 			$("#'.$hash_items.'").spinner({min: 0, max: 1000, step: 5});
 			$("#'.$hash_pool.'").multiselect();
-			$("#'.$hash_filter.' :input").change(function(event){
+			$("#'.$hash_filter.' :input").change(function(){
 				if( $(this).val() == 0){
 					$("#'.$hash_gameid.'").parent().parent().hide();
 					$("#'.$hash_pool.'").parent().parent().show();
@@ -114,44 +139,5 @@ class items_cronmodule extends cronmodules {
 		
 		return $htmlout;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	public $requiredItems = 25;	
-
-
-	public function run($intAchID, $arrMemberIDs){
-		if($arrMemberIDs){
-			$this->get_data($intAchID);
-			
-			$returnMemberIDs = array();
-			foreach($arrMemberIDs as $intMemberID){
-				$arrItems = $this->pdh->get('item', 'itemids4memberid', array($intMemberID));
-				
-				if(count($arrItems) >= $this->requiredItems)
-					$returnMemberIDs[] = $intMemberID;
-			}
-			
-			if($returnMemberIDs) return $returnMemberIDs;
-			return false;
-		}
-		return false;
-	}
-
-	//fetch module settings of award
-	public function get_data($intAchID){
-		$strModuleData = unserialize( $this->pdh->get('awards_achievements', 'module_set', array($intAchID)) );
-		$this->requiredItems = (isset($strModuleData['items']))? $strModuleData['items'] : 25;
-	}
-	
 }
 ?>

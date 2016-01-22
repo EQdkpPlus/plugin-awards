@@ -96,17 +96,36 @@ class awards_manage_cronmodules extends page_generic
 	  */
 	public function display(){
 		
-		$this->timekeeper->del_cron('awards');
+		#$this->timekeeper->del_cron('awards');
 		
-		$this->timekeeper->add_cron('awards', array('extern' => true, 'ajax' => false, 'delay' => false, 'repeat' => true, 'repeat_type' => 'daily', 'active' => true, 'path' => '/plugins/awards/cronjob/', 'editable' => true, 'description'	=> 'Plugin: Awards'));
+		#$this->timekeeper->add_cron('awards', array('extern' => true, 'ajax' => false, 'delay' => false, 'repeat' => true, 'repeat_type' => 'daily', 'active' => true, 'path' => '/plugins/awards/cronjob/', 'editable' => true, 'description'	=> 'Plugin: Awards'));
 		
 		
 		/*
-		include $this->root_path.'plugins/awards/cronjob/module/wow_cronmodule.class.php';
-		$m = new wow_cronmodule(3, array('opt' => 74));
-		var_dump($m->requirements());
-		*/
+		$this->game->new_object('bnet_armory', 'armory', array(unsanitize($this->config->get('uc_server_loc')), $this->config->get('uc_data_lang')));
+		$strMemberName		= unsanitize($this->pdh->get('member', 'name', array(137)));
+		$strMemberServer	= unsanitize($this->pdh->get('member', 'profile_field', array(137, 'servername')));
+		$strServerName		= ($strMemberServer != '') ? $strMemberServer : unsanitize($this->config->get('servername'));
+		$arrCharData		= $this->game->obj['armory']->character($strMemberName, $strServerName);
 		
+		//check achievement
+		//in_array(9060, $arrCharData['achievements']['achievementsCompleted']);
+		
+		//check title
+		//foreach($arrCharData['titles'] as $arrTitle){
+		//	if($arrTitle['id'] == 143) d('TRUE');
+		//}
+		
+		//check achpoints
+		//if($arrCharData['achievementPoints'] >= 100) d('TRUE');
+		
+		//check honorkills
+		//if($arrCharData['totalHonorableKills'] >= 100) d('TRUE');
+		
+		#d(isset($arrCharData['achievements']['achievementsCompleted'][$id]));
+		d('--------------------------------------');
+		#d($arrCharData);die;
+		*/
 		
 		
 		// -- EQDKP ---------------------------------------------------------------
