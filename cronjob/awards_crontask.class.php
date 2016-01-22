@@ -41,7 +41,7 @@ if ( !class_exists( "awards_crontask" ) ) {
 					$arrAchModuleSettings	= unserialize($this->pdh->get('awards_achievements', 'module_set', array($intAchID)));
 					$arrAchModuleConditions	= $arrAchModules['conditions'];
 					$arrAchModules			= array_slice($arrAchModules, 1);
-	d('------------');d('------------');
+					
 					if($arrAchModuleConditions == 'all'){
 						foreach($arrAchModules as $strAchModule){
 							include $this->root_path.'plugins/awards/cronjob/modules/'.$strAchModule.'_cronmodule.class.php';

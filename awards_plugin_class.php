@@ -208,12 +208,6 @@ class awards extends plugin_generic
 				'check' => 'a_awards_manage',
 				'icon'  => 'fa-list'
 			),
-			3 => array(
-				'link'	=> 'plugins/awards/admin/manage_cronmodules.php'.$this->SID,
-				'text'  => $this->user->lang('aw_manage_cronmodules'),
-				'check' => 'a_awards_manage',
-				'icon'  => 'fa-tasks'
-			),
 		));
 		
 		return $admin_menu;

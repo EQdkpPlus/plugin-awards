@@ -53,7 +53,7 @@ class raids_cronmodule extends cronmodules {
 		foreach($arrAllRaidIDs as $arrRaidIDs){
 			foreach($arrRaidIDs as $intRaidID){
 				foreach($this->pdh->get('raid', 'raid_attendees', array($intRaidID)) as $intRaidMemberID){
-					if(in_array($intRaidMemberID, $arrMemberIDs)) $arrCountMemberIDs[$intRaidMemberID] = $arrCountMemberIDs[$intRaidMemberID] + 1;
+					if(isset($arrMemberIDs[$intRaidMemberID])) $arrCountMemberIDs[$intRaidMemberID] = $arrCountMemberIDs[$intRaidMemberID] + 1;
 				}
 			}
 		}

@@ -65,14 +65,14 @@ class items_cronmodule extends cronmodules {
 				$intPoolID		= $this->pdh->get('item', 'itempool_id', array($intItemID));
 				$intMemberID	= $this->pdh->get('item', 'buyer', array($intItemID));
 				
-				if(in_array($intPoolID, $arrPoolIDs) && in_array($intMemberID, $arrMemberIDs)) $arrCountMemberIDs[$intMemberID] = $arrCountMemberIDs[$intMemberID] + 1;
+				if(isset($arrPoolIDs[$intPoolID]) && isset($arrMemberIDs[$intMemberID])) $arrCountMemberIDs[$intMemberID] = $arrCountMemberIDs[$intMemberID] + 1;
 			}
 			
 		}else{
 			foreach($this->pdh->get('item', 'ids_by_ingameid', array($this->settings['gameid'])) as $intItemID){
 				$intMemberID	= $this->pdh->get('item', 'buyer', array($intItemID));
 				
-				if(in_array($intMemberID, $arrMemberIDs)) $arrCountMemberIDs[$intMemberID] = $arrCountMemberIDs[$intMemberID] + 1;
+				if(isset($arrMemberIDs[$intMemberID])) $arrCountMemberIDs[$intMemberID] = $arrCountMemberIDs[$intMemberID] + 1;
 			}
 		}
 		
