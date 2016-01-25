@@ -142,7 +142,7 @@ class awards extends plugin_generic
 		// install ntfy and cron
 		$this->ntfy->addNotificationType('awards_new_award', 'notification_awards_new_award', 'awards', 0, 1, 0, NULL, 3, 'fa-gift');
 		
-		$this->timekeeper->add_cron(
+		$this->cronjobs->add_cron(
 			'awards', array(
 				'extern'		=> true,
 				'ajax'			=> true,
@@ -170,7 +170,7 @@ class awards extends plugin_generic
 		}
 		
 		$this->ntfy->deleteNotificationType(array('awards_new_award'));
-		$this->timekeeper->del_cron('awards');
+		$this->cronjobs->del_cron('awards');
 	}
 
 
