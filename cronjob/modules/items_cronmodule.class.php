@@ -98,7 +98,7 @@ class items_cronmodule extends cronmodules {
 		$hmultiselect_pool	= new hmultiselect('pool', array('id'=>$hash_pool, 'options' => $all_pools, 'value' => $this->settings['pool']));
 		$htext_gameid		= new htext('gameid', array('id'=>$hash_gameid, 'size' => 20));
 		
-		$htmlout = '<fieldset class="settings mediumsettings">
+		$htmlout = '<fieldset class="settings">
 			<legend>'.$this->lang('title').'</legend>
 			<dl>
 				<dt><label>'.$this->lang('items').'</label></dt>

@@ -76,7 +76,7 @@ class raids_cronmodule extends cronmodules {
 		$hspinner_raids		= new htext('raids', array('id'=>$hash_raids, 'value' => $this->settings['raids'], 'size' => 5));
 		$hmultiselect_event	= new hmultiselect('event', array('id'=>$hash_event, 'options' => $all_events, 'value' => $this->settings['event']));
 		
-		$htmlout = '<fieldset class="settings mediumsettings">
+		$htmlout = '<fieldset class="settings">
 			<legend>'.$this->lang('title').'</legend>
 			<dl>
 				<dt><label>'.$this->lang('raids').'</label></dt>

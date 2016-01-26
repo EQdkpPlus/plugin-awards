@@ -131,7 +131,7 @@ class wow_cronmodule extends cronmodules {
 		$htext_achpoints	= new htext('achpoints', array('id'=>$hash_achpoints, 'value' => $this->settings['achpoints'], 'size' => 20));
 		$htext_honorkills	= new htext('honorkills', array('id'=>$hash_honorkills, 'value' => $this->settings['honorkills'], 'size' => 20));
 		
-		$htmlout = '<fieldset class="settings mediumsettings">
+		$htmlout = '<fieldset class="settings">
 			<legend>'.$this->lang('title').'</legend>
 			<dl>
 				<dt><label>'.$this->lang('filter').'</label></dt>

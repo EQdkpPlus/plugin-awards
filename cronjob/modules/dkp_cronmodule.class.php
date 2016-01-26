@@ -79,7 +79,7 @@ class dkp_cronmodule extends cronmodules {
 		$hspinner_dkp		= new htext('dkp', array('id'=>$hash_dkp, 'value' => $this->settings['dkp'], 'size' => 10));
 		$hmultiselect_mdkp	= new hmultiselect('mdkp', array('id'=>$hash_mdkp, 'options' => $all_mdkps, 'value' => $this->settings['mdkp']));
 		
-		$htmlout = '<fieldset class="settings mediumsettings">
+		$htmlout = '<fieldset class="settings">
 			<legend>'.$this->lang('title').'</legend>
 			<dl>
 				<dt><label>'.$this->lang('dkp').'</label></dt>

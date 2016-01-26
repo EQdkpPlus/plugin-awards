@@ -73,7 +73,7 @@ class article_cronmodule extends cronmodules {
 		$hspinner_articles		= new htext('articles', array('id'=>$hash_articles, 'value' => $this->settings['articles'], 'size' => 5));
 		$hmultiselect_category	= new hmultiselect('category', array('id'=>$hash_category, 'options' => $all_categories, 'value' => $this->settings['category']));
 		
-		$htmlout = '<fieldset class="settings mediumsettings">
+		$htmlout = '<fieldset class="settings">
 			<legend>'.$this->lang('title').'</legend>
 			<dl>
 				<dt><label>'.$this->lang('articles').'</label></dt>
