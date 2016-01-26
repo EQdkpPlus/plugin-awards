@@ -83,21 +83,22 @@ class wow_cronmodule extends cronmodules {
 					
 					// ToDo: Here we should make an AND or OR switch with a checkbox
 					// And splitable achieves/titles like: split the achievements and titles by ; or any else
-					if(isset($this->settings['filter']['achievement']) && !empty($this->settings['achievement']) && is_int($this->settings['achievement'])){
+					if(in_array('achievement', $this->settings['filter']) && !empty($this->settings['achievement']) && is_numeric($this->settings['achievement'])){
+						
 						if(in_array($this->settings['achievement'], $arrCharData['achievements']['achievementsCompleted'])) $arrMembers[] = $intMemberID;
 					}
 					
-					if(isset($this->settings['filter']['chartitle']) && !empty($this->settings['chartitle']) && is_int($this->settings['chartitle'])){
+					if(in_array('chartitle', $this->settings['filter']) && !empty($this->settings['chartitle']) && is_numeric($this->settings['chartitle'])){
 						foreach($arrCharData['titles'] as $arrTitle){
 							if($arrTitle['id'] == $this->settings['chartitle']) $arrMembers[] = $intMemberID;
 						}
 					}
 					
-					if(isset($this->settings['filter']['achpoints'])){
+					if(in_array('achpoints', $this->settings['filter'])){
 						if($arrCharData['achievementPoints'] >= $this->settings['achpoints']) $arrMembers[] = $intMemberID;
 					}
 					
-					if(isset($this->settings['filter']['honorkills'])){
+					if(in_array('honorkills', $this->settings['filter'])){
 						if($arrCharData['totalHonorableKills'] >= $this->settings['honorkills']) $arrMembers[] = $intMemberID;
 					}
 				}
