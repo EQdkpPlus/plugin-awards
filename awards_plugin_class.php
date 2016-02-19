@@ -78,12 +78,12 @@ class awards extends plugin_generic
 			'long_description'  => $this->user->lang('awards_long_desc'),
 			'homepage'          => 'https://eqdkp-plus.eu/',
 			'manuallink'        => 'https://eqdkp-plus.eu/wiki/Plugin:_Awards',
-			'plus_version'      => '2.2',
+			'plus_version'      => '2.3',
 			'build'             => $this->build,
 		));
 
 		$this->add_dependency(array(
-			'plus_version'      => '2.2'
+			'plus_version'      => '2.3'
 		));
 
 		// -- Register our permissions ------------------------
@@ -142,7 +142,7 @@ class awards extends plugin_generic
 		// install ntfy and cron
 		$this->ntfy->addNotificationType('awards_new_award', 'notification_awards_new_award', 'awards', 0, 1, 0, NULL, 3, 'fa-gift');
 		
-		$this->timekeeper->add_cron(
+		$this->cronjobs->add_cron(
 			'awards', array(
 				'extern'		=> true,
 				'ajax'			=> true,
@@ -170,7 +170,7 @@ class awards extends plugin_generic
 		}
 		
 		$this->ntfy->deleteNotificationType(array('awards_new_award'));
-		$this->timekeeper->del_cron('awards');
+		$this->cronjobs->del_cron('awards');
 	}
 
 
