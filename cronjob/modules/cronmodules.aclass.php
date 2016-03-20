@@ -42,7 +42,7 @@ abstract class cronmodules extends gen_class {
 		if(array_key_exists($strUserLang, $arrLanguage)){
 			return $arrLanguage[$strUserLang][$strLangCode];
 		}else{
-			return $arrLanguage[$strUserLang][$strLangCode];
+			return $arrLanguage[$strDefaultLang][$strLangCode];
 		}
 	}
 	
