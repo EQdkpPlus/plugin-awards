@@ -14,10 +14,10 @@
 	$(document).ready(function(){
 		//check if the pre-defined icon an svg
 		if({AID}){
-			icon_src = $('input[type="radio"][name="icon"][checked="checked"]').next('img').attr('src');
+			icon_src = $('input[type="radio"][name="icon"][checked="checked"]').next('img').prop('src');
 			icon_ext = icon_src.substring(icon_src.length - 4);
 			if(icon_ext == '.svg'){
-				$('#changecolor_btn').removeAttr('disabled');
+				$('#changecolor_btn').prop('disabled', false);
 				$('#colorchange .icon_preview').load(icon_src, function() {
 					icon_areas = $('#colorchange .icon_preview svg').children('g').length;
 					for(i=1; i<=5; i++){
@@ -30,18 +30,18 @@
 					}
 				});
 			}else{
-				$('#changecolor_btn').attr('disabled', 'disabled');
+				$('#changecolor_btn').prop('disabled', true);
 			}
 		}else{
-			$('#changecolor_btn').attr('disabled', 'disabled');
+			$('#changecolor_btn').prop('disabled', true);
 		}
 		
 		//check if the selected icon an svg
 		$('input[type="radio"][name="icon"]').on('click', function(event){
-			icon_src = $(this).next('img').attr('src');
+			icon_src = $(this).next('img').prop('src');
 			icon_ext = icon_src.substring(icon_src.length - 4);
 			if(icon_ext == '.svg'){
-				$('#changecolor_btn').removeAttr('disabled');
+				$('#changecolor_btn').prop('disabled', false);
 				$('#colorchange .icon_preview').empty();
 				$('#colorchange .icon_preview').load(icon_src, function() {
 					icon_areas = $('#colorchange .icon_preview svg').children('g').length;
@@ -55,7 +55,7 @@
 					}
 				});
 			}else{
-				$('#changecolor_btn').attr('disabled', 'disabled');
+				$('#changecolor_btn').prop('disabled', true);
 			}
 		});
 		
@@ -79,8 +79,8 @@
 		
 		$('#modules').change(function(event){
 			selected_module = $(this).val();
-			if( !$('#modules option[value="'+selected_module+'"]').attr('disabled') ){
-				$('#modules option[value="'+selected_module+'"]').attr('disabled', 'disabled');
+			if( !$('#modules option[value="'+selected_module+'"]').prop('disabled') ){
+				$('#modules option[value="'+selected_module+'"]').prop('disabled', true);
 				new_row = $('#aw_reference_table tr[data-module="'+selected_module+'"]').html();
 				$('#aw_module_table').find('tbody').append('<tr>'+new_row+'</tr>');
 				if($('#aw_reference_table tr[data-module="'+selected_module+'"]').data('settings')) get_module_settings(selected_module);
@@ -101,8 +101,8 @@
 	}
 	
 	function delete_module_row(obj, module){
-		$('#modules option[value="'+module+'"]').removeAttr('disabled');
-		$('#modules option[value="'+module+'"]').removeAttr('selected');
+		$('#modules option[value="'+module+'"]').prop('disabled', false);
+		$('#modules option[value="'+module+'"]').prop('selected', false);
 		$(obj).parent().parent().remove();
 	}
 	
@@ -119,7 +119,7 @@
 					module_settings: (settings.length != 0)? settings : '',
 					
 				}, function(response){
-					response = $.parseJSON(response);
+					response = JSON.parse(response);
 					
 					if(response.error_code == 0){
 						$('#module_settings').append('<div data-module="'+module+'">'+response.error+'</div>');

@@ -18,7 +18,7 @@
 			var value	= $(this).next('.special_cb').val();
 			
 			action		= 'special';
-			data.id		= $(this).next('.special_cb').attr('name');
+			data.id		= $(this).next('.special_cb').prop('name');
 			data.value	= (value == '1')? 0 : 1;
 			
 			ajax(action, data);
@@ -39,7 +39,7 @@
 			var value			= $(this).next('.active_cb').val();
 			
 			action	= 'active';
-			data.id		= $(this).next('.active_cb').attr('name');
+			data.id		= $(this).next('.active_cb').prop('name');
 			data.value	= (value == '1')? 0 : 1;
 			
 			ajax(action, data);
@@ -64,10 +64,10 @@
 		});
 		
 		function ajax(action, data){
-			$.post('{EQDKP_ROOT_PATH}plugins/awards/ajax.php{SID}&'+action, 
+			$.post('{EQDKP_ROOT_PATH}plugins/awards/ajax.php{SID}&'+action,
 				data,
 				function(response){
-					response = $.parseJSON(response);
+					response = JSON.parse(response);
 					
 					if(response.error_code == 0){
 						$('#notify_container').notify('create', 'success', {text: response.error, title: {L_success|jsencode}, custom: true,}, {expires: 3000, speed: 1000});
@@ -78,7 +78,7 @@
 		}
 		
 		$.each( $('div[class^="aw-"] .icon_colors'), function(){
-			aw_icon_id	= $(this).parent().attr('class').substring(3);
+			aw_icon_id	= $(this).parent().prop('class').substring(3);
 			icon_areas	= $('.aw-' + aw_icon_id + ' svg').children('g').length;
 			
 			for(i=1; i<=icon_areas; i++){
@@ -109,5 +109,5 @@
 		<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete_selected_entries}</button>
 		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
 	</div>
-{CSRF_TOKEN}	
+{CSRF_TOKEN}
 </form>
