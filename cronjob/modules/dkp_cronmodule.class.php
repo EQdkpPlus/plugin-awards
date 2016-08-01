@@ -42,7 +42,7 @@ class dkp_cronmodule extends cronmodules {
 	);
 	protected $settings = array(
 		'dkp'	=> 1000,
-		'mdkp'	=> array(1),
+		'mdkp'	=> [1],
 	);
 	
 	static public function check_requirements(){
@@ -76,8 +76,8 @@ class dkp_cronmodule extends cronmodules {
 		$hash_mdkp	= substr(md5(__CLASS__.'mdkp'), 0, 5);
 		
 		$all_mdkps			= $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list')));
-		$hspinner_dkp		= new htext('dkp', array('id'=>$hash_dkp, 'value' => $this->settings['dkp'], 'size' => 10));
-		$hmultiselect_mdkp	= new hmultiselect('mdkp', array('id'=>$hash_mdkp, 'options' => $all_mdkps, 'value' => $this->settings['mdkp']));
+		$hspinner_dkp		= new hspinner('dkp', ['id'=>$hash_dkp, 'value' => $this->settings['dkp'], 'size' => 10, 'min' => 0, 'step' => 100, 'returnJS' => true]);
+		$hmultiselect_mdkp	= new hmultiselect('mdkp', ['id'=>$hash_mdkp, 'options' => $all_mdkps, 'value' => $this->settings['mdkp'], 'returnJS' => true]);
 		
 		$htmlout = '<fieldset class="settings">
 			<legend>'.$this->lang('title').'</legend>
@@ -89,11 +89,7 @@ class dkp_cronmodule extends cronmodules {
 				<dt><label>'.$this->lang('mdkp').'</label></dt>
 				<dd>'.$hmultiselect_mdkp.'</dd>
 			</dl>
-		</fieldset>
-		<script type="text/javascript">
-			$("#'.$hash_dkp.'").spinner({min: 0, step: 100});
-			$("#'.$hash_mdkp.'").multiselect();
-		</script>';
+		</fieldset>';
 		
 		return $htmlout;
 	}

@@ -51,7 +51,7 @@ class items_cronmodule extends cronmodules {
 	protected $settings = array(
 		'items'		=> 25,
 		'filter'	=> 0,
-		'pool'		=> array(1),
+		'pool'		=> [1],
 		'gameid'	=> '',
 	);
 	
@@ -93,10 +93,10 @@ class items_cronmodule extends cronmodules {
 		$hash_gameid	= substr(md5(__CLASS__.'gameid'), 0, 5);
 		
 		$all_pools			= $this->pdh->aget('itempool', 'name', 0, array($this->pdh->get('itempool', 'id_list')));
-		$hspinner_items		= new htext('items', array('id'=>$hash_items, 'value' => $this->settings['items'], 'size' => 5));
-		$hradio_filter		= new hradio('filter', array('id'=>$hash_filter, 'options' => array(0 => $this->lang('filter_0'), 1 => $this->lang('filter_1')), 'default' => $this->settings['filter']));
-		$hmultiselect_pool	= new hmultiselect('pool', array('id'=>$hash_pool, 'options' => $all_pools, 'value' => $this->settings['pool']));
-		$htext_gameid		= new htext('gameid', array('id'=>$hash_gameid, 'size' => 20));
+		$hspinner_items		= new hspinner('items', ['id'=>$hash_items, 'value' => $this->settings['items'], 'size' => 6, 'min' => 0, 'max' => 10000, 'step' => 5, 'returnJS' => true]);
+		$hradio_filter		= new hradio('filter', ['id'=>$hash_filter, 'options' => array(0 => $this->lang('filter_0'), 1 => $this->lang('filter_1')), 'default' => $this->settings['filter']]);
+		$hmultiselect_pool	= new hmultiselect('pool', ['id'=>$hash_pool, 'options' => $all_pools, 'value' => $this->settings['pool'], 'returnJS' => true]);
+		$htext_gameid		= new htext('gameid', ['id'=>$hash_gameid, 'size' => 20]);
 		
 		$htmlout = '<fieldset class="settings">
 			<legend>'.$this->lang('title').'</legend>
@@ -118,8 +118,6 @@ class items_cronmodule extends cronmodules {
 			</dl>
 		</fieldset>
 		<script type="text/javascript">
-			$("#'.$hash_items.'").spinner({min: 0, max: 1000, step: 5});
-			$("#'.$hash_pool.'").multiselect();
 			$("#'.$hash_filter.' :input").change(function(){
 				if( $(this).val() == 0){
 					$("#'.$hash_gameid.'").parent().parent().hide();

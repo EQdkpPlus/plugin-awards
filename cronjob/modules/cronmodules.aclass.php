@@ -53,17 +53,6 @@ abstract class cronmodules extends gen_class {
 			if(substr($key, -2) == '[]') $key = substr($key, 0, mb_strlen($key, 'UTF-8') - 2);
 			$this->settings[$key] = $val;
 		}
-		
-		//parse JS serliazed strings	-- NOT WORKING for multiple inputs
-		/*if(!empty($strSettings)){
-			$settings = explode('&', $strSettings);
-			array_walk($settings, function($val, $key) use(&$arrSettings){
-				$setting = explode('=', $val);
-				$arrSettings[$setting[0]] = $setting[1];
-			}, $arrSettings);
-			
-			$this->settings = $arrSettings;
-		}*/
 	}
 }
 ?>

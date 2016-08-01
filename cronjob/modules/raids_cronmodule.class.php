@@ -42,7 +42,7 @@ class raids_cronmodule extends cronmodules {
 	);
 	protected $settings = array(
 		'raids'	=> 25,
-		'event'	=> array(),
+		'event'	=> [],
 	);
 	
 	public function cron_process($intAchID, $arrMemberIDs){
@@ -73,8 +73,8 @@ class raids_cronmodule extends cronmodules {
 		$hash_event	= substr(md5(__CLASS__.'event'), 0, 5);
 		
 		$all_events			= $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list')));
-		$hspinner_raids		= new htext('raids', array('id'=>$hash_raids, 'value' => $this->settings['raids'], 'size' => 5));
-		$hmultiselect_event	= new hmultiselect('event', array('id'=>$hash_event, 'options' => $all_events, 'value' => $this->settings['event']));
+		$hspinner_raids		= new hspinner('raids', ['id'=>$hash_raids, 'value' => $this->settings['raids'], 'size' => 5, 'min' => 0, 'max' => 10000, 'step' => 5, 'returnJS' => true]);
+		$hmultiselect_event	= new hmultiselect('event', ['id'=>$hash_event, 'options' => $all_events, 'value' => $this->settings['event'], 'width' => 240, 'returnJS' => true]);
 		
 		$htmlout = '<fieldset class="settings">
 			<legend>'.$this->lang('title').'</legend>
@@ -86,11 +86,7 @@ class raids_cronmodule extends cronmodules {
 				<dt><label>'.$this->lang('event').'</label></dt>
 				<dd>'.$hmultiselect_event.'</dd>
 			</dl>
-		</fieldset>
-		<script type="text/javascript">
-			$("#'.$hash_raids.'").spinner({min: 0, max: 1000, step: 5});
-			$("#'.$hash_event.'").multiselect();
-		</script>';
+		</fieldset>';
 		
 		return $htmlout;
 	}

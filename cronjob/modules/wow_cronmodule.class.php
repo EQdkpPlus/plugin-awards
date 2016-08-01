@@ -56,7 +56,7 @@ class wow_cronmodule extends cronmodules {
 		),
 	);
 	protected $settings = array(
-		'filter'		=> array('achievement'),
+		'filter'		=> ['achievement'],
 		'achievement'	=> '',
 		'chartitle'		=> '',
 		'achpoints'		=> 10000,
@@ -125,11 +125,11 @@ class wow_cronmodule extends cronmodules {
 			'achpoints'		=> $this->lang('filter_achpoints'),
 			'honorkills'	=> $this->lang('filter_honorkills'),
 		);
-		$hcheckbox_filter	= new hcheckbox('filter', array('id'=>$hash_filter, 'options' => $filter_options, 'value' => $this->settings['filter']));
-		$htext_achievement	= new htext('achievement', array('id'=>$hash_achievement, 'value' => $this->settings['achievement'], 'size' => 7));
-		$htext_chartitle	= new htext('chartitle', array('id'=>$hash_chartitle, 'value' => $this->settings['chartitle'], 'size' => 7));
-		$htext_achpoints	= new htext('achpoints', array('id'=>$hash_achpoints, 'value' => $this->settings['achpoints'], 'size' => 20));
-		$htext_honorkills	= new htext('honorkills', array('id'=>$hash_honorkills, 'value' => $this->settings['honorkills'], 'size' => 20));
+		$hcheckbox_filter	= new hcheckbox('filter', ['id'=>$hash_filter, 'options' => $filter_options, 'value' => $this->settings['filter']]);
+		$htext_achievement	= new htext('achievement', ['id'=>$hash_achievement, 'value' => $this->settings['achievement'], 'size' => 7]);
+		$htext_chartitle	= new htext('chartitle', ['id'=>$hash_chartitle, 'value' => $this->settings['chartitle'], 'size' => 7]);
+		$htext_achpoints	= new hspinner('achpoints', ['id'=>$hash_achpoints, 'value' => $this->settings['achpoints'], 'size' => 20, 'min' => 0, 'step' => 100, 'returnJS' => true]);
+		$htext_honorkills	= new hspinner('honorkills', ['id'=>$hash_honorkills, 'value' => $this->settings['honorkills'], 'size' => 20, 'min' => 0, 'step' => 50, 'returnJS' => true]);
 		
 		$htmlout = '<fieldset class="settings">
 			<legend>'.$this->lang('title').'</legend>
@@ -137,7 +137,6 @@ class wow_cronmodule extends cronmodules {
 				<dt><label>'.$this->lang('filter').'</label></dt>
 				<dd>'.$hcheckbox_filter.'</dd>
 			</dl>
-			
 			<div data-filter="'.$hash_filter.'_achievement">
 				<legend>'.$this->lang('achievement').'</legend>
 				<dl>
@@ -159,7 +158,6 @@ class wow_cronmodule extends cronmodules {
 					<dd>'.$htext_achpoints.'</dd>
 				</dl>
 			</div>
-			
 			<div data-filter="'.$hash_filter.'_honorkills">
 				<legend>'.$this->lang('honorkills').'</legend>
 				<dl>
@@ -169,9 +167,6 @@ class wow_cronmodule extends cronmodules {
 			</div>
 		</fieldset>
 		<script type="text/javascript">
-			$("#'.$hash_honorkills.'").spinner({min: 0, step: 50});
-			$("#'.$hash_achpoints.'").spinner({min: 0, step: 100});
-			
 			$("#'.$hash_filter.'").parent().find(":input").each(function(){
 				$(this).change(function(){
 					handle_'.$hash_filter.'();
