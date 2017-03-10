@@ -129,7 +129,7 @@ class awards_manage_assignments extends page_generic
 	/**
 	  * Edit Page
 	  * display edit page
-	  */	
+	  */
 	public function edit(){
 		$intAssID		= $this->in->get('aid', 0);
 		$intAssDate		= $this->pdh->get('awards_assignments', 'date', array($intAssID));
@@ -155,7 +155,7 @@ class awards_manage_assignments extends page_generic
 		
 		$this->tpl->assign_vars(array(
 			'AID' => $intAssID,
-			'DD_ACHIEVEMENT' => new hdropdown('achievment', array('options' => $achievements, 'value' => (isset($achievement) ? $achievement : ''), 'name', array($intAssID))),
+			'DD_ACHIEVEMENT' => (new hdropdown('achievment', array('options' => $achievements, 'value' => (isset($achievement) ? $achievement : ''), 'name', array($intAssID))))->output(),
 			'DATE'			 => $this->jquery->Calendar('date', $this->time->user_date( (is_int($intAssDate) ? $intAssDate : $this->time->time), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 			'MEMBERS'		 => $this->jquery->MultiSelect('members', $members, ((isset($arrAdjUserIDs)) ? $arrAdjUserIDs : ''), array('width' => 350, 'filter' => true)),
 		));

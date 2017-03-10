@@ -125,11 +125,11 @@ class wow_cronmodule extends cronmodules {
 			'achpoints'		=> $this->lang('filter_achpoints'),
 			'honorkills'	=> $this->lang('filter_honorkills'),
 		);
-		$hcheckbox_filter	= new hcheckbox('filter', ['id'=>$hash_filter, 'options' => $filter_options, 'value' => $this->settings['filter']]);
-		$htext_achievement	= new htext('achievement', ['id'=>$hash_achievement, 'value' => $this->settings['achievement'], 'size' => 7]);
-		$htext_chartitle	= new htext('chartitle', ['id'=>$hash_chartitle, 'value' => $this->settings['chartitle'], 'size' => 7]);
-		$htext_achpoints	= new hspinner('achpoints', ['id'=>$hash_achpoints, 'value' => $this->settings['achpoints'], 'size' => 20, 'min' => 0, 'step' => 100, 'returnJS' => true]);
-		$htext_honorkills	= new hspinner('honorkills', ['id'=>$hash_honorkills, 'value' => $this->settings['honorkills'], 'size' => 20, 'min' => 0, 'step' => 50, 'returnJS' => true]);
+		$hcheckbox_filter	= (new hcheckbox('filter', ['id'=>$hash_filter, 'options' => $filter_options, 'value' => $this->settings['filter']]))->output();
+		$htext_achievement	= (new htext('achievement', ['id'=>$hash_achievement, 'value' => $this->settings['achievement'], 'size' => 7]))->output();
+		$htext_chartitle	= (new htext('chartitle', ['id'=>$hash_chartitle, 'value' => $this->settings['chartitle'], 'size' => 7]))->output();
+		$htext_achpoints	= (new hspinner('achpoints', ['id'=>$hash_achpoints, 'value' => $this->settings['achpoints'], 'size' => 20, 'min' => 0, 'step' => 100, 'returnJS' => true]))->output();
+		$htext_honorkills	= (new hspinner('honorkills', ['id'=>$hash_honorkills, 'value' => $this->settings['honorkills'], 'size' => 20, 'min' => 0, 'step' => 50, 'returnJS' => true]))->output();
 		
 		$htmlout = '<fieldset class="settings">
 			<legend>'.$this->lang('title').'</legend>

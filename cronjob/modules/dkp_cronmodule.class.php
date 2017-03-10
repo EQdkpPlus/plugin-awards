@@ -76,8 +76,8 @@ class dkp_cronmodule extends cronmodules {
 		$hash_mdkp	= substr(md5(__CLASS__.'mdkp'), 0, 5);
 		
 		$all_mdkps			= $this->pdh->aget('multidkp', 'name', 0, array($this->pdh->get('multidkp', 'id_list')));
-		$hspinner_dkp		= new hspinner('dkp', ['id'=>$hash_dkp, 'value' => $this->settings['dkp'], 'size' => 10, 'min' => 0, 'step' => 100, 'returnJS' => true]);
-		$hmultiselect_mdkp	= new hmultiselect('mdkp', ['id'=>$hash_mdkp, 'options' => $all_mdkps, 'value' => $this->settings['mdkp'], 'returnJS' => true]);
+		$hspinner_dkp		= (new hspinner('dkp', ['id'=>$hash_dkp, 'value' => $this->settings['dkp'], 'size' => 10, 'min' => 0, 'step' => 100, 'returnJS' => true]))->output();
+		$hmultiselect_mdkp	= (new hmultiselect('mdkp', ['id'=>$hash_mdkp, 'options' => $all_mdkps, 'value' => $this->settings['mdkp'], 'returnJS' => true]))->output();
 		
 		$htmlout = '<fieldset class="settings">
 			<legend>'.$this->lang('title').'</legend>
