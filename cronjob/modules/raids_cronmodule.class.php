@@ -73,8 +73,8 @@ class raids_cronmodule extends cronmodules {
 		$hash_event	= substr(md5(__CLASS__.'event'), 0, 5);
 		
 		$all_events			= $this->pdh->aget('event', 'name', 0, array($this->pdh->get('event', 'id_list')));
-		$hspinner_raids		= new hspinner('raids', ['id'=>$hash_raids, 'value' => $this->settings['raids'], 'size' => 5, 'min' => 0, 'max' => 10000, 'step' => 5, 'returnJS' => true]);
-		$hmultiselect_event	= new hmultiselect('event', ['id'=>$hash_event, 'options' => $all_events, 'value' => $this->settings['event'], 'width' => 240, 'returnJS' => true]);
+		$hspinner_raids		= (new hspinner('raids', ['id'=>$hash_raids, 'value' => $this->settings['raids'], 'size' => 5, 'min' => 0, 'max' => 10000, 'step' => 5, 'returnJS' => true]))->output();
+		$hmultiselect_event	= (new hmultiselect('event', ['id'=>$hash_event, 'options' => $all_events, 'value' => $this->settings['event'], 'width' => 240, 'returnJS' => true]))->output();
 		
 		$htmlout = '<fieldset class="settings">
 			<legend>'.$this->lang('title').'</legend>

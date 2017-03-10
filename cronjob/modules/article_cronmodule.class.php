@@ -70,8 +70,8 @@ class article_cronmodule extends cronmodules {
 		$hash_category	= substr(md5(__CLASS__.'category'), 0, 5);
 		
 		$all_categories			= $this->pdh->aget('article_categories', 'name', 0, array($this->pdh->get('article_categories', 'id_list')));
-		$hspinner_articles		= new hspinner('articles', ['id'=>$hash_articles, 'value' => $this->settings['articles'], 'size' => 6, 'min' => 0, 'max' => 10000, 'step' => 5, 'returnJS' => true]);
-		$hmultiselect_category	= new hmultiselect('category', ['id'=>$hash_category, 'options' => $all_categories, 'value' => $this->settings['category'], 'returnJS'=>true]);
+		$hspinner_articles		= (new hspinner('articles', ['id'=>$hash_articles, 'value' => $this->settings['articles'], 'size' => 6, 'min' => 0, 'max' => 10000, 'step' => 5, 'returnJS' => true]))->output();
+		$hmultiselect_category	= (new hmultiselect('category', ['id'=>$hash_category, 'options' => $all_categories, 'value' => $this->settings['category'], 'returnJS'=>true]))->output();
 		
 		$htmlout = '<fieldset class="settings">
 			<legend>'.$this->lang('title').'</legend>
