@@ -111,22 +111,23 @@
 			show_module_settings(module);
 			
 		}else{
-			//check if re-opened then read the input and post it via ajax too, so we can instance it directly with the settings
-			settings = $('#aw_module_table input[name="module['+module+'][settings]"]').val();
+			settings	= $('#aw_module_table input[name="module['+module+'][settings]"]').val();
+			csrf_token	= $('form[name="aw_achievement_form"] .contentFooter').next('input[type="hidden"]').val();
+			data		= {
+				module_name: module,
+				module_settings: (settings.length != 0)? settings : '',
+			};
+			data[csrf_token] = csrf_token;
 			
-			$.post('{EQDKP_ROOT_PATH}plugins/awards/ajax.php{SID}&module', {
-					module_name: module,
-					module_settings: (settings.length != 0)? settings : '',
-					
-				}, function(response){
+			$.post('{EQDKP_ROOT_PATH}plugins/awards/ajax.php{SID}&module', data, function(response){
 					response = JSON.parse(response);
 					
-					if(response.error_code == 0){
-						$('#module_settings').append('<div data-module="'+module+'">'+response.error+'</div>');
+					if(!response.error){
+						$('#module_settings').append('<div data-module="'+module+'">'+response.return+'</div>');
 						show_module_settings(module);
 						
 					}else{
-						$('#notify_container').notify('create', 'error', {text: response.error + response.error_code, title: {L_error|jsencode}, custom: true,}, {expires: 3000, speed: 1000});
+						custom_message(response.return.replace('%s', module), {headertxt:{L_error|jsencode}, icon:'error', sticky:true, parent:false});
 					}
 			});
 		}
@@ -177,115 +178,115 @@
 	#colorchange .icon_preview svg { width: 160px; height: 160px; }
 </style>
 
-<form method="post" action="{ACTION}" name="post">
-<fieldset class="settings mediumsettings">
-	<legend><!-- IF AID -->{L_aw_edit_achievement}<!-- ELSE -->{L_aw_add_achievement}<!-- ENDIF --></legend>
-	<dl>
-		<dt><label>{L_name}:</label>
-		<br /><span>{L_aw_name_help}</span></dt>
-		<dd>{ML_NAME}</dd>
-	</dl>
-	<dl>
-		<dt><label>{L_description}:</label>
-		<br /><span>{L_aw_desc_help}</span></dt>
-		<dd>{ML_DESCRIPTION}</dd>
-	</dl>
-	<dl>
-		<dt><label>{L_active}:</label>
-		<br /><span>{L_aw_active_help}</span></dt>
-		<dd>{R_ACTIVE_STATE}</dd>
-	</dl>
-	<dl>
-		<dt><label>{L_aw_special}:</label>
-		<br /><span>{L_aw_special_help}</span></dt>
-		<dd>{R_SPECIAL_STATE}</dd>
-	</dl>
-	<dl>
-		<dt><label>{L_aw_value}:</label>
-		<br/><span>{L_aw_ap_help}</span></dt>
-		<dd>{SPINNER_POINTS}</dd>
-	</dl>
-	<dl>
-		<dt><label>{L_aw_dkp_value}: <!-- IF AID --><i class="fa fa-exclamation-triangle" title="{L_aw_dkp_warn}" style="color:#DD5D00; cursor: help;"></i><!-- ENDIF --></label>
-		<br/><span>{L_aw_dkp_help}</span></dt>
-		<dd>{SPINNER_DKP}</dd>
-	</dl>
-	<dl>
-		<dt><label>{L_event}:</label>
-		<br/><span>{L_aw_event_help}</span></dt>
-		<dd>{DD_EVENT}</dd>
-	</dl>
-	<dl>
-		<dt><label>{L_aw_auto_assign}:</label>
-		<br /><span>{L_aw_auto_assign_help}</span></dt>
-		<dd>
-			{DD_MODULE_COND} <span class="module_show">{L_aw_module_condition}</span>
-			<table id="aw_module_table" class="table fullwidth colorswitch module_show" style="margin-left: 30px; width: auto;">
-				<tbody>
-				<!-- BEGIN module_row -->
-				<tr>
-					<td style="width: 80%;"><input type="hidden" name="module[{module_row.NAME}][name]" value="{module_row.NAME}" />{module_row.TITLE}</td>
-					<td style="padding-top: 2px;">
-						<!-- IF module_row.SETTINGS -->
-						<input type="hidden" name="module[{module_row.NAME}][settings]" value="{module_row.SETTINGS}" />
-						<button type="button" onclick="get_module_settings('{module_row.NAME}');" style="font-size: 10px;">{L_settings}</button>
-						<!-- ENDIF -->
-					</td>
-					<td><i class="fa fa-trash-o fa-lg hand" title="{L_aw_module_row_delete}"  onclick="delete_module_row(this, '{module_row.NAME}');"></i></td>
-				</tr>
-				<!-- END module_row -->
-				</tbody>
-			</table>
-			{DD_MODULES}
-		</dd>
-	</dl>
-	<dl>
-		<dt><label>{L_aw_icon_header}:</label>
-		<br /><span>{L_aw_icon_help}</span></dt>
-		<dd>
-			<button class="mainoption" type="button" id="iubuttonedit" onclick="elfinder_all();"><i class="fa fa-upload"></i> {L_aw_upload_icon}</button>
-			<button class="mainoption" type="button" id="changecolor_btn" onclick="changecolor();"><i class="fa fa-paint-brush"></i> {L_aw_edit_icon}</button>
-		</dd>
-	</dl>
-	<table width="100%" border="0" cellspacing="1" cellpadding="2" class="scrollable-x floatLeft">
-		<!-- IF ICONS -->
-		<!-- BEGIN files_row -->
-		<tr class="colorswitch">
-			<!-- BEGIN fields -->
-			<td class="nowrap" width="16%">
-				<!-- IF files_row.fields.CHECKBOX -->
-				<label><input type="radio" name="icon" {files_row.fields.CHECKED} value="{files_row.fields.NAME}" />
-				{files_row.fields.IMAGE}</label>
-				<!-- ENDIF -->
-			</td>
-			<!-- END fields -->
-		</tr>
-		<!-- END files_row -->
-		<!-- ENDIF -->
-	</table>
-	
-	<div id="colorchange">
-		<div class="colorchange_container">
-			<div class="icon_preview floatLeft"></div>
-			Background: {CP_ICON_LAYER_1}<br />
-			Layer 1: {CP_ICON_LAYER_2}<br />
-			Layer 2: {CP_ICON_LAYER_3}<br />
-			Layer 3: {CP_ICON_LAYER_4}<br />
-			Layer 4: {CP_ICON_LAYER_5}
+<form method="post" action="{ACTION}" name="aw_achievement_form">
+	<fieldset class="settings mediumsettings">
+		<legend><!-- IF AID -->{L_aw_edit_achievement}<!-- ELSE -->{L_aw_add_achievement}<!-- ENDIF --></legend>
+		<dl>
+			<dt><label>{L_name}:</label>
+			<br /><span>{L_aw_name_help}</span></dt>
+			<dd>{ML_NAME}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_description}:</label>
+			<br /><span>{L_aw_desc_help}</span></dt>
+			<dd>{ML_DESCRIPTION}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_active}:</label>
+			<br /><span>{L_aw_active_help}</span></dt>
+			<dd>{R_ACTIVE_STATE}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_aw_special}:</label>
+			<br /><span>{L_aw_special_help}</span></dt>
+			<dd>{R_SPECIAL_STATE}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_aw_value}:</label>
+			<br/><span>{L_aw_ap_help}</span></dt>
+			<dd>{SPINNER_POINTS}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_aw_dkp_value}: <!-- IF AID --><i class="fa fa-exclamation-triangle" title="{L_aw_dkp_warn}" style="color:#DD5D00; cursor: help;"></i><!-- ENDIF --></label>
+			<br/><span>{L_aw_dkp_help}</span></dt>
+			<dd>{SPINNER_DKP}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_event}:</label>
+			<br/><span>{L_aw_event_help}</span></dt>
+			<dd>{DD_EVENT}</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_aw_auto_assign}:</label>
+			<br /><span>{L_aw_auto_assign_help}</span></dt>
+			<dd>
+				{DD_MODULE_COND} <span class="module_show">{L_aw_module_condition}</span>
+				<table id="aw_module_table" class="table fullwidth colorswitch module_show" style="margin-left: 30px; width: auto;">
+					<tbody>
+					<!-- BEGIN module_row -->
+					<tr>
+						<td style="width: 80%;"><input type="hidden" name="module[{module_row.NAME}][name]" value="{module_row.NAME}" />{module_row.TITLE}</td>
+						<td style="padding-top: 2px;">
+							<!-- IF module_row.SETTINGS -->
+							<input type="hidden" name="module[{module_row.NAME}][settings]" value="{module_row.SETTINGS}" />
+							<button type="button" onclick="get_module_settings('{module_row.NAME}');" style="font-size: 10px;">{L_settings}</button>
+							<!-- ENDIF -->
+						</td>
+						<td><i class="fa fa-trash-o fa-lg hand" title="{L_aw_module_row_delete}"  onclick="delete_module_row(this, '{module_row.NAME}');"></i></td>
+					</tr>
+					<!-- END module_row -->
+					</tbody>
+				</table>
+				{DD_MODULES}
+			</dd>
+		</dl>
+		<dl>
+			<dt><label>{L_aw_icon_header}:</label>
+			<br /><span>{L_aw_icon_help}</span></dt>
+			<dd>
+				<button class="mainoption" type="button" id="iubuttonedit" onclick="elfinder_all();"><i class="fa fa-upload"></i> {L_aw_upload_icon}</button>
+				<button class="mainoption" type="button" id="changecolor_btn" onclick="changecolor();"><i class="fa fa-paint-brush"></i> {L_aw_edit_icon}</button>
+			</dd>
+		</dl>
+		<table width="100%" border="0" cellspacing="1" cellpadding="2" class="scrollable-x floatLeft">
+			<!-- IF ICONS -->
+			<!-- BEGIN files_row -->
+			<tr class="colorswitch">
+				<!-- BEGIN fields -->
+				<td class="nowrap" width="16%">
+					<!-- IF files_row.fields.CHECKBOX -->
+					<label><input type="radio" name="icon" {files_row.fields.CHECKED} value="{files_row.fields.NAME}" />
+					{files_row.fields.IMAGE}</label>
+					<!-- ENDIF -->
+				</td>
+				<!-- END fields -->
+			</tr>
+			<!-- END files_row -->
+			<!-- ENDIF -->
+		</table>
+		
+		<div id="colorchange">
+			<div class="colorchange_container">
+				<div class="icon_preview floatLeft"></div>
+				Background: {CP_ICON_LAYER_1}<br />
+				Layer 1: {CP_ICON_LAYER_2}<br />
+				Layer 2: {CP_ICON_LAYER_3}<br />
+				Layer 3: {CP_ICON_LAYER_4}<br />
+				Layer 4: {CP_ICON_LAYER_5}
+			</div>
 		</div>
-	</div>
-	<div class="clear" style="height: 2em;" />
-	
-	<br />
-</fieldset>
+		<div class="clear" style="height: 2em;" />
+		
+		<br />
+	</fieldset>
 
-<div class="contentFooter">
-	<button class="mainoption" type="submit" name="save"><i class="fa fa-check"></i>{L_save}</button>
-	<input type="hidden" name="aid" value="{AID}" />
-	<input type="hidden" name="sort_id" value="{SORT_ID}" />
-	<button class="mainoption" type="button" name="" onclick="window.location.href='{EQDKP_ROOT_PATH}plugins/awards/admin/manage_achievements.php{SID}'"><i class="fa fa-chevron-left"></i>{L_cancel}</button>
-</div>
-{CSRF_TOKEN}
+	<div class="contentFooter">
+		<button class="mainoption" type="submit" name="save"><i class="fa fa-check"></i>{L_save}</button>
+		<input type="hidden" name="aid" value="{AID}" />
+		<input type="hidden" name="sort_id" value="{SORT_ID}" />
+		<button class="mainoption" type="button" name="" onclick="window.location.href='{EQDKP_ROOT_PATH}plugins/awards/admin/manage_achievements.php{SID}'"><i class="fa fa-chevron-left"></i>{L_cancel}</button>
+	</div>
+	{CSRF_TOKEN}
 </form>
 
 <table id="aw_reference_table" style="display:none;">

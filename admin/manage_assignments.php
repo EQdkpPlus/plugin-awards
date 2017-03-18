@@ -162,7 +162,7 @@ class awards_manage_assignments extends page_generic
 		
 		// -- EQDKP ---------------------------------------------------------------
 		$this->core->set_vars(array(
-			'page_title'		=> (($intAssID) ? $this->user->lang('aw_add_assignment').': '.$this->user->lang('aw_add_assignment') : $this->user->lang('aw_add_assignment')),
+			'page_title'		=> (($intAssID) ? $this->user->lang('aw_edit_assignment') : $this->user->lang('aw_add_assignment')),
 			'template_path'		=> $this->pm->get_data('awards', 'template_path'),
 			'template_file'		=> 'admin/manage_assignments_edit.html',
 			'display'			=> true)

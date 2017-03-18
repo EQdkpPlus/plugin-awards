@@ -33,14 +33,14 @@ class AjaxAwards extends page_generic {
 	 * Constructor
 	 */
 	public function __construct(){
-		$this->user->check_auth('a_awards_add');
+		if(!$this->user->check_auth('a_awards_add', false)) $this->display();
 		register("pm");
 		
 		$handler = array(
-			'active'	=> array('process' => 'set_active'),
-			'special'	=> array('process' => 'set_special'),
-			'sort'		=> array('process' => 'set_sort_ids'),
-			'module'	=> array('process' => 'module_settings'),
+			'active'	=> array('process' => 'set_active', 'csrf' => true),
+			'special'	=> array('process' => 'set_special', 'csrf' => true),
+			'sort'		=> array('process' => 'set_sort_ids', 'csrf' => true),
+			'module'	=> array('process' => 'module_settings', 'csrf' => true),
 		);
 		parent::__construct(false, $handler);
 		$this->process();
@@ -58,17 +58,17 @@ class AjaxAwards extends page_generic {
 			if( $this->pdh->put('awards_achievements', 'set_active', array($intAchID, $blnAchActive)) ){
 				$this->pdh->process_hook_queue();
 				
-				die(json_encode(array(
-					'error_code' => 0,
-					'error' => $this->user->lang('success')
-				)));
+				die(json_encode([
+					'error' => 0,
+					'return' => ''
+				]));
 			}
 		}
 		
-		die(json_encode(array(
-			'error_code' => 1,
-			'error' => $this->user->lang('error')
-		)));
+		die(json_encode([
+			'error' => 1,
+			'return' => 'Error: Cannot change state'
+		]));
 	}
 
 
@@ -83,17 +83,17 @@ class AjaxAwards extends page_generic {
 			if( $this->pdh->put('awards_achievements', 'set_special', array($intAchID, $blnAchSpecial)) ){
 				$this->pdh->process_hook_queue();
 				
-				die(json_encode(array(
-					'error_code' => 0,
-					'error' => $this->user->lang('success')
-				)));
+				die(json_encode([
+					'error' => 0,
+					'return' => ''
+				]));
 			}
 		}
 		
-		die(json_encode(array(
-			'error_code' => 1,
-			'error' => $this->user->lang('error')
-		)));
+		die(json_encode([
+			'error' => 1,
+			'return' => 'Error: Cannot change state'
+		]));
 	}
 
 
@@ -111,21 +111,21 @@ class AjaxAwards extends page_generic {
 			}
 			$this->pdh->process_hook_queue();
 			
-			die(json_encode(array(
-				'error_code' => 0,
-				'error' => $this->user->lang('success')
-			)));
+			die(json_encode([
+				'error' => 0,
+				'return' => $this->user->lang('success')
+			]));
 		}
 		
-		die(json_encode(array(
-			'error_code' => 1,
-			'error' => $this->user->lang('error')
-		)));
+		die(json_encode([
+			'error' => 1,
+			'return' => $this->user->lang('error')
+		]));
 	}
 
 
 	/**
-	 *
+	 * Get Module Settings
 	 */
 	public function module_settings(){
 		$strModuleName		= $this->in->get('module_name', '');
@@ -136,27 +136,28 @@ class AjaxAwards extends page_generic {
 			$strModuleClass	= $strModuleName.'_cronmodule';
 			
 			if(class_exists($strModuleClass)){
-				$objModule			= new $strModuleClass;
-				
-				die(json_encode(array(
-					'error_code' => 0,
-					'error' => $objModule->display_settings($jsonModuleSettings)
-				)));
+				die(json_encode([
+					'error' => 0,
+					'return' => (new $strModuleClass)->display_settings($jsonModuleSettings)
+				]));
 			}
 		}
 		
-		die(json_encode(array(
-			'error_code' => 1,
-			'error' => $this->user->lang('error')
-		)));
+		die(json_encode([
+			'error' => 1,
+			'return' => $this->user->lang('aw_module_load_error')
+		]));
 	}
 
 
+	/**
+	 * Fallback if request method not found or auth failed
+	 */
 	public function display(){
-		die(json_encode(array(
-			'error_code' => 1,
-			'error' => $this->user->lang('error')
-		)));
+		die(json_encode([
+			'error' => 1,
+			'return' => 'Error: Bad Request'
+		]));
 	}
 }
 registry::register('AjaxAwards');

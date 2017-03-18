@@ -14,65 +14,62 @@
 		var action	= '';
 		var data	= { };
 		
-		$('.eyeToggleTrigger').on('click', function(){
-			var value	= $(this).next('.special_cb').val();
-			
+		$('.aw_toggle_special').on('click', function(){
 			action		= 'special';
+			value		= $(this).next('.special_cb').val();
 			data.id		= $(this).next('.special_cb').prop('name');
 			data.value	= (value == '1')? 0 : 1;
 			
-			ajax(action, data);
-			
-			if( value == '0' ){
-				$(this).next('.special_cb').val(1);
-				$(this).removeClass('eye');
-				$(this).addClass('eye-gray');
-				
-			}else{
-				$(this).next('.special_cb').val(0);
-				$(this).removeClass('eye-gray');
-				$(this).addClass('eye');
-			}
+			if( $(this).hasClass('aw_toggle_pending') ) return;
+			ajax(action, data, {element:this, value:data.value, classes:['disabled', 'enabled']});
+			// the new inline object = prevent overwriting 'data' & 'value' variable during ajax process, if multiple ajax requests at the same time
 		});
 		
-		$('.activeToggleTrigger').on('click', function(){
-			var value			= $(this).next('.active_cb').val();
-			
-			action	= 'active';
+		$('.aw_toggle_active').on('click', function(){
+			action		= 'active';
+			value		= $(this).next('.active_cb').val();
 			data.id		= $(this).next('.active_cb').prop('name');
 			data.value	= (value == '1')? 0 : 1;
 			
-			ajax(action, data);
 			
-			if( value == '0' ){
-				$(this).next('.active_cb').val(1);
-				$(this).removeClass('fa-square-o icon-color-red');
-				$(this).addClass('fa-check-square-o icon-color-green');
-			}else{
-				$(this).next('.active_cb').val(0);
-				$(this).removeClass('fa-check-square-o icon-color-green');
-				$(this).addClass('fa-square-o icon-color-red');
-			}
+			if( $(this).hasClass('aw_toggle_pending') ) return;
+			ajax(action, data, {element:this, value:data.value, classes:['disabled', 'enabled']});
+			// the new inline object = prevent overwriting 'data' & 'value' variable during ajax process, if multiple ajax requests at the same time
 		});
+		
+		function changeToggleTriggerIcon(element, value, classes){
+			$(element).removeClass('aw_toggle_pending');
+			if(value){
+				$(element).next('input[type="hidden"]').val(value);
+				$(element).switchClass(classes[0], classes[1]);
+			}else{
+				$(element).next('input[type="hidden"]').val(value);
+				$(element).switchClass(classes[1], classes[0]);
+			}
+		}
 		
 		$('#awards_achievements_table tbody').sortable({
 			cancel: '.not-sortable, input, tr th.footer, th',
 			cursor: 'pointer',
 			update: function(){
-				ajax('sort', $('form[name="post"]').serialize());
+				ajax('sort', $('form[name="aw_achievement_form"]').serialize());
 			},
 		});
 		
-		function ajax(action, data){
-			$.post('{EQDKP_ROOT_PATH}plugins/awards/ajax.php{SID}&'+action,
-				data,
+		function ajax(action, data, change_icon=false){
+			csrf_token		= $('form[name="aw_achievement_form"] .contentFooter').next('input[type="hidden"]').val();
+			data[csrf_token] = csrf_token;
+			
+			if(change_icon) $(change_icon.element).addClass('aw_toggle_pending');
+			$.post('{EQDKP_ROOT_PATH}plugins/awards/ajax.php{SID}&'+action, data,
 				function(response){
 					response = JSON.parse(response);
 					
-					if(response.error_code == 0){
-						$('#notify_container').notify('create', 'success', {text: response.error, title: {L_success|jsencode}, custom: true,}, {expires: 3000, speed: 1000});
+					if(!response.error){
+						custom_message(response.return, {headertxt:{L_success|jsencode}, icon:'success', parent:false});
+						if(change_icon) changeToggleTriggerIcon(change_icon.element, change_icon.value, change_icon.classes);
 					}else{
-						$('#notify_container').notify('create', 'error', {text: response.error + response.error_code, title: {L_error|jsencode}, custom: true,}, {expires: 3000, speed: 1000});
+						custom_message(response.return, {headertxt:{L_error|jsencode}, icon:'error', parent:false});
 					}
 			});
 		}
@@ -88,10 +85,27 @@
 	});
 </script>
 <style>
-	div[class^="aw-"] svg { height: 28px; width: 28px; margin: -9px 0px; }
+	div[class^="aw-"] svg{ height:28px; width:28px; margin:-9px 0px; }
+	
+	.aw_toggle_active,
+	.aw_toggle_special					{ cursor:pointer; }
+	
+	.aw_toggle_pending:before,
+	.aw_toggle_active:before,
+	.aw_toggle_special:before			{ font-family:FontAwesome; font-size:16px; }
+	
+	.aw_toggle_active.enabled:before	{ content:'\f046'; color:#00a400; }
+	.aw_toggle_active.disabled:before	{ content:'\f096'; color:#e80000; }
+	
+	.aw_toggle_special.enabled:before	{ content:'\f070'; color:#7d7d7d; }
+	.aw_toggle_special.disabled:before	{ content:'\f06e'; }
+	
+	.aw_toggle_pending					{ animation:fa-spin 1s infinite steps(8); cursor:not-allowed; }
+	.aw_toggle_pending:before			{ content:'\f110' !important; color:inherit !important; }
+	
 </style>
 
-<form method="post" action="{ACTION}" name="post">
+<form method="post" action="{ACTION}" name="aw_achievement_form">
 	<div class="contentHeader">
 		<h1 class="contentTitle">{L_aw_manage_achievements}</h1>
 	</div>
@@ -109,5 +123,5 @@
 		<button class="mainoption" type="button" name="del" onclick="delete_warning();"><i class="fa fa-times"></i>{L_delete_selected_entries}</button>
 		<input type="hidden" name="del" value="1" disabled="disabled" id="mass_del_submit" />
 	</div>
-{CSRF_TOKEN}
+	{CSRF_TOKEN}
 </form>

@@ -192,10 +192,10 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		
 		public function get_html_active($intAchievementID){
 			if($this->get_active($intAchievementID)){
-				return '<i class="fa fa-check-square-o fa-lg icon-color-green activeToggleTrigger" style="cursor: pointer;"></i>
+				return '<i class="fa aw_toggle_active enabled" style="cursor: pointer;"></i>
 						<input type="hidden" class="active_cb" name="'.$intAchievementID.'" value="1"/>';
 			} else {
-				return '<i class="fa fa-square-o fa-lg icon-color-red activeToggleTrigger" style="cursor: pointer;"></i>
+				return '<i class="fa aw_toggle_active disabled" style="cursor: pointer;"></i>
 						<input type="hidden" class="active_cb" name="'.$intAchievementID.'" value="0"/>';
 			}
 		}
@@ -214,10 +214,10 @@ if ( !class_exists( "pdh_r_awards_achievements" ) ) {
 		
 		public function get_html_special($intAchievementID){
 			if($this->get_special($intAchievementID)){
-				return '<div class="eye-gray eyeToggleTrigger"></div>
+				return '<i class="fa aw_toggle_special enabled" data-aid="'.$intAchievementID.'"></i>
 						<input type="hidden" class="special_cb" name="'.$intAchievementID.'" value="1"/>';
 			} else {
-				return '<div class="eye eyeToggleTrigger"></div>
+				return '<i class="fa aw_toggle_special disabled" data-aid="'.$intAchievementID.'"></i>
 						<input type="hidden" class="special_cb" name="'.$intAchievementID.'" value="0"/>';
 			}
 		}

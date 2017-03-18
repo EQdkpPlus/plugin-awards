@@ -125,6 +125,7 @@ $lang = array(
   'aw_assign_success'			=> '%s was<br />%s assigned',
   'aw_assign_nosuccess'			=> '%s could not be assigned',
   'aw_del_assign'				=> 'Assignment(s) deleted',
+  'aw_module_load_error'		=> 'Couldn\'t load Modul.<br />Try again: <a href="javascript:get_module_settings(\'%s\');" onclick="$(this).parent().remove();">Load module</a>',
   
   'aw_confirm_delete_achievement'	=> 'Are you sure, that you will delet all %s achievements? All reached DKP will be deleted too!',
   'aw_confirm_delete_assignment'	=> 'Are you sure, that you will delet all %s assignments? All reached DKP will be deleted too!',

@@ -125,6 +125,7 @@ $lang = array(
   'aw_assign_success'			=> '%s wurde<br />%s zugewiesen',
   'aw_assign_nosuccess'			=> '%s konnte nicht zugewiesen werden',
   'aw_del_assign'				=> 'Zuweisung(en) entfernt',
+  'aw_module_load_error'		=> 'Konnte Modul nicht laden.<br />Versuche es erneut: <a href="javascript:get_module_settings(\'%s\');" onclick="$(this).parent().remove();">Modul laden</a>',
   
   'aw_confirm_delete_achievement'	=> 'Bist du sicher, dass Du die Erfolge %s wirklich löschen willst? Alle erhaltenen DKP werden dabei auch gelöscht!',
   'aw_confirm_delete_assignment'	=> 'Bist du sicher, dass Du die Zuweisungen %s wirklich löschen willst? Alle erhaltenen DKP werden dabei auch gelöscht!',

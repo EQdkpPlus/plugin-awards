@@ -57,10 +57,8 @@ class awards_manage_achievements extends page_generic
 	public function save(){
 		$id 				= $this->in->get('aid', 0);
 		
-		$hmultilangName		= (new htextmultilang('name'))->output();
-		$hmultilangDesc		= (new htextareamultilang('description'))->output();
-		$strAchName			= $hmultilangName->_inpval();
-		$strAchDescription	= $hmultilangDesc->_inpval();
+		$strAchName			= (new htextmultilang('name'))->_inpval();
+		$strAchDescription	= (new htextareamultilang('description'))->_inpval();
 		
 		$intAchSortID		= $this->in->get('sort_id', PHP_INT_MAX);
 		$blnAchActive		= $this->in->get('active_state', 1);
@@ -276,7 +274,7 @@ class awards_manage_achievements extends page_generic
 		
 		// -- EQDKP ---------------------------------------------------------------
 		$this->core->set_vars(array(
-			'page_title'		=> (($id) ? $this->user->lang('aw_add_achievement').': '.$this->user->multilangValue($this->pdh->get('awards_achievements', 'name', array($id))) : $this->user->lang('aw_add_achievement')),
+			'page_title'		=> (($id) ? $this->user->lang('aw_edit_achievement').': '.$this->user->multilangValue($this->pdh->get('awards_achievements', 'name', array($id))) : $this->user->lang('aw_add_achievement')),
 			'template_path'		=> $this->pm->get_data('awards', 'template_path'),
 			'template_file'		=> 'admin/manage_achievements_edit.html',
 			'display'			=> true)
