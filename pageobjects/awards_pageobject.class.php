@@ -52,7 +52,7 @@ class awards_pageobject extends pageobject
 		
 		$intAP		= $awReachedCounter = $blnUserReached = 0;
 		$list_order = $allAwards = array();
-		$strLayout	= 'default';	# USE OTHER DEFAULT-LAYOUT BY REPLACE default TO minimalist 
+		$strLayout	= 'default';	# USE OTHER DEFAULT-LAYOUT BY REPLACE default TO minimalist
 		$awReached	= 'reached';
 		
 		$arrUserSettings = $this->pdh->get('user', 'plugin_settings', array($intViewerID));
@@ -149,12 +149,15 @@ class awards_pageobject extends pageobject
 		
 		
 		// -- EQDKP ---------------------------------------------------------------
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'    => $this->user->lang('awards'),
 			'template_path' => $this->pm->get_data('awards', 'template_path'),
 			'template_file' => 'awards.html',
-			'display'       => true
-		));
+			'page_path'		=> [
+				['title'=>$this->user->lang('awards').': '.$this->user->lang('aw_all_guild_achievements'), 'url'=>' '],
+			],
+			'display'       => true,
+		]);
 
 	}
 }

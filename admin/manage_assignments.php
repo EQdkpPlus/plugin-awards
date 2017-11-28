@@ -132,41 +132,48 @@ class awards_manage_assignments extends page_generic
 	  */
 	public function edit(){
 		$intAssID		= $this->in->get('aid', 0);
-		$intAssDate		= $this->pdh->get('awards_assignments', 'date', array($intAssID));
+		$intAssDate		= $this->pdh->get('awards_assignments', 'date', [$intAssID]);
 		
 		//fetch achievements for select
 		$achievements			= array();
 		$achievement_ids		= $this->pdh->get('awards_achievements', 'id_list');
 		foreach($achievement_ids as $aid)
-			$achievements[$aid]	= $this->user->multilangValue( $this->pdh->get('awards_achievements', 'name', array($aid)) );
+			$achievements[$aid]	= $this->user->multilangValue( $this->pdh->get('awards_achievements', 'name', [$aid]) );
 		
 		//pre_select achievement for select
-		$achievement = $this->pdh->get('awards_assignments', 'achievement_id', array($intAssID));
+		$achievement = $this->pdh->get('awards_assignments', 'achievement_id', [$intAssID]);
 		
 		//fetch members for select
-		$members = $this->pdh->aget('member', 'name', 0, array($this->pdh->sort($this->pdh->get('member', 'id_list', array(false,true,false)), 'member', 'name', 'asc')));
+		$members = $this->pdh->aget('member', 'name', 0, [$this->pdh->sort($this->pdh->get('member', 'id_list', [false, true, false]), 'member', 'name', 'asc')]);
 		
 		//pre_select members for select
-		$strAdjGK  = $this->pdh->get('awards_assignments', 'adj_group_key', array($intAssID));
-		$arrAdjIDs = $this->pdh->get('adjustment', 'ids_of_group_key', array($strAdjGK));
+		$strAdjGK  = $this->pdh->get('awards_assignments', 'adj_group_key', [$intAssID]);
+		$arrAdjIDs = $this->pdh->get('adjustment', 'ids_of_group_key', [$strAdjGK]);
 		foreach($arrAdjIDs as $intAdjID)
-			$arrAdjUserIDs[] = $this->pdh->get('adjustment', 'member', array($intAdjID));
+			$arrAdjUserIDs[] = $this->pdh->get('adjustment', 'member', [$intAdjID]);
 		
 		
-		$this->tpl->assign_vars(array(
+		$this->tpl->assign_vars([
 			'AID' => $intAssID,
 			'DD_ACHIEVEMENT' => (new hdropdown('achievment', array('options' => $achievements, 'value' => (isset($achievement) ? $achievement : ''), 'name', array($intAssID))))->output(),
 			'DATE'			 => $this->jquery->Calendar('date', $this->time->user_date( (is_int($intAssDate) ? $intAssDate : $this->time->time), true, false, false, function_exists('date_create_from_format')), '', array('timepicker' => true)),
 			'MEMBERS'		 => $this->jquery->MultiSelect('members', $members, ((isset($arrAdjUserIDs)) ? $arrAdjUserIDs : ''), array('width' => 350, 'filter' => true)),
-		));
+		]);
+		
+		$strPageTitle = (($intAssID) ? $this->user->lang('aw_edit_assignment') : $this->user->lang('aw_add_assignment'));
 		
 		// -- EQDKP ---------------------------------------------------------------
-		$this->core->set_vars(array(
-			'page_title'		=> (($intAssID) ? $this->user->lang('aw_edit_assignment') : $this->user->lang('aw_add_assignment')),
+		$this->core->set_vars([
+			'page_title'		=> $strPageTitle,
 			'template_path'		=> $this->pm->get_data('awards', 'template_path'),
 			'template_file'		=> 'admin/manage_assignments_edit.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('awards').': '.$this->user->lang('aw_manage_assignments'), 'url'=>$this->root_path.'plugins/awards/admin/manage_assignments.php'.$this->SID],
+				['title'=>$strPageTitle, 'url'=>' '],
+			],
+			'display'			=> true
+		]);
 	}
 
 
@@ -217,12 +224,16 @@ class awards_manage_assignments extends page_generic
 		);
 	
 	// -- EQDKP ---------------------------------------------------------------
-	$this->core->set_vars(array(
+	$this->core->set_vars([
 			'page_title'		=> $this->user->lang('aw_manage_assignments'),
 			'template_path'		=> $this->pm->get_data('awards', 'template_path'),
 			'template_file'		=> 'admin/manage_assignments.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('awards').': '.$this->user->lang('aw_manage_assignments'), 'url'=>' '],
+			],
+			'display'			=> true,
+		]);
 	}
 
 

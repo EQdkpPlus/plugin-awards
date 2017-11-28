@@ -272,13 +272,20 @@ class awards_manage_achievements extends page_generic
 			'CP_ICON_LAYER_5'	=> $this->jquery->colorpicker('icon_layer_5', ($arrAchIconColors[4])?:'#000000'),
 		));
 		
+		$strPageTitle = (($id) ? $this->user->lang('aw_edit_achievement').': '.$this->user->multilangValue($this->pdh->get('awards_achievements', 'name', array($id))) : $this->user->lang('aw_add_achievement'));
+		
 		// -- EQDKP ---------------------------------------------------------------
-		$this->core->set_vars(array(
-			'page_title'		=> (($id) ? $this->user->lang('aw_edit_achievement').': '.$this->user->multilangValue($this->pdh->get('awards_achievements', 'name', array($id))) : $this->user->lang('aw_add_achievement')),
+		$this->core->set_vars([
+			'page_title'		=> $strPageTitle,
 			'template_path'		=> $this->pm->get_data('awards', 'template_path'),
 			'template_file'		=> 'admin/manage_achievements_edit.html',
-			'display'			=> true)
-		);
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('awards').': '.$this->user->lang('aw_manage_achievements'), 'url'=>$this->root_path.'plugins/awards/admin/manage_achievements.php'.$this->SID],
+				['title'=>$strPageTitle, 'url'=>' '],
+			],
+			'display'			=> true,
+		]);
 	}
 
 
@@ -322,19 +329,23 @@ class awards_manage_achievements extends page_generic
 		
 		$this->confirm_delete($this->user->lang('aw_confirm_delete_achievement'));
 
-		$this->tpl->assign_vars(array(
+		$this->tpl->assign_vars([
 			'ACHIEVEMENTS_LIST'	=> $hptt->get_html_table($this->in->get('sort'), $page_suffix, $this->in->get('start', 0), $arrUserSettings['aw_admin_pagination'], $strfootertext),
 			'PAGINATION'		=> generate_pagination('manage_achievements.php'.$sort_suffix, $item_count, $arrUserSettings['aw_admin_pagination'], $this->in->get('start', 0)),
 			'HPTT_COLUMN_COUNT'	=> $hptt->get_column_count()
-		));
+		]);
 
 		// -- EQDKP ---------------------------------------------------------------
-		$this->core->set_vars(array(
+		$this->core->set_vars([
 			'page_title'		=> $this->user->lang('aw_manage_achievements'),
 			'template_path'		=> $this->pm->get_data('awards', 'template_path'),
 			'template_file'		=> 'admin/manage_achievements.html',
+			'page_path'			=> [
+				['title'=>$this->user->lang('menu_admin_panel'), 'url'=>$this->root_path.'admin/'.$this->SID],
+				['title'=>$this->user->lang('awards').': '.$this->user->lang('aw_manage_achievements'), 'url'=>' '],
+			],
 			'display'			=> true
-		));
+		]);
 	}
 
 
