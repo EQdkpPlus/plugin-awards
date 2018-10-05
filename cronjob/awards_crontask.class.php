@@ -28,7 +28,9 @@ if ( !defined('EQDKP_INC') ){
   +--------------------------------------------------------------------------*/
 if ( !class_exists( "awards_crontask" ) ) {
 	class awards_crontask extends crontask {
-		public function __construct(){}
+		public function __construct(){
+			register('pm');
+		}
 
 
 		public function run(){
