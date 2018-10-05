@@ -46,7 +46,7 @@ if ( !class_exists( "awards_crontask" ) ) {
 					
 					if($arrAchModuleConditions == 'all'){
 						foreach($arrAchModules as $strAchModule){
-							include $this->root_path.'plugins/awards/cronjob/modules/'.$strAchModule.'_cronmodule.class.php';
+							include_once($this->root_path.'plugins/awards/cronjob/modules/'.$strAchModule.'_cronmodule.class.php');
 							$strModuleClass	= $strAchModule.'_cronmodule';
 							$objModule		= new $strModuleClass($arrAchModuleSettings[$strAchModule]);
 							$arrMemberIDs	= $objModule->cron_process($intAchID, $arrMemberIDs);
@@ -60,7 +60,7 @@ if ( !class_exists( "awards_crontask" ) ) {
 						
 					}elseif($arrAchModuleConditions == 'any'){
 						foreach($arrAchModules as $strAchModule){
-							include $this->root_path.'plugins/awards/cronjob/modules/'.$strAchModule.'_cronmodule.class.php';
+							include_once($this->root_path.'plugins/awards/cronjob/modules/'.$strAchModule.'_cronmodule.class.php');
 							$strModuleClass	= $strAchModule.'_cronmodule';
 							$objModule		= new $strModuleClass($arrAchModuleSettings[$strAchModule]);
 							$arrMemberIDs	= $objModule->cron_process($intAchID, $arrMemberIDs);
