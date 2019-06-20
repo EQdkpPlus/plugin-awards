@@ -53,7 +53,8 @@ $lang = array(
   'user_sett_f_aw_admin_pagination'   => '[ACP] Erfolge/Zuweisungen pro Seite',
   'user_sett_f_aw_layout_default'	  => 'Standart',
   'user_sett_f_aw_layout_minimalist'  => 'Minimalist',
-  'user_sett_f_ntfy_awards_new_award' => 'Award Plugin: Neuer Erfolg',
+  'user_sett_f_ntfy_awards_new_award' => 'Neuer Erfolg',
+  'user_sett_f_ntfy_awards' 	=> 'Awards',
   
   // Admin
   'aw_manage_achievements'		=> 'Erfolge verwalten',

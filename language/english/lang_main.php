@@ -53,7 +53,8 @@ $lang = array(
   'user_sett_f_aw_admin_pagination'   => '[ACP] Achieve/Assignments per site',
   'user_sett_f_aw_layout_default'	  => 'Default',
   'user_sett_f_aw_layout_minimalist'  => 'Minimalist',
-  'user_sett_f_ntfy_awards_new_award' => 'Award Plugin: New Achievement',
+  'user_sett_f_ntfy_awards_new_award' => 'New Achievement',
+  'user_sett_f_ntfy_awards' 	=> 'Awards',
   
   // Admin
   'aw_manage_achievements'		=> 'Manage achievements',
@@ -127,7 +128,7 @@ $lang = array(
   'aw_del_assign'				=> 'Assignment(s) deleted',
   'aw_module_load_error'		=> 'Couldn\'t load Modul.<br />Try again: <a href="javascript:get_module_settings(\'%s\');" onclick="$(this).parent().remove();">Load module</a>',
   
-  'aw_confirm_delete_achievement'	=> 'Are you sure, that you will delet all %s achievements? All reached DKP will be deleted too!',
+  'aw_confirm_delete_achievement'	=> 'Are you sure, that you will delete the selected %s achievements? All associated DKP of the characters will be deleted, too!',
   'aw_confirm_delete_assignment'	=> 'Are you sure, that you will delet all %s assignments? All reached DKP will be deleted too!',
   
   'aw_upd_assignment_warning'	=> '<h3>A later editing of an assignment is on your own risk!</h3>

@@ -134,7 +134,7 @@ class awards_pageobject extends pageobject
 		$this->tpl->assign_vars(array(
 			'AP'				=> $intAP,
 			'LAYOUT'			=> $strLayout,
-			'USER_PROFILE_LINK' => $this->routing->build('User', $this->pdh->get('user', 'name', array($intViewerID)), 'u'.$intViewerID).'#2384ece2c',
+			'USER_PROFILE_LINK' => $this->routing->build('User', $this->pdh->get('user', 'name', array($intViewerID)), 'u'.$intViewerID).'#3e55cad42',
 			'S_AW_MANAGE'		=> $this->user->check_auth('a_awards_manage', false),
 			'S_AW_ADD'			=> $this->user->check_auth('a_awards_add', false),
 			'PAGINATION'		=> generate_pagination($this->strPath.$this->SID, $allAwardsCount, $arrUserSettings['aw_pagination'], $intPage, 'page'),

@@ -45,7 +45,7 @@ class awards_manage_achievements extends page_generic
 			'save'		=> array('process' => 'save', 'check' => 'a_awards_add', 'csrf' => true),
 			'aid'		=> array('process' => 'edit', 'check' => 'a_awards_add'),
 		);
-		parent::__construct(false, $handler, array('manage_achievements', 'name'), null, 'selected_ids[]');
+		parent::__construct(false, $handler, array('awards_achievements', 'html_name'), null, 'selected_ids[]');
 		$this->process();
 	}
 
@@ -316,7 +316,7 @@ class awards_manage_achievements extends page_generic
 				array('name' => 'awards_achievements_icon',	   'sort' => false, 'th_add' => 'width="20"', 'td_add' => ''),
 				array('name' => 'awards_achievements_name',	   'sort' => true, 'th_add' => '', 'td_add' => ''),
 				array('name' => 'awards_achievements_description', 'sort' => true, 'th_add' => '', 'td_add' => ''),
-				array('name' => 'awards_achievements_points',  'sort' => true, 'th_add' => 'width="20"', 'td_add' => 'style="text-align:right"'),
+				array('name' => 'awards_achievements_points',  'sort' => true, 'th_add' => 'width="40"', 'td_add' => 'style="text-align:right"'),
 				array('name' => 'awards_achievements_dkp',  'sort' => true, 'th_add' => 'width="20"', 'td_add' => 'style="text-align:right"'),
 			),
 		);
