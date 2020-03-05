@@ -60,12 +60,13 @@ class items_cronmodule extends cronmodules {
 		
 		if($this->settings['filter'] == 0){
 			$arrPoolIDs	= (empty($this->settings['pool']))? $this->pdh->get('itempool', 'id_list') : $this->settings['pool'];
-			
 			foreach($this->pdh->get('item', 'id_list') as $intItemID){
 				$intPoolID		= $this->pdh->get('item', 'itempool_id', array($intItemID));
 				$intMemberID	= $this->pdh->get('item', 'buyer', array($intItemID));
 				
-				if(isset($arrPoolIDs[$intPoolID]) && isset($arrMemberIDs[$intMemberID])) $arrCountMemberIDs[$intMemberID] = $arrCountMemberIDs[$intMemberID] + 1;
+				if(in_array($intPoolID, $arrPoolIDs) && isset($arrMemberIDs[$intMemberID])) {
+					$arrCountMemberIDs[$intMemberID] = $arrCountMemberIDs[$intMemberID] + 1;
+				}
 			}
 			
 		}else{
@@ -75,6 +76,7 @@ class items_cronmodule extends cronmodules {
 				if(isset($arrMemberIDs[$intMemberID])) $arrCountMemberIDs[$intMemberID] = $arrCountMemberIDs[$intMemberID] + 1;
 			}
 		}
+		
 		
 		$arrMemberIDs = array();
 		foreach($arrCountMemberIDs as $intMemberID => $intItemCounter){
